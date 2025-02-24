@@ -24,10 +24,13 @@ contract YoloStake is AccessControl {
     }
 
     function deposit(uint256 tokenId) external {
-        uint256 amount = _veNFT.locked(tokenId);
+        IVotingEscrow.LockedBalance memory lockedBalance = _veNFT.locked(
+            tokenId
+        );
+        uint256 amount = uint256(uint128(lockedBalance.amount));
         _lockedTokenIdToAmount[tokenId] = amount;
+        _yolo.mint(msg.sender, amount);
         _veNFT.transferFrom(msg.sender, address(this), tokenId);
-        _veNFT._yolo.mint(msg.sender, amount);
     }
 
     function withdraw(uint256 tokenId) external {
