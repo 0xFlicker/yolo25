@@ -6,6 +6,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {IERC6372} from "@openzeppelin/contracts/interfaces/IERC6372.sol";
 import {ERC2771Context} from "@openzeppelin/contracts/metatx/ERC2771Context.sol";
+import {OwnableRoles} from "solady/auth/OwnableRoles.sol";
 
 /// @title Voting Escrow
 /// @notice veNFT implementation that escrows ERC-20 tokens in the form of an ERC-721 NFT
@@ -15,7 +16,7 @@ import {ERC2771Context} from "@openzeppelin/contracts/metatx/ERC2771Context.sol"
 /// @author velodrome.finance, @figs999, @pegahcarter
 /// @dev Vote weight decays linearly over time. Lock time cannot be more than `MAXTIME` (4 years).
 
-contract VotingEscrow is ERC2771Context {
+contract VotingEscrow is OwnableRoles, ERC2771Context {
     error ZeroAddress();
     error SameAddress();
     error NotApprovedOrOwner();
@@ -30,17 +31,29 @@ contract VotingEscrow is ERC2771Context {
     ///  (`to` == 0). Exception: during contract creation, any number of NFTs
     ///  may be created and assigned without emitting Transfer. At the time of
     ///  any transfer, the approved address for that NFT (if any) is reset to none.
-    event Transfer(address indexed _from, address indexed _to, uint256 indexed _tokenId);
+    event Transfer(
+        address indexed _from,
+        address indexed _to,
+        uint256 indexed _tokenId
+    );
 
     /// @dev This emits when the approved address for an NFT is changed or
     ///  reaffirmed. The zero address indicates there is no approved address.
     ///  When a Transfer event emits, this also indicates that the approved
     ///  address for that NFT (if any) is reset to none.
-    event Approval(address indexed _owner, address indexed _approved, uint256 indexed _tokenId);
+    event Approval(
+        address indexed _owner,
+        address indexed _approved,
+        uint256 indexed _tokenId
+    );
 
     /// @dev This emits when an operator is enabled or disabled for an owner.
     ///  The operator can manage all NFTs of the owner.
-    event ApprovalForAll(address indexed _owner, address indexed _operator, bool _approved);
+    event ApprovalForAll(
+        address indexed _owner,
+        address indexed _operator,
+        bool _approved
+    );
 
     using SafeERC20 for IERC20;
     /*//////////////////////////////////////////////////////////////
@@ -71,13 +84,24 @@ contract VotingEscrow is ERC2771Context {
         bool isPermanent;
     }
 
-    constructor() ERC2771Context(address(0)) {
+    /*//////////////////////////////////////////////////////////////
+                               ROLES
+    //////////////////////////////////////////////////////////////*/
 
+    uint256 internal constant TESTER_ROLE = _ROLE_0;
+
+    /*//////////////////////////////////////////////////////////////
+                               CONSTRUCTOR
+    //////////////////////////////////////////////////////////////*/
+
+    constructor() ERC2771Context(address(0)) {
         supportedInterfaces[ERC165_INTERFACE_ID] = true;
         supportedInterfaces[ERC721_INTERFACE_ID] = true;
         supportedInterfaces[ERC721_METADATA_INTERFACE_ID] = true;
         supportedInterfaces[ERC4906_INTERFACE_ID] = true;
         supportedInterfaces[ERC6372_INTERFACE_ID] = true;
+        _initializeOwner(msg.sender);
+        _grantRoles(msg.sender, TESTER_ROLE);
     }
 
     /*///////////////////////////////////////////////////////////////
@@ -100,11 +124,9 @@ contract VotingEscrow is ERC2771Context {
     string public constant version = "1.1";
     uint8 public constant decimals = 18;
 
-    function setTeam(address _team) external {
-    }
+    function setTeam(address _team) external {}
 
-    function setArtProxy(address _proxy) external {
-    }
+    function setArtProxy(address _proxy) external {}
 
     function tokenURI(uint256 _tokenId) external view returns (string memory) {
         return "no";
@@ -148,15 +170,24 @@ contract VotingEscrow is ERC2771Context {
         return idToApprovals[_tokenId];
     }
 
-    function isApprovedForAll(address _owner, address _operator) external view returns (bool) {
+    function isApprovedForAll(
+        address _owner,
+        address _operator
+    ) external view returns (bool) {
         return (ownerToOperators[_owner])[_operator];
     }
 
-    function isApprovedOrOwner(address _spender, uint256 _tokenId) external view returns (bool) {
+    function isApprovedOrOwner(
+        address _spender,
+        uint256 _tokenId
+    ) external view returns (bool) {
         return _isApprovedOrOwner(_spender, _tokenId);
     }
 
-    function _isApprovedOrOwner(address _spender, uint256 _tokenId) internal view returns (bool) {
+    function _isApprovedOrOwner(
+        address _spender,
+        uint256 _tokenId
+    ) internal view returns (bool) {
         address owner = _ownerOf(_tokenId);
         bool spenderIsOwner = owner == _spender;
         bool spenderIsApproved = _spender == idToApprovals[_tokenId];
@@ -178,7 +209,8 @@ contract VotingEscrow is ERC2771Context {
         // Check requirements
         bool senderIsOwner = (_ownerOf(_tokenId) == sender);
         bool senderIsApprovedForAll = (ownerToOperators[owner])[sender];
-        if (!senderIsOwner && !senderIsApprovedForAll) revert NotApprovedOrOwner();
+        if (!senderIsOwner && !senderIsApprovedForAll)
+            revert NotApprovedOrOwner();
         // Set the approval
         idToApprovals[_tokenId] = _approved;
         emit Approval(owner, _approved, _tokenId);
@@ -194,15 +226,20 @@ contract VotingEscrow is ERC2771Context {
 
     /* TRANSFER FUNCTIONS */
 
-    function lockTokens() external {
+    function lockTokens() external onlyRoles(TESTER_ROLE) {
         isLocked = true;
     }
 
-    function unlockTokens() external {
+    function unlockTokens() external onlyRoles(TESTER_ROLE) {
         isLocked = false;
     }
 
-    function _transferFrom(address _from, address _to, uint256 _tokenId, address _sender) internal {
+    function _transferFrom(
+        address _from,
+        address _to,
+        uint256 _tokenId,
+        address _sender
+    ) internal {
         if (isLocked) revert NotManagedOrNormalNFT();
         // if (escrowType[_tokenId] == EscrowType.LOCKED) revert NotManagedOrNormalNFT();
         // Check requirements
@@ -222,11 +259,19 @@ contract VotingEscrow is ERC2771Context {
         emit Transfer(_from, _to, _tokenId);
     }
 
-    function transferFrom(address _from, address _to, uint256 _tokenId) external {
+    function transferFrom(
+        address _from,
+        address _to,
+        uint256 _tokenId
+    ) external {
         _transferFrom(_from, _to, _tokenId, _msgSender());
     }
 
-    function safeTransferFrom(address _from, address _to, uint256 _tokenId) external {
+    function safeTransferFrom(
+        address _from,
+        address _to,
+        uint256 _tokenId
+    ) external {
         safeTransferFrom(_from, _to, _tokenId, "");
     }
 
@@ -241,14 +286,28 @@ contract VotingEscrow is ERC2771Context {
         return size > 0;
     }
 
-    function safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes memory _data) public {
+    function safeTransferFrom(
+        address _from,
+        address _to,
+        uint256 _tokenId,
+        bytes memory _data
+    ) public {
         address sender = _msgSender();
         _transferFrom(_from, _to, _tokenId, sender);
 
         if (_isContract(_to)) {
             // Throws if transfer destination is a contract which does not implement 'onERC721Received'
-            try IERC721Receiver(_to).onERC721Received(sender, _from, _tokenId, _data) returns (bytes4 response) {
-                if (response != IERC721Receiver(_to).onERC721Received.selector) {
+            try
+                IERC721Receiver(_to).onERC721Received(
+                    sender,
+                    _from,
+                    _tokenId,
+                    _data
+                )
+            returns (bytes4 response) {
+                if (
+                    response != IERC721Receiver(_to).onERC721Received.selector
+                ) {
                     revert ERC721ReceiverRejectedTokens();
                 }
             } catch (bytes memory reason) {
@@ -267,7 +326,7 @@ contract VotingEscrow is ERC2771Context {
                               ERC165 LOGIC
     //////////////////////////////////////////////////////////////*/
 
-    function supportsInterface(bytes4 _interfaceID) external view returns (bool) {
+    function supportsInterface(bytes4 _interfaceID) public view returns (bool) {
         return supportedInterfaces[_interfaceID];
     }
 
@@ -303,6 +362,12 @@ contract VotingEscrow is ERC2771Context {
         ownerToNFTokenCount[_to] += 1;
     }
 
+    /// @dev Array with all token ids, used for enumeration
+    uint256[] private _allTokens;
+
+    /// @dev Mapping from token id to position in the allTokens array
+    mapping(uint256 => uint256) private _allTokensIndex;
+
     /// @dev Function to mint tokens
     ///      Throws if `_to` is zero address.
     ///      Throws if `_tokenId` is owned by someone.
@@ -317,13 +382,21 @@ contract VotingEscrow is ERC2771Context {
         // Update voting checkpoints
         // _checkpointDelegator(_tokenId, 0, _to);
         emit Transfer(address(0), _to, _tokenId);
+
+        // Add token to all tokens enumeration
+        _allTokensIndex[_tokenId] = _allTokens.length;
+        _allTokens.push(_tokenId);
+
         return true;
     }
 
     /// @dev Remove a NFT from an index mapping to a given address
     /// @param _from address of the sender
     /// @param _tokenId uint ID Of the token to be removed
-    function _removeTokenFromOwnerList(address _from, uint256 _tokenId) internal {
+    function _removeTokenFromOwnerList(
+        address _from,
+        uint256 _tokenId
+    ) internal {
         // Delete
         uint256 currentCount = ownerToNFTokenCount[_from] - 1;
         uint256 currentIndex = tokenToOwnerIndex[_tokenId];
@@ -363,6 +436,10 @@ contract VotingEscrow is ERC2771Context {
         ownerToNFTokenCount[_from] -= 1;
     }
 
+    function adminBurn(uint256 _tokenId) external onlyRoles(TESTER_ROLE) {
+        _burn(_tokenId);
+    }
+
     /// @dev Must be called prior to updating `LockedBalance`
     function _burn(uint256 _tokenId) internal {
         address sender = _msgSender();
@@ -376,6 +453,19 @@ contract VotingEscrow is ERC2771Context {
         // Remove token
         _removeTokenFrom(owner, _tokenId);
         emit Transfer(owner, address(0), _tokenId);
+
+        // Remove token from all tokens enumeration
+        uint256 lastTokenIndex = _allTokens.length - 1;
+        uint256 tokenIndex = _allTokensIndex[_tokenId];
+
+        if (tokenIndex != lastTokenIndex) {
+            uint256 lastTokenId = _allTokens[lastTokenIndex];
+            _allTokens[tokenIndex] = lastTokenId;
+            _allTokensIndex[lastTokenId] = tokenIndex;
+        }
+
+        delete _allTokensIndex[_tokenId];
+        _allTokens.pop();
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -396,7 +486,19 @@ contract VotingEscrow is ERC2771Context {
     mapping(address => bool) public canSplit;
     uint256 public permanentLockBalance;
 
-    function setLockedBalance(uint256 _tokenId, int128 _amount, uint256 _timestamp) external {
+    function setLockedBalance(
+        uint256 _tokenId,
+        int128 _amount,
+        uint256 _timestamp
+    ) external onlyRoles(TESTER_ROLE) {
+        _setLockedBalance(_tokenId, _amount, _timestamp);
+    }
+
+    function _setLockedBalance(
+        uint256 _tokenId,
+        int128 _amount,
+        uint256 _timestamp
+    ) internal {
         LockedBalance memory _new;
         _new.amount = _amount;
         _new.end = (_timestamp / week) * week; // gives you the magic "wednesday"
@@ -404,7 +506,9 @@ contract VotingEscrow is ERC2771Context {
         dataPoint[_tokenId] = _new;
     }
 
-    function locked(uint256 _tokenId) external view returns (LockedBalance memory) {
+    function locked(
+        uint256 _tokenId
+    ) external view returns (LockedBalance memory) {
         return dataPoint[_tokenId];
     }
 
@@ -438,5 +542,38 @@ contract VotingEscrow is ERC2771Context {
 
     function CLOCK_MODE() external pure returns (string memory) {
         return "mode=timestamp";
+    }
+
+    function tokenOfOwnerByIndex(
+        address owner,
+        uint256 index
+    ) external view returns (uint256) {
+        require(
+            index < ownerToNFTokenCount[owner],
+            "VotingEscrow: owner index out of bounds"
+        );
+        return ownerToNFTokenIdList[owner][index];
+    }
+
+    function totalSupply() external view returns (uint256) {
+        return _allTokens.length;
+    }
+
+    function tokenByIndex(uint256 index) external view returns (uint256) {
+        require(
+            index < _allTokens.length,
+            "VotingEscrow: global index out of bounds"
+        );
+        return _allTokens[index];
+    }
+
+    function adminMint(
+        address _to,
+        uint256 _tokenId,
+        int128 value,
+        uint256 timestamp
+    ) external onlyRoles(TESTER_ROLE) {
+        _mint(_to, _tokenId);
+        _setLockedBalance(_tokenId, value, timestamp);
     }
 }

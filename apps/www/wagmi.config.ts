@@ -7,7 +7,13 @@ export default defineConfig({
   plugins: [
     foundry({
       project: "../../packages/contracts",
-      include: ["Yolo.sol/**", "IYolo.sol/**", "IVoteEscrow.sol/**"],
+      include: [
+        "Yolo.sol/**",
+        "YoloStake.sol/**",
+        "IYolo.sol/**",
+        "IVoteEscrow.sol/**",
+        "veStuxNet.sol/**",
+      ],
     }),
   ],
 });

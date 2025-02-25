@@ -3,7 +3,10 @@
     "connectkit",
     "headlessui",
     "IERC",
+    "Metadex",
     "siwe",
+    "STUX",
+    "stuxnet",
     "WALLETCONNECT"
   ]
 }
