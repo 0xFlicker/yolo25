@@ -382,7 +382,7 @@ contract VotingEscrow is ERC2771Context {
                              ESCROW STORAGE
     //////////////////////////////////////////////////////////////*/
 
-    uint256 internal constant WEEK = 1 weeks;
+    uint256 internal constant week = 1 weeks;
     uint256 internal constant MAXTIME = 4 * 365 * 86400;
     int128 internal constant iMAXTIME = 4 * 365 * 86400;
     uint256 internal constant MULTIPLIER = 1 ether;
@@ -397,11 +397,11 @@ contract VotingEscrow is ERC2771Context {
     uint256 public permanentLockBalance;
 
     function setLockedBalance(uint256 _tokenId, int128 _amount, uint256 _timestamp) external {
-        LockedBalance _new;
+        LockedBalance memory _new;
         _new.amount = _amount;
         _new.end = (_timestamp / week) * week; // gives you the magic "wednesday"
         _new.isPermanent = false;
-        dataPoint[_tokenId} = _new;
+        dataPoint[_tokenId] = _new;
     }
 
     function locked(uint256 _tokenId) external view returns (LockedBalance memory) {
