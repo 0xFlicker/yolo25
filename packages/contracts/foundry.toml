@@ -16,3 +16,4 @@ sepolia = "${SEPOLIA_RPC_URL}"
 
 [etherscan]
 sepolia = { key = "${SEPOLIA_SCAN_API_KEY}", url = "${SEPOLIA_ETHERSCAN_VERIFIER_URL}" }
+

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.22;
+pragma solidity ^0.8.19;
 
 import {OwnableRoles} from "solady/auth/OwnableRoles.sol";
 import {ERC20} from "solady/tokens/ERC20.sol";
