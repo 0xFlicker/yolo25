@@ -1,28 +1,26 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.17;
 
-import "./DataChunkCompiler.sol";
 import "./Base64.sol";
 import "./IMetaDataURI.sol";
 import "./VeVaultRenderer_interface.sol";
 import "./MetadataLib.sol";
 
 contract VeVaultRendererImage is IVeVaultRendererImage {
-    IDataChunkCompiler private compiler;
-    uint256 private immutable MAX_MINT_GAS_PRICE = 1000000; // 1000 gwei mint would show all checks
-    IMetaDataURI public upgradeContract;
+    string private _asset;
+
+    constructor(string memory asset) {
+        _asset = asset;
+    }
 
     function render(
-        uint256 /* tokenId */,
+        uint256 tokenId,
         uint96 seed,
-        uint128 value,
-        uint128 /* maxValue */,
-        uint64 /* unlockStartTime */,
-        uint64 /* unlockEndTime */,
-        bool /* isDarkMode */,
+        uint128 maxValue,
+        Lock calldata lock,
         bool[80] memory isVRendered
     ) public pure returns (string memory) {
-        return generateSvg(seed, value, isVRendered);
+        return generateSvg(seed, lock.amount, isVRendered);
     }
 
     /**
@@ -32,17 +30,21 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
    */
     function generateSvg(
         uint96 seed,
-        uint128 value,
+        Lock calldata lock,
         bool[80] memory isVRendered
     ) public pure returns (string memory) {
         bool isDark = seed % 2 == 0;
+
         return
             string.concat(
                 '<?xml version="1.0" encoding="UTF-8"?><svg aria-hidden="true" version="1.1" viewBox="0 0 512 688" xmlns="http://www.w3.org/2000/svg"><svg width="400" height="400"><defs><radialGradient id="SphereShade" cx="0.5" cy="0.5" r=".8" fx="0.35" fy="0.25"><stop offset="0"  stop-opacity="0"  /><stop offset=".3" stop-opacity="0.1"/><stop offset=".5" stop-opacity="0.3"/><stop offset=".9"  stop-opacity="1"  /></radialGradient></defs><rect width="100%" height="100%" fill="#',
                 isDark ? "111111" : "EEEEEE",
                 '" />',
                 generateTopGrid(seed, isVRendered),
-                generateValueText(value, isDark),
+                generateValueText(
+                    MetadataLib.uint256ToStr(uint256(uint128(lock.amount))),
+                    isDark
+                ),
                 generateBottomGrid(seed, isVRendered),
                 "</svg>"
             );
@@ -56,8 +58,10 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
             string.concat(
                 '<text x="50%" text-anchor="middle" style="white-space: pre; fill: #',
                 isDark ? "EEEEEE" : "111111",
-                '; font-family: Arial, sans-serif; font-size: 33.3px;" y="353">Minted at ',
+                '; font-family: Arial, sans-serif; font-size: 33.3px;" y="353">Locked ',
                 MetadataLib.uint256ToStr(value),
+                " ",
+                _asset,
                 "</text>"
             );
     }
@@ -218,11 +222,11 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
             string.concat(
                 '<g transform="translate(',
                 xPos,
-                ' 0)" fill="#',
+                ' 0)"><rect rx="5" ry="5" width="40" height="24" fill="#',
                 colorStr,
-                '"><path d="M22.25 12c0-1.43-.88-2.67-2.19-3.34.46-1.39.2-2.9-.81-3.91s-2.52-1.27-3.91-.81c-.66-1.31-1.91-2.19-3.34-2.19s-2.67.88-3.33 2.19c-1.4-.46-2.91-.2-3.92.81s-1.26 2.52-.8 3.91c-1.31.67-2.2 1.91-2.2 3.34s.89 2.67 2.2 3.34c-.46 1.39-.21 2.9.8 3.91s2.52 1.26 3.91.81c.67 1.31 1.91 2.19 3.34 2.19s2.68-.88 3.34-2.19c1.39.45 2.9.2 3.91-.81s1.27-2.52.81-3.91c1.31-.67 2.19-1.91 2.19-3.34zm-11.71 4.2L6.8 12.46l1.41-1.42 2.26 2.26 4.8-5.23 1.47 1.36-6.2 6.77z" fill="#',
-                colorStr,
-                '"/></g>'
+                '"/><text x="20" y="16" font-size="12" text-anchor="middle" fill="white">',
+                _asset,
+                "</text></g>"
             );
     }
 }

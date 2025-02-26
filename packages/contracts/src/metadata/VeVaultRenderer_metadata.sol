@@ -29,21 +29,19 @@ contract VeVaultRendererMetadata is IMetaDataURI, Ownable {
     function tokenURI(
         uint256 tokenId,
         uint96 seed,
-        uint128 value,
         uint128 maxValue,
-        uint64 unlockStartTime,
-        uint64 unlockEndTime
+        Lock calldata lock
     ) public view returns (string memory) {
         string memory tokenIdStr = MetadataLib.uint2str(tokenId);
         bool[80] memory isVRendered = MetadataLib.getIsVRendered(
             seed,
-            value,
-            unlockStartTime,
-            unlockEndTime,
+            lock.amount,
+            lock.start,
+            lock.end,
             maxValue
         );
         bool isDark = seed % 2 == 0;
-        (uint256 year, uint256 month, uint256 day) = uint256(unlockEndTime)
+        (uint256 year, uint256 month, uint256 day) = uint256(lock.end)
             .timestampToDate();
         return
             string.concat(
@@ -56,10 +54,10 @@ contract VeVaultRendererMetadata is IMetaDataURI, Ownable {
                             imageMetadata.render(
                                 tokenId,
                                 seed,
-                                value,
+                                lock.amount,
                                 maxValue,
-                                unlockStartTime,
-                                unlockEndTime,
+                                lock.start,
+                                lock.end,
                                 isDark,
                                 isVRendered
                             )
@@ -70,7 +68,7 @@ contract VeVaultRendererMetadata is IMetaDataURI, Ownable {
                 string.concat(
                     compiler.BEGIN_METADATA_VAR("attributes", true),
                     "%5B%7B%22trait_type%22%3A%22locked%20value%22%2C%22value%22%3A",
-                    uint256(value).toString(),
+                    uint256(lock.amount).toString(),
                     "%7D%2C%7B%22trait_type%22%3A%22dark%22%2C%22value%22%3A%22",
                     isDark ? "true" : "false",
                     "%22%7D%2C%7B%22trait_type%22%3A%22unlock%20time%22%2C%22value%22%3A%22",

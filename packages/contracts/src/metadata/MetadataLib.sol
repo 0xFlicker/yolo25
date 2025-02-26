@@ -17,7 +17,7 @@ library MetadataLib {
     /**
      * @dev For a given gas price (in 1/1000 gwei) and an index, returns whether a checkmark should be generated.
      * The index is the position of the checkmark in the 8 x 10 grid, starting from the top left.
-     * For each index, generate a random number between 0 and 1000000. If the gas price is lower than the random number, do not generate a checkmark.
+     * For each index, generate a random number between 0 and maxValue. If the gas price is lower than the random number, do not generate a checkmark.
      * For an easy random number, let's use the seed and bit shift it to the right by the index
      */
     function vGenerates(

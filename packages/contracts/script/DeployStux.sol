@@ -32,6 +32,7 @@ contract DeployStuxScript is Script {
         );
 
         yolo.grantRoles(address(veVaultStake), yolo._VAULT_ROLE());
+        yolo.renounceOwnership();
 
         vm.stopBroadcast();
     }

@@ -5,8 +5,11 @@ libs = ["lib"]
 remappings = [
   "forge-std=lib/forge-std/src",
   "solady=lib/solady/src",
-  "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
-  "aerodrome-finance/=lib/aerodrome-finance/contracts"
+  "@openzeppelin/contracts/=lib/aerodrome-slipstream/lib/openzeppelin-contracts/contracts/",
+  "aerodrome-finance/contracts/=lib/aerodrome-finance/contracts/",
+  "aerodrome-slipstream/contracts/=lib/aerodrome-slipstream/contracts/",
+  "contracts/=lib/aerodrome-slipstream/contracts/"
+
 ]
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
 
@@ -15,5 +18,5 @@ remappings = [
 sepolia = "${SEPOLIA_RPC_URL}"
 
 [etherscan]
-sepolia = { key = "${SEPOLIA_SCAN_API_KEY}", url = "${SEPOLIA_ETHERSCAN_VERIFIER_URL}" }
+sepolia = { key = "${SEPOLIA_ETHERSCAN_API_KEY}", url = "${SEPOLIA_ETHERSCAN_VERIFIER_URL}" }
 
