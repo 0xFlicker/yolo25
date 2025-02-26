@@ -1,14 +1,12 @@
 "use client";
 
-import { META_DEX_CHAIN, META_DEX_ORIGIN } from "@/wagmi/contracts";
 import React, { FC, useMemo } from "react";
 import { useSelectable } from "./context";
 import { SelectableGrid } from "./SelectableGrid";
 
 export const VeNFTGrid: FC<{
-  meta: (typeof META_DEX_CHAIN)[META_DEX_ORIGIN];
   initialTokenIds: bigint[];
-}> = ({ meta, initialTokenIds }) => {
+}> = ({ initialTokenIds }) => {
   const {
     selectedTokenIds,
     addToSelectedTokenIds,

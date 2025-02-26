@@ -1,11 +1,20 @@
 "use client";
 import { useReducer, useCallback } from "react";
-import { BaseError } from "viem";
+import { BaseError, erc721Abi, Transaction } from "viem";
 import { WriteContractData } from "wagmi/query";
-import { yoloStakeAbi } from "@/wagmi/generated";
+import {
+  useWriteIerc721SetApprovalForAll,
+  useWriteYoloStakeBatchDepositFor,
+} from "@/wagmi/generated";
 
-import { sepolia, type base } from "viem/chains";
-import { useAccount, useWaitForTransactionReceipt } from "wagmi";
+import {
+  useAccount,
+  useReadContract,
+  useWaitForTransactionReceipt,
+} from "wagmi";
+import { useSelectable } from "./context";
+import { useNotifications } from "@/features/notifications/Context";
+import { META_DEX_ORIGIN, META_DEX_CHAIN } from "@/wagmi/contracts";
 
 // -------------------------------
 // State & Actions
@@ -115,16 +124,18 @@ const initialTransactionState: TransactionState = {
 // -------------------------------
 // Hook
 // -------------------------------
-export function useApproveAndWrap(
-  chainId: typeof sepolia.id | typeof base.id,
-  toWrapSelectedTokenIds: bigint[]
-) {
+export function useApproveAndDeposit({
+  chainId,
+  metaVeNft,
+  ourStaker,
+  selectedTokenIds,
+}: (typeof META_DEX_CHAIN)[META_DEX_ORIGIN] & { selectedTokenIds: bigint[] }) {
   const {
-    resetWrapSelectedTokenIds,
-    addToPendingWrapTokenIds,
-    removeFromPendingWrapTokenIds,
-    addToCompletedWrapTokenIds,
-  } = useFameusWrap();
+    resetSelectedTokenIds,
+    addToPendingTokenIds,
+    removeFromPendingTokenIds,
+    addToCompletedTokenIds,
+  } = useSelectable();
 
   const [transactionState, dispatch] = useReducer(
     transactionReducer,
@@ -134,14 +145,18 @@ export function useApproveAndWrap(
   const { addNotification } = useNotifications();
 
   // Contract calls
-  const { data: isApprovedForAll } = useReadFameMirrorIsApprovedForAll({
-    address: societyFromNetwork(chainId),
-    args: address ? [address, govSocietyFromNetwork(chainId)] : undefined,
+  const { data: isApprovedForAll } = useReadContract({
+    chainId,
+    abi: erc721Abi,
+    address: metaVeNft,
+    functionName: "isApprovedForAll",
+    args: address ? [address, ourStaker] : undefined,
   });
-  const { writeContractAsync: writeFameMirrorSetApprovalForAll } =
-    useWriteFameMirrorSetApprovalForAll();
-  const { writeContractAsync: writeGovSocietyDepositFor } =
-    useWriteGovSocietyDepositFor();
+  const { writeContractAsync: writeIerc721SetApprovalForAll } =
+    useWriteIerc721SetApprovalForAll();
+
+  const { writeContractAsync: writeYoloStakeBatchDepositFor } =
+    useWriteYoloStakeBatchDepositFor();
 
   // Transaction watchers
   const { isSuccess: isSuccess0, isError: isError0 } =
@@ -168,10 +183,10 @@ export function useApproveAndWrap(
       autoHideMs: 5000,
     });
     if (kind === "wrap" && tokenIds && tokenIds.length > 0) {
-      removeFromPendingWrapTokenIds(...tokenIds);
-      addToCompletedWrapTokenIds(...tokenIds);
+      removeFromPendingTokenIds(...tokenIds);
+      addToCompletedTokenIds(...tokenIds);
       if (address) {
-        revalidate(chainId === sepolia.id ? "sepolia" : "base", address);
+        // revalidate(chainId === sepolia.id ? "sepolia" : "base", address);
       }
       dispatch({
         type: "COMPLETE_TX",
@@ -220,12 +235,13 @@ export function useApproveAndWrap(
       let approvalWasAttemptedAndFailed = false;
 
       // Attempt approval if needed
-      if (!isApprovedForAll && toWrapSelectedTokenIds.length !== 0) {
+      if (!isApprovedForAll && selectedTokenIds.length !== 0) {
         dispatch({ type: "ADD_ACTIVE_TX", payload: { kind: "approval" } });
         try {
-          const approvalResponse = await writeFameMirrorSetApprovalForAll({
-            address: societyFromNetwork(chainId),
-            args: [govSocietyFromNetwork(chainId), true],
+          const approvalResponse = await writeIerc721SetApprovalForAll({
+            address: metaVeNft,
+            args: [ourStaker, true],
+            chainId,
           });
           dispatch({
             type: "SET_ACTIVE_TX_HASH",
@@ -250,23 +266,24 @@ export function useApproveAndWrap(
       // Wrap
       if (!approvalWasAttemptedAndFailed) {
         dispatch({ type: "ADD_ACTIVE_TX", payload: { kind: "wrap" } });
-        addToPendingWrapTokenIds(...toWrapSelectedTokenIds);
-        const depositResponse = await writeGovSocietyDepositFor({
-          address: govSocietyFromNetwork(chainId),
-          args: [address, toWrapSelectedTokenIds],
+        addToPendingTokenIds(...selectedTokenIds);
+        const depositResponse = await writeYoloStakeBatchDepositFor({
+          address: ourStaker,
+          args: [address, selectedTokenIds],
+          chainId,
         });
         dispatch({
           type: "SET_ACTIVE_TX_HASH",
           payload: {
             kind: "wrap",
             hash: depositResponse,
-            context: toWrapSelectedTokenIds,
+            context: selectedTokenIds,
           },
         });
-        resetWrapSelectedTokenIds();
+        resetSelectedTokenIds();
       }
     } catch (error) {
-      removeFromPendingWrapTokenIds(...toWrapSelectedTokenIds);
+      removeFromPendingTokenIds(...selectedTokenIds);
       if (error instanceof BaseError) {
         dispatch({ type: "CLOSE_MODAL" });
         addNotification({
@@ -287,14 +304,16 @@ export function useApproveAndWrap(
   }, [
     address,
     isApprovedForAll,
-    toWrapSelectedTokenIds,
-    writeFameMirrorSetApprovalForAll,
+    selectedTokenIds,
+    writeIerc721SetApprovalForAll,
+    metaVeNft,
+    ourStaker,
     chainId,
     addNotification,
-    addToPendingWrapTokenIds,
-    writeGovSocietyDepositFor,
-    resetWrapSelectedTokenIds,
-    removeFromPendingWrapTokenIds,
+    addToPendingTokenIds,
+    writeYoloStakeBatchDepositFor,
+    resetSelectedTokenIds,
+    removeFromPendingTokenIds,
     transactionState.activeTransactionHashList.length,
   ]);
 

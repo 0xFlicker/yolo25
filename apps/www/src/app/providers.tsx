@@ -10,17 +10,15 @@ import {
   cookieStorage,
   createStorage,
 } from "wagmi";
-import {
-  base,
-  sepolia,
-} from "wagmi/chains";
+import { base, sepolia } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { FC, PropsWithChildren, useMemo } from "react";
 import { SiweMessage } from "siwe";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import { Chain, Transport } from "viem";
 import { SerializedSession } from "@/wagmi/session";
-
+import { NotificationsProvider } from "@/features/notifications/Context";
+import { Notifications } from "@/features/notifications/Notifications";
 
 export const baseSepolia = {
   chains: [base, sepolia],
@@ -37,7 +35,6 @@ export const baseSepolia = {
     ),
   },
 } as const;
-
 
 const SIWE_API_PATH = "/siwe";
 
@@ -132,7 +129,12 @@ const Web3Provider: FC<
           signOutOnNetworkChange={true} // defaults true
           {...siweConfig}
         >
-          <ConnectKitProvider>{children}</ConnectKitProvider>
+          <ConnectKitProvider>
+            <NotificationsProvider>
+              {children}
+              <Notifications />
+            </NotificationsProvider>
+          </ConnectKitProvider>
         </siweClient.Provider>
       </QueryClientProvider>
     </WagmiProvider>
@@ -148,7 +150,7 @@ export const Providers: FC<
 > = ({ siwe, children, base, sepolia }) => {
   const chains = useMemo<readonly [Chain, ...Chain[]]>(() => {
     const chainSet = new Set<Chain>();
-    
+
     if (base || sepolia) {
       for (const chain of baseSepolia.chains) {
         chainSet.add(chain);

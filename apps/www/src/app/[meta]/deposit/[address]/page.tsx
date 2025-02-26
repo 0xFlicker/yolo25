@@ -105,10 +105,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
             ourTokenName={ourTokenName}
             ourTokenDecimals={ourTokenDecimals}
           />
-          <VeNFTGrid
-            meta={META_DEX_CHAIN[meta]}
-            initialTokenIds={tokens.map((t) => t.tokenId)}
-          />
+          <VeNFTGrid initialTokenIds={tokens.map((t) => t.tokenId)} />
         </div>
       </SelectableProvider>
     );

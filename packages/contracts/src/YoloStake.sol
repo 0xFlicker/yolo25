@@ -19,7 +19,7 @@ contract YoloStake is AccessControl {
         _yolo = IYolo(yoloAddress);
     }
 
-    function deposit(uint256 tokenId) external {
+    function depositFor(address to, uint256 tokenId) public {
         _veNFT.transferFrom(msg.sender, address(this), tokenId);
         _veNFT.lockPermanent(tokenId);
         IVotingEscrow.LockedBalance memory lockedBalance = _veNFT.locked(
@@ -27,6 +27,12 @@ contract YoloStake is AccessControl {
         );
         uint256 amount = uint256(uint128(lockedBalance.amount));
         _lockedTokenIdToAmount[tokenId] = amount;
-        _yolo.mint(msg.sender, amount);
+        _yolo.mint(to, amount);
+    }
+
+    function batchDepositFor(address to, uint256[] memory tokenIds) external {
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            depositFor(to, tokenIds[i]);
+        }
     }
 }

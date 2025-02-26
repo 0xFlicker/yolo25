@@ -18,7 +18,7 @@ export const META_DEX_CHAIN: Record<
 > = {
   [META_DEX_ORIGIN.STUX_NET]: {
     chainId: sepolia.id,
-    ourStaker: "0xe5F7e78122BB094d711d5f534070B61501Dd5EEC",
+    ourStaker: "0xEFAE80F9beb270E41cB283B6c4138E157d64a761",
     ourToken: "0x84214A05c2915F7FFb24492a2401263CFd6662ce",
     metaVeNft: "0xe5F7e78122BB094d711d5f534070B61501Dd5EEC",
   },
