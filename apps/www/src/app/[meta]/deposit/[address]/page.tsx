@@ -28,6 +28,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       chainId,
       metaVeNft: metaNftContractAddress,
       ourToken,
+      ourStaker,
     } = META_DEX_CHAIN[meta];
     const client = getChainClient(chainId);
     const [
@@ -105,7 +106,13 @@ export default async function Page({ params }: { params: Promise<Params> }) {
             ourTokenName={ourTokenName}
             ourTokenDecimals={ourTokenDecimals}
           />
-          <VeNFTGrid initialTokenIds={tokens.map((t) => t.tokenId)} />
+          <VeNFTGrid
+            chainId={chainId}
+            ourStaker={ourStaker}
+            ourToken={ourToken}
+            metaVeNft={metaNftContractAddress}
+            initialTokenIds={tokens.map((t) => t.tokenId)}
+          />
         </div>
       </SelectableProvider>
     );

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useCallback, useMemo, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { useNotifications, type Notification } from "./Context";
 import { Snackbar } from "./Snackbar";
 
@@ -15,19 +15,13 @@ export const Notifications: FC = () => {
     setMessageInfo(null);
   }, [messageInfo, removeNotification]);
 
-  const processQueue = useCallback(() => {
-    if (notifications.length > 0) {
+  useEffect(() => {
+    if (notifications.length > 0 && !messageInfo) {
       const topTransaction = notifications[0];
       setMessageInfo(topTransaction);
       removeNotification(topTransaction.id);
     }
-  }, [notifications, removeNotification]);
-
-  useMemo(() => {
-    if (notifications.length > 0 && !messageInfo) {
-      processQueue();
-    }
-  }, [notifications, messageInfo, processQueue]);
+  }, [notifications, messageInfo, removeNotification]);
 
   return (
     <Snackbar

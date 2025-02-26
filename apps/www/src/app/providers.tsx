@@ -19,6 +19,7 @@ import { Chain, Transport } from "viem";
 import { SerializedSession } from "@/wagmi/session";
 import { NotificationsProvider } from "@/features/notifications/Context";
 import { Notifications } from "@/features/notifications/Notifications";
+import { TransactionProvider } from "@/features/transaction-modal/TransactionContext";
 
 export const baseSepolia = {
   chains: [base, sepolia],
@@ -131,8 +132,10 @@ const Web3Provider: FC<
         >
           <ConnectKitProvider>
             <NotificationsProvider>
-              {children}
-              <Notifications />
+              <TransactionProvider>
+                {children}
+                <Notifications />
+              </TransactionProvider>
             </NotificationsProvider>
           </ConnectKitProvider>
         </siweClient.Provider>
