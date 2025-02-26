@@ -4,3 +4,6 @@
 [submodule "packages/contracts/lib/openzeppelin-contracts"]
 	path = packages/contracts/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "packages/contracts/lib/aerodrome-slipstream"]
+	path = packages/contracts/lib/aerodrome-slipstream
+	url = https://github.com/aerodrome-finance/slipstream
