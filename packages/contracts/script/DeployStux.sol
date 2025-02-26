@@ -5,6 +5,7 @@ import {Script, console} from "forge-std/Script.sol";
 import {VeVaultStake} from "../src/VeVaultStake.sol";
 import {DataChunkCompiler} from "../src/metadata/DataChunkCompiler.sol";
 import {VeVaultRendererMetadata} from "../src/metadata/VeVaultRenderer_metadata.sol";
+import {VeVaultRendererImage} from "../src/metadata/VeVaultRenderer_image.sol";
 import {Yolo} from "../src/Yolo.sol";
 
 contract DeployStuxScript is Script {
@@ -18,9 +19,10 @@ contract DeployStuxScript is Script {
         address veNFT = 0xe5F7e78122BB094d711d5f534070B61501Dd5EEC;
         yolo = new Yolo(veNFT);
         DataChunkCompiler compiler = new DataChunkCompiler();
+        VeVaultRendererImage image = new VeVaultRendererImage();
         VeVaultRendererMetadata metadata = new VeVaultRendererMetadata(
             address(compiler),
-            address(yolo)
+            address(image)
         );
 
         veVaultStake = new VeVaultStake(
@@ -29,7 +31,7 @@ contract DeployStuxScript is Script {
             address(metadata)
         );
 
-        yolo.grantRole(yolo._VAULT_ROLE(), address(veVaultStake));
+        yolo.grantRoles(address(veVaultStake), yolo._VAULT_ROLE());
 
         vm.stopBroadcast();
     }

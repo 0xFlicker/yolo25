@@ -18,8 +18,8 @@ contract VeVaultRendererMetadata is IMetaDataURI, Ownable {
     IVeVaultRendererImage public imageMetadata;
 
     constructor(address _compiler, address _imageMetadata) {
-        imageMetadata = IVeVaultRendererImage(_imageMetadata);
         compiler = IDataChunkCompiler(_compiler);
+        imageMetadata = IVeVaultRendererImage(_imageMetadata);
     }
 
     function setImageMetadata(address _imageMetadata) public onlyOwner {

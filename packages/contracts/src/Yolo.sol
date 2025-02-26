@@ -9,7 +9,7 @@ import {LibString} from "solady/utils/LibString.sol";
 contract Yolo is OwnableRoles, ERC20 {
     using LibString for string;
 
-    uint256 internal constant _VAULT_ROLE = _ROLE_0;
+    uint256 public constant _VAULT_ROLE = _ROLE_0;
 
     address private _token;
 
