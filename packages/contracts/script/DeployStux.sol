@@ -18,10 +18,10 @@ contract DeployStuxScript is Script {
     function run() public {
         uint256 deployerPrivateKey = vm.envUint("DEPLOYER_PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
-        address veNFT = 0xe5F7e78122BB094d711d5f534070B61501Dd5EEC;
+        address veNFT = 0xF8053E811889bE6a86e087276419Be4e5d3C2637;
         yolo = new Yolo(veNFT);
         DataChunkCompiler compiler = new DataChunkCompiler();
-        VeVaultRendererImage image = new VeVaultRendererImage("AERO");
+        VeVaultRendererImage image = new VeVaultRendererImage("STUX");
         VeVaultRendererMetadata metadata = new VeVaultRendererMetadata(
             address(compiler),
             address(image)

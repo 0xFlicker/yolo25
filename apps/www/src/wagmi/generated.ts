@@ -292,6 +292,467 @@ export const iYoloAbi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// VeVaultStake
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const veVaultStakeAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      { name: 'veNFTAddress', internalType: 'address', type: 'address' },
+      { name: 'yoloAddress', internalType: 'address', type: 'address' },
+      { name: 'renderer', internalType: 'address', type: 'address' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: '_METADATA_UPDATE_ROLE',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'id', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approve',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: 'result', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenIds', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    name: 'batchDepositFor',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenIds', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    name: 'batchRedeemTo',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'cancelOwnershipHandover',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'pendingOwner', internalType: 'address', type: 'address' },
+    ],
+    name: 'completeOwnershipHandover',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'depositFor',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'generateSeed',
+    outputs: [{ name: '', internalType: 'uint96', type: 'uint96' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'id', internalType: 'uint256', type: 'uint256' }],
+    name: 'getApproved',
+    outputs: [{ name: 'result', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'user', internalType: 'address', type: 'address' },
+      { name: 'roles', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'grantRoles',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'user', internalType: 'address', type: 'address' },
+      { name: 'roles', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'hasAllRoles',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'user', internalType: 'address', type: 'address' },
+      { name: 'roles', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'hasAnyRole',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'operator', internalType: 'address', type: 'address' },
+    ],
+    name: 'isApprovedForAll',
+    outputs: [{ name: 'result', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'locked',
+    outputs: [
+      { name: 'currentValue', internalType: 'uint256', type: 'uint256' },
+      {
+        name: 'lock',
+        internalType: 'struct IVeVaultLock.Lock',
+        type: 'tuple',
+        components: [
+          { name: 'amount', internalType: 'uint128', type: 'uint128' },
+          { name: 'start', internalType: 'uint64', type: 'uint64' },
+          { name: 'end', internalType: 'uint64', type: 'uint64' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'owner',
+    outputs: [{ name: 'result', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'id', internalType: 'uint256', type: 'uint256' }],
+    name: 'ownerOf',
+    outputs: [{ name: 'result', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'pendingOwner', internalType: 'address', type: 'address' },
+    ],
+    name: 'ownershipHandoverExpiresAt',
+    outputs: [{ name: 'result', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'redeemTo',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'roles', internalType: 'uint256', type: 'uint256' }],
+    name: 'renounceRoles',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'requestOwnershipHandover',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'user', internalType: 'address', type: 'address' },
+      { name: 'roles', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'revokeRoles',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'user', internalType: 'address', type: 'address' }],
+    name: 'rolesOf',
+    outputs: [{ name: 'roles', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'id', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'safeTransferFrom',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'id', internalType: 'uint256', type: 'uint256' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'safeTransferFrom',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'operator', internalType: 'address', type: 'address' },
+      { name: 'isApproved', internalType: 'bool', type: 'bool' },
+    ],
+    name: 'setApprovalForAll',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'interfaceId', internalType: 'bytes4', type: 'bytes4' }],
+    name: 'supportsInterface',
+    outputs: [{ name: 'result', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'tokenURI',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'id', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
+    name: 'transferOwnership',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'updateAllMetadata',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'account',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
+    ],
+    name: 'Approval',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'operator',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'isApproved',
+        internalType: 'bool',
+        type: 'bool',
+        indexed: false,
+      },
+    ],
+    name: 'ApprovalForAll',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: '_fromTokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: '_toTokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'BatchMetadataUpdate',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'pendingOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'OwnershipHandoverCanceled',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'pendingOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'OwnershipHandoverRequested',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'oldOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'newOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'OwnershipTransferred',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'user', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'roles',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'RolesUpdated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
+    ],
+    name: 'Transfer',
+  },
+  { type: 'error', inputs: [], name: 'AccountBalanceOverflow' },
+  { type: 'error', inputs: [], name: 'AlreadyInitialized' },
+  { type: 'error', inputs: [], name: 'BalanceQueryForZeroAddress' },
+  { type: 'error', inputs: [], name: 'NewOwnerIsZeroAddress' },
+  { type: 'error', inputs: [], name: 'NoHandoverRequest' },
+  { type: 'error', inputs: [], name: 'NotOwnerNorApproved' },
+  { type: 'error', inputs: [], name: 'TokenAlreadyExists' },
+  { type: 'error', inputs: [], name: 'TokenDoesNotExist' },
+  { type: 'error', inputs: [], name: 'TransferFromIncorrectOwner' },
+  { type: 'error', inputs: [], name: 'TransferToNonERC721ReceiverImplementer' },
+  { type: 'error', inputs: [], name: 'TransferToZeroAddress' },
+  { type: 'error', inputs: [], name: 'Unauthorized' },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // VotingEscrow
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -882,6 +1343,13 @@ export const yoloAbi = [
     inputs: [],
     name: 'DOMAIN_SEPARATOR',
     outputs: [{ name: 'result', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: '_BURNER_ROLE',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
   {
@@ -1579,6 +2047,544 @@ export const useWatchIYoloApprovalEvent =
 export const useWatchIYoloTransferEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
     abi: iYoloAbi,
+    eventName: 'Transfer',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__
+ */
+export const useReadVeVaultStake = /*#__PURE__*/ createUseReadContract({
+  abi: veVaultStakeAbi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"_METADATA_UPDATE_ROLE"`
+ */
+export const useReadVeVaultStakeMetadataUpdateRole =
+  /*#__PURE__*/ createUseReadContract({
+    abi: veVaultStakeAbi,
+    functionName: '_METADATA_UPDATE_ROLE',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"balanceOf"`
+ */
+export const useReadVeVaultStakeBalanceOf = /*#__PURE__*/ createUseReadContract(
+  { abi: veVaultStakeAbi, functionName: 'balanceOf' },
+)
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"generateSeed"`
+ */
+export const useReadVeVaultStakeGenerateSeed =
+  /*#__PURE__*/ createUseReadContract({
+    abi: veVaultStakeAbi,
+    functionName: 'generateSeed',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"getApproved"`
+ */
+export const useReadVeVaultStakeGetApproved =
+  /*#__PURE__*/ createUseReadContract({
+    abi: veVaultStakeAbi,
+    functionName: 'getApproved',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"hasAllRoles"`
+ */
+export const useReadVeVaultStakeHasAllRoles =
+  /*#__PURE__*/ createUseReadContract({
+    abi: veVaultStakeAbi,
+    functionName: 'hasAllRoles',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"hasAnyRole"`
+ */
+export const useReadVeVaultStakeHasAnyRole =
+  /*#__PURE__*/ createUseReadContract({
+    abi: veVaultStakeAbi,
+    functionName: 'hasAnyRole',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"isApprovedForAll"`
+ */
+export const useReadVeVaultStakeIsApprovedForAll =
+  /*#__PURE__*/ createUseReadContract({
+    abi: veVaultStakeAbi,
+    functionName: 'isApprovedForAll',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"locked"`
+ */
+export const useReadVeVaultStakeLocked = /*#__PURE__*/ createUseReadContract({
+  abi: veVaultStakeAbi,
+  functionName: 'locked',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"name"`
+ */
+export const useReadVeVaultStakeName = /*#__PURE__*/ createUseReadContract({
+  abi: veVaultStakeAbi,
+  functionName: 'name',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"owner"`
+ */
+export const useReadVeVaultStakeOwner = /*#__PURE__*/ createUseReadContract({
+  abi: veVaultStakeAbi,
+  functionName: 'owner',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"ownerOf"`
+ */
+export const useReadVeVaultStakeOwnerOf = /*#__PURE__*/ createUseReadContract({
+  abi: veVaultStakeAbi,
+  functionName: 'ownerOf',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"ownershipHandoverExpiresAt"`
+ */
+export const useReadVeVaultStakeOwnershipHandoverExpiresAt =
+  /*#__PURE__*/ createUseReadContract({
+    abi: veVaultStakeAbi,
+    functionName: 'ownershipHandoverExpiresAt',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"rolesOf"`
+ */
+export const useReadVeVaultStakeRolesOf = /*#__PURE__*/ createUseReadContract({
+  abi: veVaultStakeAbi,
+  functionName: 'rolesOf',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"supportsInterface"`
+ */
+export const useReadVeVaultStakeSupportsInterface =
+  /*#__PURE__*/ createUseReadContract({
+    abi: veVaultStakeAbi,
+    functionName: 'supportsInterface',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"symbol"`
+ */
+export const useReadVeVaultStakeSymbol = /*#__PURE__*/ createUseReadContract({
+  abi: veVaultStakeAbi,
+  functionName: 'symbol',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"tokenURI"`
+ */
+export const useReadVeVaultStakeTokenUri = /*#__PURE__*/ createUseReadContract({
+  abi: veVaultStakeAbi,
+  functionName: 'tokenURI',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__
+ */
+export const useWriteVeVaultStake = /*#__PURE__*/ createUseWriteContract({
+  abi: veVaultStakeAbi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"approve"`
+ */
+export const useWriteVeVaultStakeApprove = /*#__PURE__*/ createUseWriteContract(
+  { abi: veVaultStakeAbi, functionName: 'approve' },
+)
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"batchDepositFor"`
+ */
+export const useWriteVeVaultStakeBatchDepositFor =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultStakeAbi,
+    functionName: 'batchDepositFor',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"batchRedeemTo"`
+ */
+export const useWriteVeVaultStakeBatchRedeemTo =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultStakeAbi,
+    functionName: 'batchRedeemTo',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"cancelOwnershipHandover"`
+ */
+export const useWriteVeVaultStakeCancelOwnershipHandover =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultStakeAbi,
+    functionName: 'cancelOwnershipHandover',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"completeOwnershipHandover"`
+ */
+export const useWriteVeVaultStakeCompleteOwnershipHandover =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultStakeAbi,
+    functionName: 'completeOwnershipHandover',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"depositFor"`
+ */
+export const useWriteVeVaultStakeDepositFor =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultStakeAbi,
+    functionName: 'depositFor',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"grantRoles"`
+ */
+export const useWriteVeVaultStakeGrantRoles =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultStakeAbi,
+    functionName: 'grantRoles',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"redeemTo"`
+ */
+export const useWriteVeVaultStakeRedeemTo =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultStakeAbi,
+    functionName: 'redeemTo',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"renounceOwnership"`
+ */
+export const useWriteVeVaultStakeRenounceOwnership =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultStakeAbi,
+    functionName: 'renounceOwnership',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"renounceRoles"`
+ */
+export const useWriteVeVaultStakeRenounceRoles =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultStakeAbi,
+    functionName: 'renounceRoles',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"requestOwnershipHandover"`
+ */
+export const useWriteVeVaultStakeRequestOwnershipHandover =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultStakeAbi,
+    functionName: 'requestOwnershipHandover',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"revokeRoles"`
+ */
+export const useWriteVeVaultStakeRevokeRoles =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultStakeAbi,
+    functionName: 'revokeRoles',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"safeTransferFrom"`
+ */
+export const useWriteVeVaultStakeSafeTransferFrom =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultStakeAbi,
+    functionName: 'safeTransferFrom',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"setApprovalForAll"`
+ */
+export const useWriteVeVaultStakeSetApprovalForAll =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultStakeAbi,
+    functionName: 'setApprovalForAll',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useWriteVeVaultStakeTransferFrom =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultStakeAbi,
+    functionName: 'transferFrom',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"transferOwnership"`
+ */
+export const useWriteVeVaultStakeTransferOwnership =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultStakeAbi,
+    functionName: 'transferOwnership',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"updateAllMetadata"`
+ */
+export const useWriteVeVaultStakeUpdateAllMetadata =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultStakeAbi,
+    functionName: 'updateAllMetadata',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__
+ */
+export const useSimulateVeVaultStake = /*#__PURE__*/ createUseSimulateContract({
+  abi: veVaultStakeAbi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"approve"`
+ */
+export const useSimulateVeVaultStakeApprove =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultStakeAbi,
+    functionName: 'approve',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"batchDepositFor"`
+ */
+export const useSimulateVeVaultStakeBatchDepositFor =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultStakeAbi,
+    functionName: 'batchDepositFor',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"batchRedeemTo"`
+ */
+export const useSimulateVeVaultStakeBatchRedeemTo =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultStakeAbi,
+    functionName: 'batchRedeemTo',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"cancelOwnershipHandover"`
+ */
+export const useSimulateVeVaultStakeCancelOwnershipHandover =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultStakeAbi,
+    functionName: 'cancelOwnershipHandover',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"completeOwnershipHandover"`
+ */
+export const useSimulateVeVaultStakeCompleteOwnershipHandover =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultStakeAbi,
+    functionName: 'completeOwnershipHandover',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"depositFor"`
+ */
+export const useSimulateVeVaultStakeDepositFor =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultStakeAbi,
+    functionName: 'depositFor',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"grantRoles"`
+ */
+export const useSimulateVeVaultStakeGrantRoles =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultStakeAbi,
+    functionName: 'grantRoles',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"redeemTo"`
+ */
+export const useSimulateVeVaultStakeRedeemTo =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultStakeAbi,
+    functionName: 'redeemTo',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"renounceOwnership"`
+ */
+export const useSimulateVeVaultStakeRenounceOwnership =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultStakeAbi,
+    functionName: 'renounceOwnership',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"renounceRoles"`
+ */
+export const useSimulateVeVaultStakeRenounceRoles =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultStakeAbi,
+    functionName: 'renounceRoles',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"requestOwnershipHandover"`
+ */
+export const useSimulateVeVaultStakeRequestOwnershipHandover =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultStakeAbi,
+    functionName: 'requestOwnershipHandover',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"revokeRoles"`
+ */
+export const useSimulateVeVaultStakeRevokeRoles =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultStakeAbi,
+    functionName: 'revokeRoles',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"safeTransferFrom"`
+ */
+export const useSimulateVeVaultStakeSafeTransferFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultStakeAbi,
+    functionName: 'safeTransferFrom',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"setApprovalForAll"`
+ */
+export const useSimulateVeVaultStakeSetApprovalForAll =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultStakeAbi,
+    functionName: 'setApprovalForAll',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useSimulateVeVaultStakeTransferFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultStakeAbi,
+    functionName: 'transferFrom',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"transferOwnership"`
+ */
+export const useSimulateVeVaultStakeTransferOwnership =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultStakeAbi,
+    functionName: 'transferOwnership',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"updateAllMetadata"`
+ */
+export const useSimulateVeVaultStakeUpdateAllMetadata =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultStakeAbi,
+    functionName: 'updateAllMetadata',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__
+ */
+export const useWatchVeVaultStakeEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({ abi: veVaultStakeAbi })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__ and `eventName` set to `"Approval"`
+ */
+export const useWatchVeVaultStakeApprovalEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: veVaultStakeAbi,
+    eventName: 'Approval',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__ and `eventName` set to `"ApprovalForAll"`
+ */
+export const useWatchVeVaultStakeApprovalForAllEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: veVaultStakeAbi,
+    eventName: 'ApprovalForAll',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__ and `eventName` set to `"BatchMetadataUpdate"`
+ */
+export const useWatchVeVaultStakeBatchMetadataUpdateEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: veVaultStakeAbi,
+    eventName: 'BatchMetadataUpdate',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__ and `eventName` set to `"OwnershipHandoverCanceled"`
+ */
+export const useWatchVeVaultStakeOwnershipHandoverCanceledEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: veVaultStakeAbi,
+    eventName: 'OwnershipHandoverCanceled',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__ and `eventName` set to `"OwnershipHandoverRequested"`
+ */
+export const useWatchVeVaultStakeOwnershipHandoverRequestedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: veVaultStakeAbi,
+    eventName: 'OwnershipHandoverRequested',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__ and `eventName` set to `"OwnershipTransferred"`
+ */
+export const useWatchVeVaultStakeOwnershipTransferredEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: veVaultStakeAbi,
+    eventName: 'OwnershipTransferred',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__ and `eventName` set to `"RolesUpdated"`
+ */
+export const useWatchVeVaultStakeRolesUpdatedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: veVaultStakeAbi,
+    eventName: 'RolesUpdated',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__ and `eventName` set to `"Transfer"`
+ */
+export const useWatchVeVaultStakeTransferEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: veVaultStakeAbi,
     eventName: 'Transfer',
   })
 
@@ -2281,6 +3287,14 @@ export const useReadYolo = /*#__PURE__*/ createUseReadContract({ abi: yoloAbi })
 export const useReadYoloDomainSeparator = /*#__PURE__*/ createUseReadContract({
   abi: yoloAbi,
   functionName: 'DOMAIN_SEPARATOR',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link yoloAbi}__ and `functionName` set to `"_BURNER_ROLE"`
+ */
+export const useReadYoloBurnerRole = /*#__PURE__*/ createUseReadContract({
+  abi: yoloAbi,
+  functionName: '_BURNER_ROLE',
 })
 
 /**

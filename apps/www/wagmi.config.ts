@@ -15,7 +15,7 @@ export default defineConfig({
       project: "../../packages/contracts",
       include: [
         "Yolo.sol/**",
-        "YoloStake.sol/**",
+        "VeVaultStake.sol/**",
         "IYolo.sol/**",
         "IVoteEscrow.sol/**",
         "veStuxNet.sol/**",

@@ -3,7 +3,7 @@ import { useCallback, useEffect } from "react";
 import { BaseError, erc721Abi } from "viem";
 import {
   useWriteIerc721SetApprovalForAll,
-  useWriteYoloStakeBatchDepositFor,
+  useWriteVeVaultStakeBatchDepositFor,
 } from "@/wagmi/generated";
 
 import {
@@ -54,8 +54,8 @@ export function useApproveAndDeposit({
   const { writeContractAsync: writeIerc721SetApprovalForAll } =
     useWriteIerc721SetApprovalForAll();
 
-  const { writeContractAsync: writeYoloStakeBatchDepositFor } =
-    useWriteYoloStakeBatchDepositFor();
+  const { writeContractAsync: writeVeVaultStakeBatchDepositFor } =
+    useWriteVeVaultStakeBatchDepositFor();
 
   // Transaction watchers
   const { data: transactionData } = useWaitForTransactionReceipt({
@@ -84,7 +84,7 @@ export function useApproveAndDeposit({
   ]);
 
   // -----------------------------------------
-  // Main wrap call
+  // Main deposit call
   // -----------------------------------------
   const deposit = useCallback(async () => {
     if (!address) return;
@@ -130,12 +130,12 @@ export function useApproveAndDeposit({
       if (!approvalWasAttemptedAndFailed) {
         addTransaction({
           id: `deposit-${chainId}-${metaVeNft}-${ourStaker}`,
-          shortDescription: "depositing",
+          shortDescription: "deposit",
           context: selectedTokenIds,
         });
 
         addToPendingTokenIds(...selectedTokenIds);
-        const depositResponse = await writeYoloStakeBatchDepositFor({
+        const depositResponse = await writeVeVaultStakeBatchDepositFor({
           address: ourStaker,
           args: [address, selectedTokenIds],
           chainId,
@@ -164,7 +164,6 @@ export function useApproveAndDeposit({
     address,
     openModal,
     isApprovedForAll,
-    selectedTokenIds,
     addTransaction,
     chainId,
     metaVeNft,
@@ -173,8 +172,9 @@ export function useApproveAndDeposit({
     updateTransactionHash,
     removeTransaction,
     addNotification,
+    selectedTokenIds,
     addToPendingTokenIds,
-    writeYoloStakeBatchDepositFor,
+    writeVeVaultStakeBatchDepositFor,
     resetSelectedTokenIds,
     removeFromPendingTokenIds,
   ]);
