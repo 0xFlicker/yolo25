@@ -3,7 +3,8 @@ src = "src"
 out = "out"
 libs = ["lib"]
 remappings = [
-  "lib/slipstream:contracts/=lib/aerodrome-slipstream/contracts/"
+  "lib/slipstream:contracts/=lib/aerodrome-slipstream/contracts/",
+  "aerodrome-finance/contracts/=lib/aerodrome-finance/contracts/"
 ]
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
