@@ -29,13 +29,13 @@
  * limitations under the License.                                             *
  ******************************************************************************/
 
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.7.0 <0.9.0;
 
 /* Imports if needed */
 // add roles (OZ)
 // swap to velodrome - v3 shit
-import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
-import {IWETH} from "aerodrome-finance/contracts/interfaces/IWETH.sol";
+import {IERC20} from "./interface/IERC20.sol";
+import {IWETH} from "../lib/aerodrome-finance/lib/openzeppelin-contracts/contracts/interfaces/IWETH.sol";
 import {ICLPool} from "slipstream/contracts/core/interfaces/ICLPool.sol";
 import {ICLFactory} from "slipstream/contracts/core/interfaces/ICLFactory.sol";
 import {INonfungiblePositionManager} from "slipstream/contracts/periphery/interfaces/INonfungiblePositionManager.sol";
