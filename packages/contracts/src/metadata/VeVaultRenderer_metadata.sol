@@ -54,11 +54,8 @@ contract VeVaultRendererMetadata is IMetaDataURI, Ownable {
                             imageMetadata.render(
                                 tokenId,
                                 seed,
-                                lock.amount,
                                 maxValue,
-                                lock.start,
-                                lock.end,
-                                isDark,
+                                lock,
                                 isVRendered
                             )
                         )

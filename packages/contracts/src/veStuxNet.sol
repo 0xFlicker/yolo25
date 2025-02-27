@@ -128,7 +128,9 @@ contract VotingEscrow is OwnableRoles, ERC2771Context {
 
     function setArtProxy(address _proxy) external {}
 
-    function tokenURI(uint256 _tokenId) external view returns (string memory) {
+    function tokenURI(
+        uint256 /*_tokenId*/
+    ) external pure returns (string memory) {
         return "no";
     }
 

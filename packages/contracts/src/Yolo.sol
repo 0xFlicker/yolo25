@@ -10,6 +10,7 @@ contract Yolo is OwnableRoles, ERC20 {
     using LibString for string;
 
     uint256 public constant _VAULT_ROLE = _ROLE_0;
+    uint256 public constant _BURNER_ROLE = _ROLE_1;
 
     address private _token;
 
@@ -45,7 +46,7 @@ contract Yolo is OwnableRoles, ERC20 {
     function burn(
         address from,
         uint256 amount
-    ) external onlyRoles(_VAULT_ROLE) {
+    ) external onlyRoles(_VAULT_ROLE | _BURNER_ROLE) {
         _burn(from, amount);
     }
 }

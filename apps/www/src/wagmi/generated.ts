@@ -674,10 +674,10 @@ export const votingEscrowAbi = [
   },
   {
     type: 'function',
-    inputs: [{ name: '_tokenId', internalType: 'uint256', type: 'uint256' }],
+    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     name: 'tokenURI',
     outputs: [{ name: '', internalType: 'string', type: 'string' }],
-    stateMutability: 'view',
+    stateMutability: 'pure',
   },
   {
     type: 'function',
@@ -872,12 +872,23 @@ export const votingEscrowAbi = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const yoloAbi = [
-  { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
+  {
+    type: 'constructor',
+    inputs: [{ name: 'token', internalType: 'address', type: 'address' }],
+    stateMutability: 'nonpayable',
+  },
   {
     type: 'function',
     inputs: [],
     name: 'DOMAIN_SEPARATOR',
     outputs: [{ name: 'result', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: '_VAULT_ROLE',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
   {
@@ -985,7 +996,7 @@ export const yoloAbi = [
     inputs: [],
     name: 'name',
     outputs: [{ name: '', internalType: 'string', type: 'string' }],
-    stateMutability: 'pure',
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1068,7 +1079,7 @@ export const yoloAbi = [
     inputs: [],
     name: 'symbol',
     outputs: [{ name: '', internalType: 'string', type: 'string' }],
-    stateMutability: 'pure',
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1210,168 +1221,14 @@ export const yoloAbi = [
   { type: 'error', inputs: [], name: 'InsufficientAllowance' },
   { type: 'error', inputs: [], name: 'InsufficientBalance' },
   { type: 'error', inputs: [], name: 'InvalidPermit' },
+  { type: 'error', inputs: [], name: 'NameCallFailed' },
   { type: 'error', inputs: [], name: 'NewOwnerIsZeroAddress' },
   { type: 'error', inputs: [], name: 'NoHandoverRequest' },
   { type: 'error', inputs: [], name: 'Permit2AllowanceIsFixedAtInfinity' },
   { type: 'error', inputs: [], name: 'PermitExpired' },
+  { type: 'error', inputs: [], name: 'SymbolCallFailed' },
   { type: 'error', inputs: [], name: 'TotalSupplyOverflow' },
   { type: 'error', inputs: [], name: 'Unauthorized' },
-] as const
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// YoloStake
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-export const yoloStakeAbi = [
-  {
-    type: 'constructor',
-    inputs: [
-      { name: 'veNFTAddress', internalType: 'address', type: 'address' },
-      { name: 'yoloAddress', internalType: 'address', type: 'address' },
-    ],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'DEFAULT_ADMIN_ROLE',
-    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'to', internalType: 'address', type: 'address' },
-      { name: 'tokenIds', internalType: 'uint256[]', type: 'uint256[]' },
-    ],
-    name: 'batchDepositFor',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'to', internalType: 'address', type: 'address' },
-      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'depositFor',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'role', internalType: 'bytes32', type: 'bytes32' }],
-    name: 'getRoleAdmin',
-    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'role', internalType: 'bytes32', type: 'bytes32' },
-      { name: 'account', internalType: 'address', type: 'address' },
-    ],
-    name: 'grantRole',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'role', internalType: 'bytes32', type: 'bytes32' },
-      { name: 'account', internalType: 'address', type: 'address' },
-    ],
-    name: 'hasRole',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'role', internalType: 'bytes32', type: 'bytes32' },
-      { name: 'account', internalType: 'address', type: 'address' },
-    ],
-    name: 'renounceRole',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'role', internalType: 'bytes32', type: 'bytes32' },
-      { name: 'account', internalType: 'address', type: 'address' },
-    ],
-    name: 'revokeRole',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'interfaceId', internalType: 'bytes4', type: 'bytes4' }],
-    name: 'supportsInterface',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      { name: 'role', internalType: 'bytes32', type: 'bytes32', indexed: true },
-      {
-        name: 'previousAdminRole',
-        internalType: 'bytes32',
-        type: 'bytes32',
-        indexed: true,
-      },
-      {
-        name: 'newAdminRole',
-        internalType: 'bytes32',
-        type: 'bytes32',
-        indexed: true,
-      },
-    ],
-    name: 'RoleAdminChanged',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      { name: 'role', internalType: 'bytes32', type: 'bytes32', indexed: true },
-      {
-        name: 'account',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'sender',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'RoleGranted',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      { name: 'role', internalType: 'bytes32', type: 'bytes32', indexed: true },
-      {
-        name: 'account',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'sender',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'RoleRevoked',
-  },
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2427,6 +2284,14 @@ export const useReadYoloDomainSeparator = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link yoloAbi}__ and `functionName` set to `"_VAULT_ROLE"`
+ */
+export const useReadYoloVaultRole = /*#__PURE__*/ createUseReadContract({
+  abi: yoloAbi,
+  functionName: '_VAULT_ROLE',
+})
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link yoloAbi}__ and `functionName` set to `"allowance"`
  */
 export const useReadYoloAllowance = /*#__PURE__*/ createUseReadContract({
@@ -2834,177 +2699,4 @@ export const useWatchYoloTransferEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
     abi: yoloAbi,
     eventName: 'Transfer',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link yoloStakeAbi}__
- */
-export const useReadYoloStake = /*#__PURE__*/ createUseReadContract({
-  abi: yoloStakeAbi,
-})
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link yoloStakeAbi}__ and `functionName` set to `"DEFAULT_ADMIN_ROLE"`
- */
-export const useReadYoloStakeDefaultAdminRole =
-  /*#__PURE__*/ createUseReadContract({
-    abi: yoloStakeAbi,
-    functionName: 'DEFAULT_ADMIN_ROLE',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link yoloStakeAbi}__ and `functionName` set to `"getRoleAdmin"`
- */
-export const useReadYoloStakeGetRoleAdmin = /*#__PURE__*/ createUseReadContract(
-  { abi: yoloStakeAbi, functionName: 'getRoleAdmin' },
-)
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link yoloStakeAbi}__ and `functionName` set to `"hasRole"`
- */
-export const useReadYoloStakeHasRole = /*#__PURE__*/ createUseReadContract({
-  abi: yoloStakeAbi,
-  functionName: 'hasRole',
-})
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link yoloStakeAbi}__ and `functionName` set to `"supportsInterface"`
- */
-export const useReadYoloStakeSupportsInterface =
-  /*#__PURE__*/ createUseReadContract({
-    abi: yoloStakeAbi,
-    functionName: 'supportsInterface',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link yoloStakeAbi}__
- */
-export const useWriteYoloStake = /*#__PURE__*/ createUseWriteContract({
-  abi: yoloStakeAbi,
-})
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link yoloStakeAbi}__ and `functionName` set to `"batchDepositFor"`
- */
-export const useWriteYoloStakeBatchDepositFor =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: yoloStakeAbi,
-    functionName: 'batchDepositFor',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link yoloStakeAbi}__ and `functionName` set to `"depositFor"`
- */
-export const useWriteYoloStakeDepositFor = /*#__PURE__*/ createUseWriteContract(
-  { abi: yoloStakeAbi, functionName: 'depositFor' },
-)
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link yoloStakeAbi}__ and `functionName` set to `"grantRole"`
- */
-export const useWriteYoloStakeGrantRole = /*#__PURE__*/ createUseWriteContract({
-  abi: yoloStakeAbi,
-  functionName: 'grantRole',
-})
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link yoloStakeAbi}__ and `functionName` set to `"renounceRole"`
- */
-export const useWriteYoloStakeRenounceRole =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: yoloStakeAbi,
-    functionName: 'renounceRole',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link yoloStakeAbi}__ and `functionName` set to `"revokeRole"`
- */
-export const useWriteYoloStakeRevokeRole = /*#__PURE__*/ createUseWriteContract(
-  { abi: yoloStakeAbi, functionName: 'revokeRole' },
-)
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link yoloStakeAbi}__
- */
-export const useSimulateYoloStake = /*#__PURE__*/ createUseSimulateContract({
-  abi: yoloStakeAbi,
-})
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link yoloStakeAbi}__ and `functionName` set to `"batchDepositFor"`
- */
-export const useSimulateYoloStakeBatchDepositFor =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: yoloStakeAbi,
-    functionName: 'batchDepositFor',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link yoloStakeAbi}__ and `functionName` set to `"depositFor"`
- */
-export const useSimulateYoloStakeDepositFor =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: yoloStakeAbi,
-    functionName: 'depositFor',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link yoloStakeAbi}__ and `functionName` set to `"grantRole"`
- */
-export const useSimulateYoloStakeGrantRole =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: yoloStakeAbi,
-    functionName: 'grantRole',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link yoloStakeAbi}__ and `functionName` set to `"renounceRole"`
- */
-export const useSimulateYoloStakeRenounceRole =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: yoloStakeAbi,
-    functionName: 'renounceRole',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link yoloStakeAbi}__ and `functionName` set to `"revokeRole"`
- */
-export const useSimulateYoloStakeRevokeRole =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: yoloStakeAbi,
-    functionName: 'revokeRole',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link yoloStakeAbi}__
- */
-export const useWatchYoloStakeEvent = /*#__PURE__*/ createUseWatchContractEvent(
-  { abi: yoloStakeAbi },
-)
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link yoloStakeAbi}__ and `eventName` set to `"RoleAdminChanged"`
- */
-export const useWatchYoloStakeRoleAdminChangedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: yoloStakeAbi,
-    eventName: 'RoleAdminChanged',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link yoloStakeAbi}__ and `eventName` set to `"RoleGranted"`
- */
-export const useWatchYoloStakeRoleGrantedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: yoloStakeAbi,
-    eventName: 'RoleGranted',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link yoloStakeAbi}__ and `eventName` set to `"RoleRevoked"`
- */
-export const useWatchYoloStakeRoleRevokedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: yoloStakeAbi,
-    eventName: 'RoleRevoked',
   })

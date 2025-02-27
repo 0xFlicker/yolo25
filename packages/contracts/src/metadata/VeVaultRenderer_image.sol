@@ -14,13 +14,13 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
     }
 
     function render(
-        uint256 tokenId,
+        uint256 /* tokenId */,
         uint96 seed,
-        uint128 maxValue,
+        uint128 /* maxValue */,
         Lock calldata lock,
         bool[80] memory isVRendered
-    ) public pure returns (string memory) {
-        return generateSvg(seed, lock.amount, isVRendered);
+    ) public view returns (string memory) {
+        return generateSvg(seed, lock, isVRendered);
     }
 
     /**
@@ -32,7 +32,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
         uint96 seed,
         Lock calldata lock,
         bool[80] memory isVRendered
-    ) public pure returns (string memory) {
+    ) public view returns (string memory) {
         bool isDark = seed % 2 == 0;
 
         return
@@ -41,10 +41,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
                 isDark ? "111111" : "EEEEEE",
                 '" />',
                 generateTopGrid(seed, isVRendered),
-                generateValueText(
-                    MetadataLib.uint256ToStr(uint256(uint128(lock.amount))),
-                    isDark
-                ),
+                generateValueText(uint128(lock.amount), isDark),
                 generateBottomGrid(seed, isVRendered),
                 "</svg>"
             );
@@ -53,7 +50,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
     function generateValueText(
         uint128 value,
         bool isDark
-    ) internal pure returns (string memory) {
+    ) internal view returns (string memory) {
         return
             string.concat(
                 '<text x="50%" text-anchor="middle" style="white-space: pre; fill: #',
@@ -69,7 +66,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
     function generateTopGrid(
         uint96 seed,
         bool[80] memory isCheckRendered
-    ) internal pure returns (string memory) {
+    ) internal view returns (string memory) {
         return
             string.concat(
                 getIconRow(seed, isCheckRendered, 0, "104"),
@@ -83,7 +80,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
     function generateBottomGrid(
         uint96 seed,
         bool[80] memory isCheckRendered
-    ) internal pure returns (string memory) {
+    ) internal view returns (string memory) {
         return
             string.concat(
                 getIconRow(seed, isCheckRendered, 40, "400"),
@@ -105,7 +102,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
         bool[80] memory isCheckRendered,
         uint8 startIndex,
         string memory yPos
-    ) internal pure returns (string memory) {
+    ) internal view returns (string memory) {
         // SVG is 512 pixels wide and the checks have a margin of 16 pixels between each other and a 104 pixel margin on the left and right
         return
             string.concat(
@@ -128,7 +125,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
         uint96 seed,
         bool[80] memory isCheckRendered,
         uint8 startIndex
-    ) internal pure returns (string memory) {
+    ) internal view returns (string memory) {
         // SVG is 512 pixels wide and the checks have a margin of 16 pixels between each other and a 104 pixel margin on the left and right
         return
             string.concat(
@@ -175,7 +172,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
         uint96 seed,
         bool[80] memory isCheckRendered,
         uint8 startIndex
-    ) internal pure returns (string memory) {
+    ) internal view returns (string memory) {
         // SVG is 512 pixels wide and the checks have a margin of 16 pixels between each other and a 104 pixel margin on the left and right
         return
             string.concat(
@@ -217,7 +214,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
     function getIcon(
         string memory colorStr,
         string memory xPos
-    ) internal pure returns (string memory) {
+    ) internal view returns (string memory) {
         return
             string.concat(
                 '<g transform="translate(',

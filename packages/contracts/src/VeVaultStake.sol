@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "aerodrome-finance/interfaces/IVotingEscrow.sol";
+import "aerodrome-finance/contracts/interfaces/IVotingEscrow.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "solady/tokens/ERC721.sol";
 import "solady/auth/OwnableRoles.sol";

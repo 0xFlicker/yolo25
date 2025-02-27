@@ -9,7 +9,6 @@ interface IVeVaultRendererImage is IVeVaultLock {
         uint96 seed,
         uint128 maxValue,
         Lock calldata lock,
-        bool isDarkMode,
         bool[80] memory isRendered
     ) external view returns (string memory);
 }

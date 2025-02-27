@@ -5,11 +5,10 @@ libs = ["lib"]
 remappings = [
   "forge-std=lib/forge-std/src",
   "solady=lib/solady/src",
-  "@openzeppelin/contracts/=lib/aerodrome-slipstream/lib/openzeppelin-contracts/contracts/",
+  "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
   "aerodrome-finance/contracts/=lib/aerodrome-finance/contracts/",
   "aerodrome-slipstream/contracts/=lib/aerodrome-slipstream/contracts/",
-  "contracts/=lib/aerodrome-slipstream/contracts/"
-
+  "lib/aerodrome-slipstream:contracts/=lib/aerodrome-slipstream/contracts/"
 ]
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
 

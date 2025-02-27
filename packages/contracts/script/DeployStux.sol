@@ -2,6 +2,7 @@
 pragma solidity ^0.8.13;
 
 import {Script, console} from "forge-std/Script.sol";
+import {VmSafe} from "forge-std/Vm.sol";
 import {VeVaultStake} from "../src/VeVaultStake.sol";
 import {DataChunkCompiler} from "../src/metadata/DataChunkCompiler.sol";
 import {VeVaultRendererMetadata} from "../src/metadata/VeVaultRenderer_metadata.sol";
@@ -15,11 +16,12 @@ contract DeployStuxScript is Script {
     function setUp() public {}
 
     function run() public {
-        vm.startBroadcast();
+        uint256 deployerPrivateKey = vm.envUint("DEPLOYER_PRIVATE_KEY");
+        vm.startBroadcast(deployerPrivateKey);
         address veNFT = 0xe5F7e78122BB094d711d5f534070B61501Dd5EEC;
         yolo = new Yolo(veNFT);
         DataChunkCompiler compiler = new DataChunkCompiler();
-        VeVaultRendererImage image = new VeVaultRendererImage();
+        VeVaultRendererImage image = new VeVaultRendererImage("AERO");
         VeVaultRendererMetadata metadata = new VeVaultRendererMetadata(
             address(compiler),
             address(image)
