@@ -33,7 +33,6 @@ pragma solidity >=0.7.0 <0.9.0;
 
 /* Imports if needed */
 // add roles (OZ)
-// swap to velodrome - v3 shit
 import {IERC20} from "./interface/IERC20.sol";
 import {IWETH} from "./interface/IWETH.sol";
 import {ICLPool} from "slipstream/contracts/core/interfaces/ICLPool.sol";
@@ -48,7 +47,6 @@ contract YoloLP {
     address public v3Router;
     address public v3PoolAddress;
     address public v3PosMgr;
-    uint24 public poolFees;
     uint24 public tickSpace;
     uint256[] public lpTokenIds;
 
@@ -57,19 +55,25 @@ contract YoloLP {
     event FactorySet(address _old, address _new);
     event RouterSet(address _old, address _new);
     event PoolAddressSet(address _old, address _new);
-    event PoolFeesSet(uint24 _old, uint24 _new);
     event PositionManagerSet(address _old, address _new);
     event TickSpacingSet(uint24 _old, uint24 _new);
 
     // error MaxSplaining(string reason);
 
+    /// @dev standard constructor
+    /// @param _yolo is the CA of $yolo
+    /// @param _weth is the CA of $weth
+    /// @param _v3Router is the CA of the slipstream router
+    /// @param _v3Factory is the CA of the slipstream factory
+    /// @param _v3PosMgr is the CA of the slipstream position manager
+    /// @param _tickSpace is the tick spacing 1, 50, 100, 200, 2000, 10 (from slipstream factory)
     constructor(
         address _yolo,
         address _weth,
         address _v3Router,
         address _v3Factory,
         address _v3PosMgr,
-        uint24 _poolFees
+        uint24 _tickSpace
     ) {
         weth = IERC20(_weth);
         emit token1Set(address(0), _weth);
@@ -81,10 +85,7 @@ contract YoloLP {
         emit FactorySet(address(0), _v3Factory);
         v3PosMgr = _v3PosMgr;
         emit PositionManagerSet(address(0), _v3PosMgr);
-        poolFees = _poolFees;
-        emit PoolFeesSet(0, poolFees);
-        // Does not exist on ICLFactory
-        tickSpace = ICLFactory(v3Factory).feeAmountTickSpacing(poolFees);
+        tickSpace = _tickSpace;
         emit TickSpacingSet(0, tickSpace);
 
         // approve weth
@@ -96,6 +97,12 @@ contract YoloLP {
         yolo.approve(v3PosMgr, type(uint256).max);
     }
 
+    /// @dev the deposit native function
+    /// drop eth =>
+    /// wrap it up =>
+    /// mint a single sided v3 LP (stays on address(this)) =>
+    /// calc value of aero swap for value =>
+    /// mint our NFT with that value
     function depositEth() external payable {
         // mint sell wall -1 tick to -2 ticks from current sqrtPriceX96
         // payable eth => weth (on contract)
@@ -112,6 +119,13 @@ contract YoloLP {
         // mint our NFT
     }
 
+    /// @dev either i'm a Jenius (Genius with a J) or completely insane...
+    /// deposit slipstream nft =>
+    /// check0, is it $yolo? =>
+    /// check1, is it $weth? =>
+    /// calc the $yolo to $aero swap value =>
+    /// calc the $weth to $aero swap value =>
+    /// add them up, mint out NFT with that value
     function depositLP(uint256 _tokenId) external {
         Position memory data = _getPosition(_tokenId);
         require(
@@ -131,6 +145,10 @@ contract YoloLP {
         lpTokenIds.push(_tokenId);
     }
 
+    /// @dev this is bland, it's 1990's calling wanting the Taco Bell pastel colors back...
+    /// @notice this has off chain values derived from sqrtPriceX96, et al
+    /// @param _yoloAmount is the calculated amount of $yolo to be minted for an "infinity pool"
+    /// @param _sqrtPriceX96 is so much easier to calculate off chain, but honestly could pull CL200 areo/weth's for parity
     function initalLPEth(
         uint256 _yoloAmount,
         uint160 _sqrtPriceX96
@@ -165,15 +183,15 @@ contract YoloLP {
         _mintInfinityPosition(deltaYolo, deltaEth, _sqrtPriceX96);
     }
 
-    /// @dev this is the magical function you will use in a few functions
+    /// @dev this is the magical function you will use once...
     /// @param _token0Amount amount of yolo to add to position
     /// @param _token1Amount amount of weth to add to position
-    /// @param _sqrtPriceX96 is the magic number from GUI
+    /// @param _sqrtPriceX96 is the magic number passed through
     /// @return tokenId the uint256 tokenId from the 721 position
-    /// @return liquidity amount of liquidity added to v3 IUniswapV3Pool
+    /// @return liquidity amount of liquidity added to v3 slipstream pool
     /// @return token0Amount the uint256 of the left over token
     /// @return token1Amount the uint256 of the left over wavax
-    /// @notice this generates an infinity pool
+    /// @notice this generates an infinity pool, aka type(int24).min <-> type(int24).max
     function _mintInfinityPosition(
         uint256 _token0Amount,
         uint256 _token1Amount,
@@ -217,7 +235,7 @@ contract YoloLP {
     /// @param _amount amount of weth
     /// @param _sqrtPriceX96 is the magic number from pool.slot0
     /// @return tokenId the uint256 tokenId from the 721 position
-    /// @return liquidity amount of liquidity added to v3 IUniswapV3Pool
+    /// @return liquidity amount of liquidity added to v3 slipstream pool
     /// @return token0Amount the uint256 of the left over token
     /// @return token1Amount the uint256 of the left over wavax
     /// @notice this generates a buy wall... 1-2 ticks below current tick
@@ -311,6 +329,8 @@ contract YoloLP {
         ) = INonfungiblePositionManager(v3PosMgr).positions(_tokenId);
     }
 
+    /// @dev this is that bland, got to have it or it breaks function
+    /// yeah this is for NFT's, but at least they aren't illiquid jpegs
     function onERC721Received(
         address operator,
         address from,
