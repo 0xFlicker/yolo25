@@ -10,3 +10,6 @@
 [submodule "packages/aero/lib/forge-std"]
 	path = packages/aero/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "packages/aero/lib/aerodrome-slipstream"]
+	path = packages/aero/lib/aerodrome-slipstream
+	url = https://github.com/aerodrome-finance/slipstream
