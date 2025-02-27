@@ -93,6 +93,8 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
             ++_tokenIdCounter,
             generateSeed(_tokenIdCounter)
         );
+
+        _veNFT.safeTransferFrom(msg.sender, address(this), tokenId);
     }
 
     function batchDepositFor(address to, uint256[] memory tokenIds) external {
@@ -154,5 +156,17 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
         if (_tokenIdCounter > 0) {
             emit BatchMetadataUpdate(1, _tokenIdCounter);
         }
+    }
+
+    // Accepts ERC721 transfers
+    error NotSupported();
+    function onERC721Received(
+        address /*operator*/,
+        address /*from*/,
+        uint256 /*tokenId*/,
+        bytes calldata /*data*/
+    ) external view returns (bytes4) {
+        if (msg.sender != address(_veNFT)) revert NotSupported();
+        return this.onERC721Received.selector;
     }
 }
