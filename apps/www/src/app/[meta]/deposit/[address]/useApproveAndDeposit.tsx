@@ -15,6 +15,8 @@ import { useSelectable } from "./context";
 import { useNotifications } from "@/features/notifications/Context";
 import { META_DEX_ORIGIN, META_DEX_CHAIN } from "@/wagmi/contracts";
 import { useTransactions } from "@/features/transaction-modal/TransactionContext";
+import { revalidate } from "./actions";
+import { useParams, useRouter } from "next/navigation";
 
 // -------------------------------
 // Hook
@@ -25,6 +27,10 @@ export function useApproveAndDeposit({
   ourStaker,
   selectedTokenIds,
 }: (typeof META_DEX_CHAIN)[META_DEX_ORIGIN] & { selectedTokenIds: bigint[] }) {
+  const router = useRouter();
+  const { meta: metaParams } = useParams();
+  const meta =
+    (Array.isArray(metaParams) ? metaParams[0] : metaParams) ?? "stuxnet";
   const {
     addTransaction,
     updateTransactionHash,
@@ -97,7 +103,7 @@ export function useApproveAndDeposit({
       if (!isApprovedForAll) {
         addTransaction({
           id: `approval-${chainId}-${metaVeNft}-${ourStaker}`,
-          shortDescription: "approving",
+          shortDescription: "approval",
         });
 
         try {
@@ -145,6 +151,8 @@ export function useApproveAndDeposit({
           depositResponse
         );
         resetSelectedTokenIds();
+        revalidate(meta as "stuxnet" | "aerodrome" | "velodrome", address);
+        router.refresh();
       }
     } catch (error) {
       removeFromPendingTokenIds(...selectedTokenIds);
@@ -176,6 +184,8 @@ export function useApproveAndDeposit({
     addToPendingTokenIds,
     writeVeVaultStakeBatchDepositFor,
     resetSelectedTokenIds,
+    meta,
+    router,
     removeFromPendingTokenIds,
   ]);
 

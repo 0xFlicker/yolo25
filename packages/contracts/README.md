@@ -1,66 +1,27 @@
-## Foundry
+## Deploy
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+Copy the .env.example file to .env and fill in the values.
 
-Foundry consists of:
+Run `source .env` to load the environment variables.
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+### Sepolia
 
-## Documentation
+Sepolia contains a mock veNFT called veStuxNet. This NFT was only used to test the protocol.
 
-https://book.getfoundry.sh/
+The rest of the contracts can be deployed with:
 
-## Usage
-
-### Build
-
-```shell
-$ forge build
+```bash
+forge script --verifier custom --verify --verifier-url $SEPOLIA_ETHERSCAN_VERIFIER_URL --verifier-api-key $SEPOLIA_ETHERSCAN_API_KEY --broadcast --rpc-url $SEPOLIA_RPC_URL --chain 11155111 script/DeployStux.sol
 ```
 
-### Test
+You will need to verify the MetadataLib separately.
 
-```shell
-$ forge test
+```bash
+forge verify-contract --verifier custom --verifier-url $SEPOLIA_ETHERSCAN_VERIFIER_URL --verifier-api-key $SEPOLIA_ETHERSCAN_API_KEY --chain 11155111 $METADATA_LIB_ADDRESS src/metadata/MetadataLib.sol:MetadataLib
 ```
 
-### Format
+Now, you can mint some test veStuxNet NFTs.
 
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+```bash
+ast send --rpc-url $SEPOLIA_RPC_URL --private-key $DEPLOYER_PRIVATE_KEY 0xe5F7e78122BB094d711d5f534070B61501Dd5EEC $(cast calldata "adminMint(address,uint256,int128,uint256)" $TO_ADDRESS 2 10000000000000000000 1772058221)
 ```

@@ -65,7 +65,7 @@ contract VeVaultRendererMetadata is IMetaDataURI, Ownable {
                 string.concat(
                     compiler.BEGIN_METADATA_VAR("attributes", true),
                     "%5B%7B%22trait_type%22%3A%22locked%20value%22%2C%22value%22%3A",
-                    uint256(lock.amount).toString(),
+                    uint256(lock.amount / 1 ether).toString(),
                     "%7D%2C%7B%22trait_type%22%3A%22dark%22%2C%22value%22%3A%22",
                     isDark ? "true" : "false",
                     "%22%7D%2C%7B%22trait_type%22%3A%22unlock%20time%22%2C%22value%22%3A%22",
