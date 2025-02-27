@@ -111,7 +111,7 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
             lock.end
         );
         _burn(tokenId);
-        _yolo.burn(to, amount);
+        _yolo.mint(to, amount);
 
         // Remove from max value linked list if it's the current max
         if (_maxValueNodes[_maxValueHead].tokenId == tokenId) {
