@@ -28,7 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers sepolia>
+        <Providers sepolia base>
           {children}
         </Providers>
       </body>

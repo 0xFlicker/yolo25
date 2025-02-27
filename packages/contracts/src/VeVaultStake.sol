@@ -8,7 +8,6 @@ import "solady/auth/OwnableRoles.sol";
 import {LibBitmap} from "solady/utils/LibBitmap.sol";
 import "./IYolo.sol";
 import "./metadata/IMetaDataURI.sol";
-import "./metadata/MetadataLib.sol";
 import "./IVeVaultLock.sol";
 
 contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
@@ -32,6 +31,8 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
     uint256 private _tokenIdCounter;
 
     uint256 public _METADATA_UPDATE_ROLE = _ROLE_0;
+
+    uint256 private _veNFT_Protocol_Token_ID;
 
     constructor(address veNFTAddress, address yoloAddress, address renderer) {
         _veNFT = IVotingEscrow(veNFTAddress);
@@ -67,6 +68,13 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
         IVotingEscrow.LockedBalance memory lockedBalance = _veNFT.locked(
             tokenId
         );
+
+        _veNFT.safeTransferFrom(msg.sender, address(this), tokenId);
+        if (!lockedBalance.isPermanent) {
+            _veNFT.lockPermanent(tokenId);
+            lockedBalance = _veNFT.locked(tokenId);
+        }
+
         _lockedTokenIdToLock[tokenId] = Lock({
             amount: uint128(lockedBalance.amount),
             start: uint64(block.timestamp),
@@ -88,13 +96,17 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
             _maxValueHead = newNodeId;
         }
 
+        if (_veNFT_Protocol_Token_ID == 0) {
+            _veNFT_Protocol_Token_ID = tokenId;
+        } else {
+            _veNFT.merge(tokenId, _veNFT_Protocol_Token_ID);
+        }
+
         _mintAndSetExtraDataUnchecked(
             to,
             ++_tokenIdCounter,
             generateSeed(_tokenIdCounter)
         );
-
-        _veNFT.safeTransferFrom(msg.sender, address(this), tokenId);
     }
 
     function batchDepositFor(address to, uint256[] memory tokenIds) external {
@@ -105,11 +117,7 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
 
     function redeemTo(address to, uint256 tokenId) public {
         Lock memory lock = _lockedTokenIdToLock[tokenId];
-        uint256 amount = MetadataLib.timeAdjustedValue(
-            lock.amount,
-            lock.start,
-            lock.end
-        );
+        uint256 amount = timeAdjustedValue(lock.amount, lock.start, lock.end);
         _burn(tokenId);
         _yolo.mint(to, amount);
 
@@ -129,11 +137,27 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
         uint256 tokenId
     ) public view returns (uint256 currentValue, Lock memory lock) {
         lock = _lockedTokenIdToLock[tokenId];
-        currentValue = MetadataLib.timeAdjustedValue(
-            lock.amount,
-            lock.start,
-            lock.end
-        );
+        currentValue = timeAdjustedValue(lock.amount, lock.start, lock.end);
+    }
+
+    function timeAdjustedValue(
+        uint128 value,
+        uint64 unlockStartTime,
+        uint64 unlockEndTime
+    ) internal view returns (uint256 adjustedValue) {
+        // Immediate 20% unlock at start
+        uint256 immediateUnlock = (value * 20) / 100;
+
+        // Remaining 80% unlocks linearly
+        uint256 remainingValue = (value * 80) / 100;
+
+        adjustedValue =
+            immediateUnlock +
+            (remainingValue *
+                (100 -
+                    (block.timestamp - unlockStartTime) /
+                    (unlockEndTime - unlockStartTime))) /
+            100;
     }
 
     function generateSeed(uint256 tokenId) public view returns (uint96) {
@@ -168,5 +192,13 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
     ) external view returns (bytes4) {
         if (msg.sender != address(_veNFT)) revert NotSupported();
         return this.onERC721Received.selector;
+    }
+
+    function lockForTokenId(uint256 tokenId) public view returns (Lock memory) {
+        return _lockedTokenIdToLock[tokenId];
+    }
+
+    function largestLock() public view returns (uint256) {
+        return _maxValueNodes[_maxValueHead].tokenId;
     }
 }

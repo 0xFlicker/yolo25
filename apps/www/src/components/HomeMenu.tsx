@@ -47,11 +47,11 @@ export const HomeMenu: FC<PropsWithChildren<HomeMenuProps>> = ({
               >
                 <DialogPanel className="pointer-events-auto w-screen max-w-md">
                   <div className="flex h-full flex-col bg-gray-800 shadow-xl">
-                    <div className="px-4 sm:px-6 py-6">
+                    {/* <div className="px-4 sm:px-6 py-6">
                       <DialogTitle className="text-base font-semibold leading-6 text-gray-100">
                         Links
                       </DialogTitle>
-                    </div>
+                    </div> */}
                     <div className="relative flex-1 px-4 sm:px-6 overflow-y-auto text-gray-300">
                       {children}
                     </div>

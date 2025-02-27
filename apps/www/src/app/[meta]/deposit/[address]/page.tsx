@@ -7,6 +7,7 @@ import { votingEscrowAbi } from "@/wagmi/generated";
 import { DepositHeader } from "./DepositHeader";
 import { SelectableProvider } from "./context";
 import { VeNFTGrid } from "./VeNFTGrid";
+import SomethingWentWrong from "@/components/SomethingWentWrong";
 
 type Params = {
   address: string;
@@ -29,63 +30,45 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       metaVeNft: metaNftContractAddress,
       ourToken,
       ourStaker,
+      fetchMetaVeNfts,
     } = META_DEX_CHAIN[meta];
     const client = getChainClient(chainId);
-    const [
-      balance,
-      ourTokenSymbol,
-      ourTokenName,
-      ourTokenDecimals,
-      theirVeNftSymbol,
-    ] = await Promise.all([
-      client.readContract({
-        address: metaNftContractAddress,
-        abi: votingEscrowAbi,
-        functionName: "balanceOf",
-        args: [address],
-      }),
-      client.readContract({
-        address: ourToken,
-        abi: erc20Abi,
-        functionName: "symbol",
-      }),
-      client.readContract({
-        address: ourToken,
-        abi: erc20Abi,
-        functionName: "name",
-      }),
-      client.readContract({
-        address: ourToken,
-        abi: erc20Abi,
-        functionName: "decimals",
-      }),
-      client.readContract({
-        address: metaNftContractAddress,
-        abi: votingEscrowAbi,
-        functionName: "symbol",
-      }),
-    ]);
-
-    const tokens = await Promise.all(
-      Array.from({ length: Number(balance) }, (_, i) =>
-        client
-          .readContract({
-            address: metaNftContractAddress,
-            abi: votingEscrowAbi,
-            functionName: "tokenOfOwnerByIndex",
-            args: [address, BigInt(i)],
-          })
-          .then(async (tokenId) => {
-            return {
-              tokenId,
-              locked: await client.readContract({
-                address: metaNftContractAddress,
-                abi: votingEscrowAbi,
-                functionName: "locked",
-                args: [tokenId],
-              }),
-            };
-          })
+    const [ourTokenSymbol, ourTokenName, ourTokenDecimals, theirVeNftSymbol] =
+      await Promise.all([
+        client.readContract({
+          address: ourToken,
+          abi: erc20Abi,
+          functionName: "symbol",
+        }),
+        client.readContract({
+          address: ourToken,
+          abi: erc20Abi,
+          functionName: "name",
+        }),
+        client.readContract({
+          address: ourToken,
+          abi: erc20Abi,
+          functionName: "decimals",
+        }),
+        client.readContract({
+          address: metaNftContractAddress,
+          abi: votingEscrowAbi,
+          functionName: "symbol",
+        }),
+      ]);
+    const tokens = await fetchMetaVeNfts(client, address).then(async (tokens) =>
+      Promise.all(
+        tokens.map(async (tokenId) => {
+          return {
+            tokenId,
+            locked: await client.readContract({
+              address: metaNftContractAddress,
+              abi: votingEscrowAbi,
+              functionName: "locked",
+              args: [tokenId],
+            }),
+          };
+        })
       )
     );
 
@@ -118,6 +101,6 @@ export default async function Page({ params }: { params: Promise<Params> }) {
     );
   } catch (error) {
     console.error(error);
-    return <InvalidMetadex />;
+    return <SomethingWentWrong />;
   }
 }

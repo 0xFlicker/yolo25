@@ -11,7 +11,7 @@ export const MenuItem: FC<{
     href={href}
     className={`flex items-center p-2 hover:bg-gray-700 ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
   >
-    <span className="mr-4 text-white">{icon}</span>
+    <span className="mr-4 text-white w-6 h-6">{icon}</span>
     <span className="text-right text-white">{text}</span>
   </NextLink>
 );
