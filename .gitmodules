@@ -13,3 +13,6 @@
 [submodule "packages/aero/lib/aerodrome-slipstream"]
 	path = packages/aero/lib/aerodrome-slipstream
 	url = https://github.com/aerodrome-finance/slipstream
+[submodule "packages/aero/lib/slipstream"]
+	path = packages/aero/lib/slipstream
+	url = https://github.com/aerodrome-finance/slipstream
