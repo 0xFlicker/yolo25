@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "aerodrome-finance/contracts/interfaces/IVotingEscrow.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 import "solady/tokens/ERC721.sol";
 import "solady/auth/OwnableRoles.sol";
 import {LibBitmap} from "solady/utils/LibBitmap.sol";
