@@ -38,6 +38,7 @@ import {IYolo} from "./interface/IYolo.sol";
 import {IERC721} from "./interface/IERC721.sol";
 import {IWETH} from "./interface/IWETH.sol";
 import {ICLPool} from "./interface/ICLPool.sol";
+import {ICLGauge} from "./interface/ICLGauge.sol";
 import {ICLFactory} from "./interface/ICLFactory.sol";
 import {INonfungiblePositionManager} from "./interface/INonfungiblePositionManager.sol";
 import {IQuoter} from "./interface/IQuoter.sol";
@@ -56,10 +57,12 @@ contract YoloLP {
 
     event token0Set(address _old, address _new);
     event token1Set(address _old, address _new);
+    event aeroSet(address _old, address _new);
     event FactorySet(address _old, address _new);
     event RouterSet(address _old, address _new);
     event PoolAddressSet(address _old, address _new);
     event PositionManagerSet(address _old, address _new);
+    event QuoterSet(address _old, address _new);
     event TickSpacingSet(int24 _old, int24 _new);
 
     // error MaxSplaining(string reason);
@@ -84,19 +87,19 @@ contract YoloLP {
         int24 _tickSpace
     ) {
         weth = IWETH(_weth);
-        emit token1Set(address(0), _weth);
+        emit token1Set(address(0), address(weth));
         yolo = IYolo(_yolo);
-        emit token0Set(address(0), _yolo);
+        emit token0Set(address(0), address(yolo));
         aero = IERC20(_aero);
-        // no emit
+        emit aeroSet(address(0), address(aero);
         v3Router = _v3Router;
-        emit RouterSet(address(0), _v3Router);
+        emit RouterSet(address(0), v3Router);
         v3Factory = _v3Factory;
-        emit FactorySet(address(0), _v3Factory);
+        emit FactorySet(address(0), v3Factory);
         v3PosMgr = _v3PosMgr;
-        emit PositionManagerSet(address(0), _v3PosMgr);
+        emit PositionManagerSet(address(0), v3PosMgr);
         v3Quoter = _v3Quoter;
-        // no emit
+        emit QuoterSet(address(0), v3Quoter);
         tickSpace = _tickSpace;
         emit TickSpacingSet(0, tickSpace);
 
@@ -133,6 +136,7 @@ contract YoloLP {
     }
 
     /// @dev either i'm a Jenius (Genius with a J) or completely insane...
+    /// @param _tokenId the tokenId of veNFT from slipstream
     /// deposit slipstream nft =>
     /// check0, is it $yolo? =>
     /// check1, is it $weth? =>
@@ -216,6 +220,11 @@ contract YoloLP {
         _mintInfinityPosition(deltaYolo, deltaEth, _sqrtPriceX96);
     }
 
+    /// @dev this function will rebalance all the LP's stored on contract
+    /// lpTokenIds[0] will alwys be an infinity pool, never modify that
+    /// lpTokenIds[1 - type(uint256).max] will be fee collection + burned
+    /// the $yolo is burned at 100%
+    /// the $weth is added to sell wall at 100%
     function rebalanceStandard() external {
           uint256[] storage rebalancedLP;
           // never touch lpTokenIds[0]
@@ -238,6 +247,15 @@ contract YoloLP {
           yolo.burn(address(this), yolo.balanceOf(address(this)));
     }
 
+    /// @dev this function will rebalance all the LP's stored on contract
+    /// lpTokenIds[0] will alwys be an infinity pool, never modify that
+    /// lpTokenIds[1 - type(uint256).max] will be fee collection + burned
+    /// @param _tickLow is the lower boundary of the tick range
+    /// @param _tickHigh is the upper boundary of the tick range
+    /// @param _amount0Desired is the value of $yolo
+    /// @param _amount1Desired is the value of $weth
+    /// this is a custom [1] slot instead of sell wall
+    /// post slot [1], $yolo is burned at 100%
     function rebalanceCustom(
         int24 _tickLow,
         int24 _tickHigh,
@@ -262,6 +280,32 @@ contract YoloLP {
           _mintCustomPosition(_tickLow, _tickHigh, _amount0Desired, _amount1Desired, _getSqrtPriceX96());
           // burn IERC20
           yolo.burn(address(this), yolo.balanceOf(address(this)));
+    }
+
+    /// @dev this will send all LP's to the proper gauge
+    function enGauge() external {
+        address gauge = ICLPool(v3PoolAddress).gauge();
+        uint256 len = lpTokenIds.length;
+        for (uint256 c = 0; c < len;) {
+            bool check = IERC721(v3PosMgr).ownerOf(lpTokenIds[c]) == gauge;
+            if (!check) {
+                ICLGauge(gauge).deposit(lpTokenIds[c]);
+            }
+            unchecked { ++c; }
+        }
+    }
+
+    /// @dev this will return all LP's from the proper gauge
+    function disenGauge() external {
+        address gauge = ICLPool(v3PoolAddress).gauge();
+        uint256 len = lpTokenIds.length;
+        for (uint256 c = 0; c < len;) {
+            bool check = IERC721(v3PosMgr).ownerOf(lpTokenIds[c]) == gauge;
+            if (check) {
+                ICLGauge(gauge).withdraw(lpTokenIds[c]);
+            }
+            unchecked { ++c; }
+        }
     }
 
       /// @dev Decreases the amount of liquidity in a position and accounts it to the position
