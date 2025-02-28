@@ -42,6 +42,7 @@ import {ICLGauge} from "./interface/ICLGauge.sol";
 import {ICLFactory} from "./interface/ICLFactory.sol";
 import {INonfungiblePositionManager} from "./interface/INonfungiblePositionManager.sol";
 import {IQuoter} from "./interface/IQuoter.sol";
+import {IVeVaultDeposit} from "./interface/IVeVaultDeposit.sol";
 
 contract YoloLP {
     IYolo public yolo;
@@ -52,6 +53,7 @@ contract YoloLP {
     address public v3PoolAddress;
     address public v3PosMgr;
     address public v3Quoter;
+    IVeVaultDeposit public vault;
     int24 public tickSpace;
     uint256[] public lpTokenIds;
 
@@ -63,6 +65,7 @@ contract YoloLP {
     event PoolAddressSet(address _old, address _new);
     event PositionManagerSet(address _old, address _new);
     event QuoterSet(address _old, address _new);
+    event VaultSet(address _old, address _new);
     event TickSpacingSet(int24 _old, int24 _new);
 
     // error MaxSplaining(string reason);
@@ -84,6 +87,7 @@ contract YoloLP {
         address _v3Factory,
         address _v3PosMgr,
         address _v3Quoter,
+        address _vault,
         int24 _tickSpace
     ) {
         weth = IWETH(_weth);
@@ -100,6 +104,8 @@ contract YoloLP {
         emit PositionManagerSet(address(0), v3PosMgr);
         v3Quoter = _v3Quoter;
         emit QuoterSet(address(0), v3Quoter);
+        vault = IVeVaultDeposit(_vault);
+        emit VaultSet(address(0), address(vault));
         tickSpace = _tickSpace;
         emit TickSpacingSet(0, tickSpace);
 
@@ -130,13 +136,13 @@ contract YoloLP {
         _mintSellWallPosition(deltaEth1, _getSqrtPriceX96());
 
         // calc $weth => $aero
-        uint256 amount = _wethToAero(deltaEth1);
+        uint256 aeroAmount = _wethToAero(deltaEth1);
 
         // mint our NFT
+        vault.depositLPFor(msg.sender, aeroAmount);
     }
 
-    /// @dev either i'm a Jenius (Genius with a J) or completely insane...
-    /// @param _tokenId the tokenId of veNFT from slipstream
+        /// @dev either i'm a Jenius (Genius with a J) or completely insane...
     /// deposit slipstream nft =>
     /// check0, is it $yolo? =>
     /// check1, is it $weth? =>
@@ -144,26 +150,8 @@ contract YoloLP {
     /// calc the $weth to $aero swap value =>
     /// add them up, mint out NFT with that value
     function depositLP(uint256 _tokenId) external {
-        // First validate the LP token
-        _validateLPToken(_tokenId);
-
-        // Transfer and store the token
-        _transferAndStoreLPToken(_tokenId);
-
-        // Calculate and return aero amount
-        uint256 aeroAmount = _calculateAeroAmount(_tokenId);
-
-        // TODO: mint based off aero amount
-    }
-
-    function _validateLPToken(uint256 _tokenId) internal view {
-        (
-            address token0,
-            address token1,
-            int24 tickSpacing /* uint128 liquidity */,
-
-        ) = _getPosition(_tokenId);
-
+        (address token0, address token1, int24 tickSpacing, uint128 liquidity) = _getPosition(_tokenId);
+        uint160 sqrtPriceX96 = _getSqrtPriceX96();
         require(
             token0 == address(yolo) || token1 == address(yolo),
             "LP must contain YOLO"
@@ -172,35 +160,33 @@ contract YoloLP {
             token0 == address(weth) || token1 == address(weth),
             "LP must contain WETH"
         );
-        require(tickSpacing == tickSpace, "LP tickSpace must match");
-    }
-
-    function _transferAndStoreLPToken(uint256 _tokenId) internal {
-        IERC721(v3PosMgr).safeTransferFrom(msg.sender, address(this), _tokenId);
-        lpTokenIds.push(_tokenId);
-    }
-
-    function _calculateAeroAmount(uint256 _tokenId) internal returns (uint256) {
-        (
-            address token0,
-            ,
-            ,
-            /* address token1 */ /* int24 tickSpacing */ uint128 liquidity
-        ) = _getPosition(_tokenId);
-
-        uint160 sqrtPriceX96 = _getSqrtPriceX96();
-        (uint256 token0Amount, uint256 token1Amount) = _calcTokens(
-            liquidity,
-            sqrtPriceX96
+        require(
+            tickSpacing == tickSpace,
+            "LP tickSpace must match"
         );
 
+        // move it
+        IERC721(v3PosMgr).safeTransferFrom(
+            msg.sender,
+            address(this),
+            _tokenId
+        );
+        // store it
+        lpTokenIds.push(_tokenId);
+
+        // calc t0/t1 => $aero
+        uint256 aeroAmount;
+        (uint256 token0Amount, uint256 token1Amount) = _calcTokens(liquidity, sqrtPriceX96);
         if (token0 == address(yolo)) {
-            token1Amount += _yoloToWeth(token0Amount);
-            return _wethToAero(token1Amount);
+            token1Amount += _yoloToWeth(token0Amount); // swap yolo to ether
+            aeroAmount = _wethToAero(token1Amount);
         } else {
-            token0Amount += _yoloToWeth(token1Amount);
-            return _wethToAero(token0Amount);
+            token0Amount += _yoloToWeth(token1Amount); // swap yolo to ether
+            aeroAmount = _wethToAero(token0Amount);
         }
+
+        // mint our NFT
+        vault.depositLPFor(msg.sender, aeroAmount);
     }
 
     /// @dev this is bland, it's 1990's calling wanting the Taco Bell pastel colors back...
