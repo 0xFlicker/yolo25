@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "aerodrome-finance/contracts/interfaces/IVotingEscrow.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 import "solady/tokens/ERC721.sol";
 import "solady/auth/OwnableRoles.sol";
 import {LibBitmap} from "solady/utils/LibBitmap.sol";
@@ -203,7 +203,9 @@ contract VeVaultDeposit is OwnableRoles, ERC721, IVeVaultLock {
     /// @dev this burns the veVault => $yolo
     /// @param to user address
     /// @param tokenId the tokenId of veVault
+    error OnlyOwnerOfTokenCanRedeem();
     function redeemTo(address to, uint256 tokenId) public {
+        if (_ownerOf(tokenId) != msg.sender) revert OnlyOwnerOfTokenCanRedeem();
         Lock memory lock = _lockedTokenIdToLock[tokenId];
         uint256 amount = _timeAdjustedValue(lock);
         _burn(tokenId);

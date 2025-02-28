@@ -7,8 +7,7 @@ remappings = [
   "solady=lib/solady/src",
   "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
   "aerodrome-finance/contracts/=lib/aerodrome-finance/contracts/",
-  "aerodrome-slipstream/contracts/=lib/aerodrome-slipstream/contracts/",
-  "lib/aerodrome-slipstream:contracts/=lib/aerodrome-slipstream/contracts/"
+  "aerodrome-slipstream/contracts/=lib/aerodrome-slipstream/contracts/"
 ]
 # tenderly
 cbor_metadata = true

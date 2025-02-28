@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.17;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "openzeppelin-contracts/contracts/access/Ownable.sol";
 import "./DataChunkCompiler.sol";
 import "./Base64.sol";
 import "./VeVaultRenderer_interface.sol";
