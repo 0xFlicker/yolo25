@@ -26,7 +26,9 @@ export function useApproveAndDeposit({
   metaVeNft,
   ourStaker,
   selectedTokenIds,
-}: (typeof META_DEX_CHAIN)[META_DEX_ORIGIN] & { selectedTokenIds: bigint[] }) {
+}: Omit<(typeof META_DEX_CHAIN)[META_DEX_ORIGIN], "fetchMetaVeNfts"> & {
+  selectedTokenIds: bigint[];
+}) {
   const router = useRouter();
   const { meta: metaParams } = useParams();
   const meta =

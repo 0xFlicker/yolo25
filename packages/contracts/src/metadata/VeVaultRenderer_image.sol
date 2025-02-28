@@ -37,7 +37,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
 
         return
             string.concat(
-                '<?xml version="1.0" encoding="UTF-8"?><svg aria-hidden="true" version="1.1" viewBox="0 0 512 688" xmlns="http://www.w3.org/2000/svg"><svg width="400" height="400"><defs><radialGradient id="SphereShade" cx="0.5" cy="0.5" r=".8" fx="0.35" fy="0.25"><stop offset="0"  stop-opacity="0"  /><stop offset=".3" stop-opacity="0.1"/><stop offset=".5" stop-opacity="0.3"/><stop offset=".9"  stop-opacity="1"  /></radialGradient></defs><rect width="100%" height="100%" fill="#',
+                '<?xml version="1.0" encoding="UTF-8"?><svg width="400" height="400"><defs><radialGradient id="SphereShade" cx="0.5" cy="0.5" r=".8" fx="0.35" fy="0.25"><stop offset="0"  stop-opacity="0"  /><stop offset=".3" stop-opacity="0.1"/><stop offset=".5" stop-opacity="0.3"/><stop offset=".9"  stop-opacity="1"  /></radialGradient></defs><rect width="100%" height="100%" fill="#',
                 isDark ? "111111" : "EEEEEE",
                 '" />',
                 generateTopGrid(seed, isVRendered),
@@ -56,7 +56,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
                 '<text x="50%" text-anchor="middle" style="white-space: pre; fill: #',
                 isDark ? "EEEEEE" : "111111",
                 '; font-family: Arial, sans-serif; font-size: 33.3px;" y="353">Locked ',
-                MetadataLib.uint256ToStr(value),
+                MetadataLib.uint256ToStr(value, 18, 2),
                 " ",
                 _asset,
                 "</text>"
@@ -132,7 +132,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
                 isCheckRendered[startIndex]
                     ? getIcon(
                         MetadataLib.uint2hex(uint24(seed >> (startIndex * 3))),
-                        "104"
+                        "24"
                     )
                     : "",
                 isCheckRendered[startIndex + 1]
@@ -140,7 +140,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
                         MetadataLib.uint2hex(
                             uint24(seed >> ((startIndex + 1) * 3))
                         ),
-                        "144"
+                        "64"
                     )
                     : "",
                 isCheckRendered[startIndex + 2]
@@ -148,7 +148,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
                         MetadataLib.uint2hex(
                             uint24(seed >> ((startIndex + 2) * 3))
                         ),
-                        "184"
+                        "104"
                     )
                     : "",
                 isCheckRendered[startIndex + 3]
@@ -156,7 +156,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
                         MetadataLib.uint2hex(
                             uint24(seed >> ((startIndex + 3) * 3))
                         ),
-                        "224"
+                        "144"
                     )
                     : ""
             );
@@ -181,7 +181,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
                         MetadataLib.uint2hex(
                             uint24(seed >> ((startIndex + 4) * 3))
                         ),
-                        "264"
+                        "184"
                     )
                     : "",
                 isCheckRendered[startIndex + 5]
@@ -189,7 +189,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
                         MetadataLib.uint2hex(
                             uint24(seed >> ((startIndex + 5) * 3))
                         ),
-                        "304"
+                        "224"
                     )
                     : "",
                 isCheckRendered[startIndex + 6]
@@ -197,7 +197,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
                         MetadataLib.uint2hex(
                             uint24(seed >> ((startIndex + 6) * 3))
                         ),
-                        "344"
+                        "264"
                     )
                     : "",
                 isCheckRendered[startIndex + 7]
@@ -205,7 +205,7 @@ contract VeVaultRendererImage is IVeVaultRendererImage {
                         MetadataLib.uint2hex(
                             uint24(seed >> ((startIndex + 7) * 3))
                         ),
-                        "384"
+                        "304"
                     )
                     : ""
             );

@@ -35,14 +35,10 @@ export const VeNFTGrid: FC<{
   const tokenIdsToDisplay = useMemo(() => {
     const filteredIndexes = initialTokenIds
       .map((_, index) => index)
-      .filter(
-        (index) =>
-          !pendingTokenIds.includes(initialTokenIds[index]) &&
-          !completedTokenIds.includes(initialTokenIds[index])
-      );
+      .filter((index) => !completedTokenIds.includes(initialTokenIds[index]));
 
     return filteredIndexes.map((i) => initialTokenIds[i]);
-  }, [initialTokenIds, pendingTokenIds, completedTokenIds]);
+  }, [initialTokenIds, completedTokenIds]);
 
   return (
     <>

@@ -2,7 +2,7 @@ import { FC, PropsWithChildren } from "react";
 import {
   Dialog,
   DialogPanel,
-  DialogTitle,
+  // DialogTitle,
   Transition,
   TransitionChild,
 } from "@headlessui/react";

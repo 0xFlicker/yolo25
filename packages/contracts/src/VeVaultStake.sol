@@ -15,7 +15,6 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
 
     struct MaxValueNode {
         uint256 value;
-        uint256 tokenId;
         uint256 next;
     }
 
@@ -102,7 +101,6 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
             uint256 newNodeId = ++_maxValueNodeCounter;
             _maxValueNodes[newNodeId] = MaxValueNode({
                 value: uint256(uint128(lockedBalance.amount)),
-                tokenId: tokenId,
                 next: _maxValueHead
             });
             _maxValueHead = newNodeId;
@@ -129,12 +127,12 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
 
     function redeemTo(address to, uint256 tokenId) public {
         Lock memory lock = _lockedTokenIdToLock[tokenId];
-        uint256 amount = _timeAdjustedValue(lock.amount, lock.start, lock.end);
+        uint256 amount = _timeAdjustedValue(lock);
         _burn(tokenId);
         _yolo.mint(to, amount);
 
         // Remove from max value linked list if it's the current max
-        if (_maxValueNodes[_maxValueHead].tokenId == tokenId) {
+        if (_maxValueNodes[_maxValueHead].value == amount) {
             _maxValueHead = _maxValueNodes[_maxValueHead].next;
         }
     }
@@ -149,27 +147,32 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
         uint256 tokenId
     ) public view returns (uint256, Lock memory) {
         Lock memory lock = _lockedTokenIdToLock[tokenId];
-        return (_timeAdjustedValue(lock.amount, lock.start, lock.end), lock);
+        return (_timeAdjustedValue(lock), lock);
     }
 
     function _timeAdjustedValue(
-        uint128 value,
-        uint64 unlockStartTime,
-        uint64 unlockEndTime
+        Lock memory lock
     ) internal view returns (uint256 adjustedValue) {
-        // Immediate 20% unlock at start
-        uint256 immediateUnlock = (value * 20) / 100;
+        uint256 value = lock.amount;
+        uint256 unlockStartTime = lock.start;
+        uint256 unlockEndTime = lock.end;
 
-        // Remaining 80% unlocks linearly
-        uint256 remainingValue = (value * 80) / 100;
+        if (block.timestamp >= unlockEndTime) {
+            return value; // Fully unlocked
+        }
+
+        if (block.timestamp <= unlockStartTime) {
+            return (value * 20) / 100; // Start at 20%
+        }
+
+        // Linear increase from 20% to 100% over the lock period
+        uint256 baseAmount = (value * 20) / 100; // 20% base
+        uint256 variableAmount = (value * 80) / 100; // 80% that unlocks linearly
 
         adjustedValue =
-            immediateUnlock +
-            (remainingValue *
-                (100 -
-                    (block.timestamp - unlockStartTime) /
-                    (unlockEndTime - unlockStartTime))) /
-            100;
+            baseAmount +
+            (variableAmount * (block.timestamp - unlockStartTime)) /
+            (unlockEndTime - unlockStartTime);
     }
 
     function generateSeed(uint256 tokenId) public view returns (uint96) {
@@ -208,9 +211,5 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
 
     function lockForTokenId(uint256 tokenId) public view returns (Lock memory) {
         return _lockedTokenIdToLock[tokenId];
-    }
-
-    function largestLock() public view returns (uint256) {
-        return _maxValueNodes[_maxValueHead].tokenId;
     }
 }

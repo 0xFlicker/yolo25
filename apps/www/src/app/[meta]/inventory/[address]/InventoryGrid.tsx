@@ -4,17 +4,16 @@ import React, { FC, useMemo } from "react";
 import cn from "classnames";
 import { useSelectable } from "./context";
 import { SelectableGrid } from "./SelectableGrid";
-import { useApproveAndDeposit } from "./useApproveAndDeposit";
+import { useRedeem } from "./useRedeem";
 import { Address } from "viem";
 import { SupportedChains } from "../../supported-chains";
 
-export const VeNFTGrid: FC<{
+export const InventoryGrid: FC<{
   chainId: SupportedChains;
   ourStaker: Address;
   ourToken: Address;
-  metaVeNft: Address;
   initialTokenIds: bigint[];
-}> = ({ chainId, ourStaker, ourToken, metaVeNft, initialTokenIds }) => {
+}> = ({ chainId, ourStaker, ourToken, initialTokenIds }) => {
   const {
     selectedTokenIds,
     addToSelectedTokenIds,
@@ -24,11 +23,10 @@ export const VeNFTGrid: FC<{
     resetSelectedTokenIds,
   } = useSelectable();
 
-  const { deposit, isApprovedForAll } = useApproveAndDeposit({
+  const { redeem } = useRedeem({
     chainId,
     ourStaker,
     ourToken,
-    metaVeNft,
     selectedTokenIds,
   });
 
@@ -50,10 +48,10 @@ export const VeNFTGrid: FC<{
         <div className="flex gap-2">
           <button
             className={cn("bg-blue-500 text-white px-4 py-2 rounded-md")}
-            disabled={isApprovedForAll && selectedTokenIds.length === 0}
-            onClick={deposit}
+            disabled={selectedTokenIds.length === 0}
+            onClick={redeem}
           >
-            {isApprovedForAll ? "Deposit" : "Approve"}
+            Redeem
           </button>
 
           {selectedTokenIds.length < tokenIdsToDisplay.length &&

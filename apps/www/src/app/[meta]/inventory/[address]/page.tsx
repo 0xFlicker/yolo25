@@ -3,14 +3,10 @@ import { InvalidAddress } from "./InvalidAddress";
 import { InvalidMetadex } from "./InvalidMetadex";
 import { META_DEX_CHAIN, stringToMeta } from "@/wagmi/contracts";
 import { getChainClient } from "@/wagmi/viem";
-import {
-  iVotingEscrowAbi,
-  veVaultStakeAbi,
-  votingEscrowAbi,
-} from "@/wagmi/generated";
-import { DepositHeader, InventoryHeader } from "./InventoryHeader";
+import { veVaultStakeAbi } from "@/wagmi/generated";
+import { InventoryHeader } from "./InventoryHeader";
 import { SelectableProvider } from "./context";
-import { VeNFTGrid } from "./VeNFTGrid";
+import { InventoryGrid } from "./InventoryGrid";
 import { fetchAllNfts } from "./fetchAllNfts";
 
 type Params = {
@@ -71,8 +67,6 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       }),
     ]);
 
-    console.log(tokens);
-
     const totalPossibleValue = tokens.reduce((acc, token) => {
       return acc + token[1].amount;
     }, 0n);
@@ -85,7 +79,6 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       <SelectableProvider>
         <div className="container mx-auto px-4 py-8 min-h-[calc(100vh-6rem)]">
           <InventoryHeader
-            allTokenIds={nfts}
             availableCount={tokens.length}
             totalValue={totalPossibleValue}
             redeemableValue={totalRedeemableValue}
@@ -95,13 +88,12 @@ export default async function Page({ params }: { params: Promise<Params> }) {
             ourTokenDecimals={ourTokenDecimals}
             ourStaker={ourStaker}
           />
-          {/* <VeNFTGrid
+          <InventoryGrid
             chainId={chainId}
             ourStaker={ourStaker}
             ourToken={ourToken}
-            metaVeNft={metaNftContractAddress}
-            initialTokenIds={tokens.map((t) => t[0])}
-          /> */}
+            initialTokenIds={nfts}
+          />
         </div>
       </SelectableProvider>
     );

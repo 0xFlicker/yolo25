@@ -1656,13 +1656,6 @@ export const veVaultStakeAbi = [
   },
   {
     type: 'function',
-    inputs: [],
-    name: 'largestLock',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
     inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
     name: 'lockForTokenId',
     outputs: [
@@ -1684,9 +1677,9 @@ export const veVaultStakeAbi = [
     inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
     name: 'locked',
     outputs: [
-      { name: 'currentValue', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
       {
-        name: 'lock',
+        name: '',
         internalType: 'struct IVeVaultLock.Lock',
         type: 'tuple',
         components: [
@@ -4444,15 +4437,6 @@ export const useReadVeVaultStakeIsApprovedForAll =
   /*#__PURE__*/ createUseReadContract({
     abi: veVaultStakeAbi,
     functionName: 'isApprovedForAll',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"largestLock"`
- */
-export const useReadVeVaultStakeLargestLock =
-  /*#__PURE__*/ createUseReadContract({
-    abi: veVaultStakeAbi,
-    functionName: 'largestLock',
   })
 
 /**

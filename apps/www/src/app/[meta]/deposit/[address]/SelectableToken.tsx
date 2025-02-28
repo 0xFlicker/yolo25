@@ -1,3 +1,5 @@
+"use client";
+
 import React, { FC, useCallback, useState } from "react";
 import cn from "classnames";
 

@@ -10,7 +10,8 @@ export function AppMain({
   title,
   disableConnect,
   disableDesktopMenu,
-  isHome,
+  isDeposit,
+  isInventory,
 }: PropsWithChildren<
   {
     title?: ReactNode;
@@ -18,12 +19,14 @@ export function AppMain({
     headerRight?: ReactNode;
     disableConnect?: boolean;
     disableDesktopMenu?: boolean;
+    isDeposit?: boolean;
+    isInventory?: boolean;
   } & ComponentPropsWithoutRef<typeof SiteMenu>
 >) {
   const menu = (
     <>
       <li className="border-t border-gray-200 my-2 list-none" />
-      <SiteMenu isHome={isHome} />
+      <SiteMenu isDeposit={isDeposit} isInventory={isInventory} />
       <li className="border-t border-gray-200 my-2 list-none" />
     </>
   );

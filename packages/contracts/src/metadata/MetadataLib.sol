@@ -77,12 +77,16 @@ library MetadataLib {
         return isVRendered;
     }
 
-    function uint256ToStr(uint256 value) public pure returns (string memory) {
+    function uint256ToStr(
+        uint256 value,
+        uint256 factor,
+        uint256 decimals
+    ) public pure returns (string memory) {
         return
             string.concat(
-                uint2str(value / 1000),
+                uint2str(value / 10 ** factor),
                 ".",
-                leftPad(uint2str(value % 1000), 3)
+                leftPad(uint2str(value % 10 ** factor), decimals)
             );
     }
 

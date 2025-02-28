@@ -7,7 +7,6 @@ import { useReadContracts } from "wagmi";
 import { veVaultStakeAbi } from "@/wagmi/generated";
 
 type InventoryHeaderProps = {
-  allTokenIds: bigint[];
   availableCount: number;
   totalValue: bigint;
   redeemableValue: bigint;
@@ -19,7 +18,6 @@ type InventoryHeaderProps = {
 };
 
 export const InventoryHeader: FC<InventoryHeaderProps> = ({
-  allTokenIds,
   ourStaker,
   availableCount,
   totalValue,
@@ -61,7 +59,10 @@ export const InventoryHeader: FC<InventoryHeaderProps> = ({
         <div className="flex flex-col">
           <span className="text-sm text-gray-500">Selected veNFTs</span>
           <span className="text-2xl font-bold">
-            {formatUnits(redeemableValue, ourTokenDecimals)} {ourTokenSymbol}
+            {totalSelectedValue
+              ? formatUnits(totalSelectedValue, ourTokenDecimals)
+              : 0}{" "}
+            {stakerSymbol}
           </span>
         </div>
         <div className="flex flex-col">
@@ -73,10 +74,7 @@ export const InventoryHeader: FC<InventoryHeaderProps> = ({
         <div className="flex flex-col">
           <span className="text-sm text-gray-500">Redeemable Value</span>
           <span className="text-2xl font-bold" title={ourTokenName}>
-            {totalSelectedValue
-              ? formatUnits(totalSelectedValue, ourTokenDecimals)
-              : 0}{" "}
-            {ourTokenSymbol}
+            {formatUnits(redeemableValue, ourTokenDecimals)} {ourTokenSymbol}
           </span>
         </div>
       </div>
