@@ -105,7 +105,7 @@ contract YoloLP {
         v3Quoter = _v3Quoter;
         emit QuoterSet(address(0), v3Quoter);
         vault = IVeVaultDeposit(_vault);
-        emit VaultSet(address(0), address(vault);
+        emit VaultSet(address(0), address(vault));
         tickSpace = _tickSpace;
         emit TickSpacingSet(0, tickSpace);
 
