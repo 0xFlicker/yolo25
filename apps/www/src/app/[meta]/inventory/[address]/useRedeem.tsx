@@ -20,7 +20,7 @@ export function useRedeem({
   selectedTokenIds,
 }: Omit<
   (typeof META_DEX_CHAIN)[META_DEX_ORIGIN],
-  "fetchMetaVeNfts" | "metaVeNft"
+  "fetchMetaVeNfts" | "metaVeNft" | "fetchMetaVeTokenImage"
 > & {
   selectedTokenIds: bigint[];
 }) {

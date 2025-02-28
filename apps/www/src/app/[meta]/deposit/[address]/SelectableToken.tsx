@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import cn from "classnames";
 
 const CircularProgress: FC = () => (
@@ -13,14 +13,33 @@ export const SelectableToken = ({
   onTokenUnselected,
   isSelected,
   isPending,
+  fetchTokenImage,
 }: {
   tokenId: bigint;
   onTokenSelected: (tokenId: bigint) => void;
   onTokenUnselected: (tokenId: bigint) => void;
   isSelected: boolean;
   isPending: boolean;
+  fetchTokenImage: (tokenId: bigint) => Promise<string>;
 }) => {
   const [hasHovered, setHasHovered] = useState(false);
+  const [tokenImage, setTokenImage] = useState<string>();
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const loadImage = async () => {
+      setIsLoading(true);
+      try {
+        const svg = await fetchTokenImage(tokenId);
+        setTokenImage(svg);
+      } catch (error) {
+        console.error("Failed to load token image:", error);
+      }
+      setIsLoading(false);
+    };
+    loadImage();
+  }, [tokenId, fetchTokenImage]);
+
   const handleClick = useCallback(() => {
     if (isSelected) {
       onTokenUnselected(tokenId);
@@ -44,13 +63,25 @@ export const SelectableToken = ({
         onMouseEnter={handleHoverIn}
         onMouseLeave={handleHoverOut}
         className={cn(
-          "w-[400px] h-[400px] bg-gray-800 flex items-center justify-center rounded-lg border-4 transition-all duration-300",
+          "w-[400px] h-[400px] bg-gray-800 flex flex-col items-center justify-center rounded-lg border-4 transition-all duration-300",
           isSelected || hasHovered ? "border-red-400" : "border-transparent"
         )}
       >
-        <span className="text-2xl font-bold text-gray-400">
-          #{tokenId.toString()}
-        </span>
+        {isLoading ? (
+          <CircularProgress />
+        ) : (
+          <>
+            {tokenImage && (
+              <div
+                className="w-[300px] h-[300px] mb-4"
+                dangerouslySetInnerHTML={{ __html: tokenImage }}
+              />
+            )}
+            <span className="text-2xl font-bold text-gray-400">
+              #{tokenId.toString()}
+            </span>
+          </>
+        )}
       </div>
 
       {isPending && (

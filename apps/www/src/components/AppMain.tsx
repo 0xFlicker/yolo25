@@ -2,19 +2,18 @@ import { AppBar } from "./AppBar";
 import { SiteMenu } from "./SiteMenu";
 import { DesktopHomeMenu } from "./DesktopHomeMenu";
 import { ComponentPropsWithoutRef, PropsWithChildren, ReactNode } from "react";
+import NextImage from "next/image";
 
 export function AppMain({
   headerLeft,
   headerRight,
   children,
-  title,
   disableConnect,
   disableDesktopMenu,
   isDeposit,
   isInventory,
 }: PropsWithChildren<
   {
-    title?: ReactNode;
     headerLeft?: ReactNode;
     headerRight?: ReactNode;
     disableConnect?: boolean;
@@ -37,7 +36,7 @@ export function AppMain({
         menu={menu}
         title={
           <>
-            <h1 className="text-2xl font-bold">{title}</h1>
+            <NextImage src="/velogo.png" alt="logo" width={200} height={40} />
             {headerLeft}
           </>
         }

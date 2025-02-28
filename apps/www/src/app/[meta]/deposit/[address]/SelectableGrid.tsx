@@ -7,12 +7,14 @@ export const SelectableGrid = ({
   pendingTokenIds,
   onTokenSelected,
   onTokenUnselected,
+  fetchTokenImage,
 }: {
   tokenIds: bigint[];
   selectedTokenIds: bigint[];
   pendingTokenIds: bigint[];
   onTokenSelected: (tokenId: bigint) => void;
   onTokenUnselected: (tokenId: bigint) => void;
+  fetchTokenImage: (tokenId: bigint) => Promise<string>;
 }) => {
   return (
     <div className="flex flex-wrap gap-4">
@@ -24,6 +26,7 @@ export const SelectableGrid = ({
           onTokenUnselected={onTokenUnselected}
           isSelected={selectedTokenIds.includes(tokenId)}
           isPending={pendingTokenIds.includes(tokenId)}
+          fetchTokenImage={fetchTokenImage}
         />
       ))}
     </div>

@@ -3,6 +3,7 @@ import { base, optimism, sepolia } from "viem/chains";
 import { baseClient, getChainClient, sepoliaClient } from "./viem";
 import { fetchStuxNfts } from "./meta/stux";
 import { fetchAeroNfts } from "./meta/aero";
+import { iVotingEscrowAbi } from "./generated";
 
 export enum META_DEX_ORIGIN {
   STUX_NET,
@@ -18,6 +19,7 @@ export const META_DEX_CHAIN: Record<
     readonly ourToken: Address;
     readonly metaVeNft: Address;
     readonly fetchMetaVeNfts: (address: Address) => Promise<bigint[]>;
+    readonly fetchMetaVeTokenImage: (tokenId: bigint) => Promise<string>;
   }
 > = {
   [META_DEX_ORIGIN.STUX_NET]: {
@@ -31,6 +33,9 @@ export const META_DEX_CHAIN: Record<
         "0xF8053E811889bE6a86e087276419Be4e5d3C2637",
         address
       ),
+    fetchMetaVeTokenImage: async (tokenId) => {
+      return tokenId.toString();
+    },
   },
   [META_DEX_ORIGIN.AERODROME]: {
     chainId: base.id,
@@ -43,6 +48,22 @@ export const META_DEX_CHAIN: Record<
         "0xeBf418Fe2512e7E6bd9b87a8F0f294aCDC67e6B4",
         address
       ),
+    fetchMetaVeTokenImage: async (tokenId) => {
+      const metadataRaw = await baseClient.readContract({
+        abi: iVotingEscrowAbi,
+        functionName: "tokenURI",
+        address: "0xeBf418Fe2512e7E6bd9b87a8F0f294aCDC67e6B4",
+        args: [tokenId],
+      });
+
+      const metadata = JSON.parse(
+        Buffer.from(metadataRaw.split(",")[1], "base64").toString("utf8")
+      );
+
+      return Buffer.from(metadata.image_data.split(",")[1], "base64").toString(
+        "utf8"
+      );
+    },
   },
   [META_DEX_ORIGIN.VELODROME]: {
     chainId: optimism.id,
@@ -56,6 +77,9 @@ export const META_DEX_CHAIN: Record<
         "0x4d4dB49B4EeC4f55a08C62fe2CF89503700f74cb",
         address
       ),
+    fetchMetaVeTokenImage: async (tokenId) => {
+      return tokenId.toString();
+    },
   },
 };
 
