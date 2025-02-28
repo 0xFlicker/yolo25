@@ -36,14 +36,14 @@ pragma solidity >=0.7.0 <0.9.0;
 import {IERC20} from "./interface/IERC20.sol";
 import {IERC721} from "./interface/IERC721.sol";
 import {IWETH} from "./interface/IWETH.sol";
-import {ICLPool} from "slipstream/contracts/core/interfaces/ICLPool.sol";
-import {ICLFactory} from "slipstream/contracts/core/interfaces/ICLFactory.sol";
-import {INonfungiblePositionManager} from "slipstream/contracts/periphery/interfaces/INonfungiblePositionManager.sol";
-import {IQuoter} from "slipstream/contracts/periphery/interfaces/IQuoter.sol";
+import {ICLPool} from "./interface/ICLPool.sol";
+import {ICLFactory} from "./interface/ICLFactory.sol";
+import {INonfungiblePositionManager} from "./interface/INonfungiblePositionManager.sol";
+import {IQuoter} from "./interface/IQuoter.sol";
 
 contract YoloLP {
     IERC20 public yolo;
-    IERC20 public weth;
+    IWETH public weth;
     IERC20 public aero;
     address public v3Factory;
     address public v3Router;
@@ -82,7 +82,7 @@ contract YoloLP {
         address _v3Quoter,
         int24 _tickSpace
     ) {
-        weth = IERC20(_weth);
+        weth = IWETH(_weth);
         emit token1Set(address(0), _weth);
         yolo = IERC20(_yolo);
         emit token0Set(address(0), _yolo);
@@ -117,18 +117,16 @@ contract YoloLP {
     function depositEth() external payable {
         // mint sell wall -1 tick to -2 ticks from current sqrtPriceX96
         // payable eth => weth (on contract)
-        uint256 preEth = weth.balanceOf(address(this));
-        IWETH(address(weth)).deposit{value: msg.value}();
-        uint256 deltaEth = weth.balanceOf(address(this)) - preEth;
-        require(deltaEth == msg.value, "WETH deposit failed");
+        uint256 deltaEth1 = weth.balanceOf(address(this));
+        weth.deposit{value: msg.value}();
+        deltaEth1 = weth.balanceOf(address(this)) - deltaEth1;
+        require(deltaEth1 == msg.value, "WETH deposit failed");
 
-        // get sqrtPriceX96
-        uint160 sqrtPriceX96 = _getSqrtPriceX96();
         // mint sellwall
-        _mintSellWallPosition(deltaEth, sqrtPriceX96);
+        _mintSellWallPosition(deltaEth1, _getSqrtPriceX96());
 
         // calc $weth => $aero
-        uint256 amount = _wethToAero(deltaEth);
+        uint256 amount = _wethToAero(deltaEth1);
 
         // mint our NFT
     }
@@ -188,17 +186,17 @@ contract YoloLP {
         uint160 _sqrtPriceX96
     ) external payable {
         // payable eth => weth (on contract)
-        uint256 preEth = weth.balanceOf(address(this));
-        IWETH(address(weth)).deposit{value: msg.value}();
-        uint256 deltaEth = weth.balanceOf(address(this)) - preEth;
+        uint256 deltaEth = weth.balanceOf(address(this));
+        weth.deposit{value: msg.value}();
+        deltaEth = weth.balanceOf(address(this)) - deltaEth;
         require(deltaEth == msg.value, "WETH deposit failed");
 
         // yolo => contract
         // fix to mint
-        uint256 preYolo = yolo.balanceOf(address(this));
+        uint256 deltaYolo = yolo.balanceOf(address(this));
         bool done = yolo.transferFrom(msg.sender, address(this), _yoloAmount);
         require(done, "YOLO transfer failed");
-        uint256 deltaYolo = yolo.balanceOf(address(this)) - preYolo;
+        deltaYolo = yolo.balanceOf(address(this)) - deltaYolo;
 
         // call slot0 of aero for sqrtPriceX96 (aka 1:1) - external
 
