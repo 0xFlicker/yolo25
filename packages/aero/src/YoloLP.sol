@@ -37,7 +37,7 @@ import {IERC20} from "./interface/IERC20.sol";
 import {IWETH} from "./interface/IWETH.sol";
 import {ICLPool} from "slipstream/contracts/core/interfaces/ICLPool.sol";
 import {ICLFactory} from "slipstream/contracts/core/interfaces/ICLFactory.sol";
-import {INonfungiblePositionManager} from "slipstream/contracts/periphery/interfaces/INonfungiblePositionManager.sol";
+import {INonfungiblePositionManager, IERC721} from "slipstream/contracts/periphery/interfaces/INonfungiblePositionManager.sol";
 
 contract YoloLP {
     IERC20 public yolo;
@@ -47,7 +47,7 @@ contract YoloLP {
     address public v3Router;
     address public v3PoolAddress;
     address public v3PosMgr;
-    uint24 public tickSpace;
+    int24 public tickSpace;
     uint256[] public lpTokenIds;
 
     event token0Set(address _old, address _new);
@@ -56,7 +56,7 @@ contract YoloLP {
     event RouterSet(address _old, address _new);
     event PoolAddressSet(address _old, address _new);
     event PositionManagerSet(address _old, address _new);
-    event TickSpacingSet(uint24 _old, uint24 _new);
+    event TickSpacingSet(int24 _old, int24 _new);
 
     // error MaxSplaining(string reason);
 
@@ -73,7 +73,7 @@ contract YoloLP {
         address _v3Router,
         address _v3Factory,
         address _v3PosMgr,
-        uint24 _tickSpace
+        int24 _tickSpace
     ) {
         weth = IERC20(_weth);
         emit token1Set(address(0), _weth);
@@ -107,7 +107,7 @@ contract YoloLP {
         // mint sell wall -1 tick to -2 ticks from current sqrtPriceX96
         // payable eth => weth (on contract)
         uint256 preEth = weth.balanceOf(address(this));
-        IWETH(weth).deposit{value: msg.value}();
+        IWETH(address(weth)).deposit{value: msg.value}();
         uint256 deltaEth = weth.balanceOf(address(this)) - preEth;
         require(deltaEth == msg.value, "WETH deposit failed");
 
@@ -127,22 +127,34 @@ contract YoloLP {
     /// calc the $weth to $aero swap value =>
     /// add them up, mint out NFT with that value
     function depositLP(uint256 _tokenId) external {
-        Position memory data = _getPosition(_tokenId);
+        (address token0, address token1, int24 tickSpacing, uint128 liquidity) = _getPosition(_tokenId);
+        uint160 sqrtPriceX96 = _getSqrtPriceX96();
         require(
-            data.token0 == address(yolo) || data.token1 == address(yolo),
+            token0 == address(yolo) || token1 == address(yolo),
             "LP must contain YOLO"
         );
         require(
-            data.token0 == address(weth) || data.token1 == address(weth),
+            token0 == address(weth) || token1 == address(weth),
             "LP must contain WETH"
         );
+        require(
+            tickSpacing == tickSpace,
+            "LP tickSpace must match"
+        )
 
-        INonfungiblePositionManager.safeTransferFrom(
+        // move it
+        IERC721(v3PosMgr).safeTransferFrom(
             msg.sender,
             address(this),
             _tokenId
         );
+        // store it
         lpTokenIds.push(_tokenId);
+
+        // calc t0/t1 => $aero
+        (uint256 token0Amount, uint256 token1Amount) = _calcTokens(liquidity, sqrtPriceX96);
+        uint256 value = _calcToAero(token0Amount);
+        value += _calcToAero(token1Amount);
     }
 
     /// @dev this is bland, it's 1990's calling wanting the Taco Bell pastel colors back...
@@ -155,7 +167,7 @@ contract YoloLP {
     ) external payable {
         // payable eth => weth (on contract)
         uint256 preEth = weth.balanceOf(address(this));
-        IWETH(weth).deposit{value: msg.value}();
+        IWETH(address(weth)).deposit{value: msg.value}();
         uint256 deltaEth = weth.balanceOf(address(this)) - preEth;
         require(deltaEth == msg.value, "WETH deposit failed");
 
@@ -172,8 +184,8 @@ contract YoloLP {
 
         // create pool
         v3PoolAddress = ICLFactory(v3Factory).createPool(
-            yolo,
-            weth,
+            address(yolo),
+            address(weth),
             tickSpace,
             _sqrtPriceX96
         );
@@ -280,6 +292,25 @@ contract YoloLP {
         lpTokenIds.push(tokenId);
     }
 
+    /// @dev this does the token from liquidity + sqrtPriceX96
+    /// @param _liquidity the value returned from _getPosition()
+    /// @param _sqrtPriceX96 the value returned from _getSqrtPriceX96()
+    function _calcTokens(
+        uint128 _liquidity,
+        uint160 _sqrtPriceX96
+    ) internal returns (uint256 token0Amount, uint256 token1Amount) {
+        // Convert sqrtPriceX96 to sqrtPrice
+        uint256 sqrtPrice = uint256(_sqrtPriceX96) * 1 ether / 2**96;
+
+        // Calculate the amounts of token0 and token1
+        token0Amount = _liquidity * 1 ether / sqrtPrice;
+        token1Amount = _liquidity * sqrtPrice / 1 ether;
+
+        // Adjust for the precision
+        token0Amount = token0Amount * 1 ether / (sqrtPrice + 1 ether);
+        token1Amount = token1Amount * 1 ether / (sqrtPrice + 1 ether);
+    }
+
     /// @dev this returns the current tick
     /// @return tick from ICLPool.slot0
     function _getTick() internal returns (int24 tick) {
@@ -288,45 +319,16 @@ contract YoloLP {
 
     /// @dev this returns the current tick
     /// @return sqrtPriceX96 from ICLPool.slot0
-    function _getSqrtPriceX96() internal returns (int160 sqrtPriceX96) {
+    function _getSqrtPriceX96() internal returns (uint160 sqrtPriceX96) {
         (sqrtPriceX96, , , , , ) = ICLPool(v3PoolAddress).slot0();
     }
 
-    struct Position {
-        uint96 nonce;
-        address operator;
-        address token0;
-        address token1;
-        int24 tickSpacing;
-        int24 tickLower;
-        int24 tickUpper;
-        uint128 liquidity;
-        uint256 feeGrowthInside0LastX128;
-        uint256 feeGrowthInside1LastX128;
-        uint128 tokensOwed0;
-        uint128 tokensOwed1;
-    }
-
     /// @dev returns position data
-    /// @param _tokenId
-    /// @return value
+    /// @param _tokenId the tokenId
     function _getPosition(
         uint256 _tokenId
-    ) internal returns (Position memory value) {
-        (
-            value.nonce,
-            value.operator,
-            value.token0,
-            value.token1,
-            value.tickSpacing,
-            value.tickLower,
-            value.tickUpper,
-            value.liquidity,
-            value.feeGrowthInside0LastX128,
-            value.feeGrowthInside1LastX128,
-            value.tokensOwed0,
-            value.tokensOwed1
-        ) = INonfungiblePositionManager(v3PosMgr).positions(_tokenId);
+    ) internal returns (address token0, address token1, int24 tickSpacing, uint128 liquidity) {
+        (,,token0,token1,tickSpacing,,,liquidity,,,,) = INonfungiblePositionManager(v3PosMgr).positions(_tokenId);
     }
 
     /// @dev this is that bland, got to have it or it breaks function
