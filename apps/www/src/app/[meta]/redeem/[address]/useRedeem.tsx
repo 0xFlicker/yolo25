@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect } from "react";
 import { BaseError } from "viem";
-import { useWriteVeVaultStakeBatchRedeemTo } from "@/wagmi/generated";
+import { useWriteVeVaultDepositBatchRedeemTo } from "@/wagmi/generated";
 
 import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 import { useSelectable } from "./context";
@@ -47,9 +47,9 @@ export function useRedeem({
   const { addNotification } = useNotifications();
 
   const {
-    writeContractAsync: writeVeVaultStakeBatchRedeemTo,
+    writeContractAsync: writeVeVaultDepositBatchRedeemTo,
     data: redeemHash,
-  } = useWriteVeVaultStakeBatchRedeemTo();
+  } = useWriteVeVaultDepositBatchRedeemTo();
 
   // Transaction watchers
   const { data: transactionData } = useWaitForTransactionReceipt({
@@ -99,7 +99,7 @@ export function useRedeem({
     });
 
     try {
-      const approvalResponse = await writeVeVaultStakeBatchRedeemTo({
+      const approvalResponse = await writeVeVaultDepositBatchRedeemTo({
         address: ourStaker,
         args: [address, selectedTokenIds],
         chainId,
@@ -125,7 +125,7 @@ export function useRedeem({
     addTransaction,
     chainId,
     ourStaker,
-    writeVeVaultStakeBatchRedeemTo,
+    writeVeVaultDepositBatchRedeemTo,
     selectedTokenIds,
     updateTransactionHash,
     resetSelectedTokenIds,

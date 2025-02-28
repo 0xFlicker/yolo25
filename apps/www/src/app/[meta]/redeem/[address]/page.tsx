@@ -3,7 +3,7 @@ import { InvalidAddress } from "./InvalidAddress";
 import { InvalidMetadex } from "./InvalidMetadex";
 import { META_DEX_CHAIN, stringToMeta } from "@/wagmi/contracts";
 import { getChainClient } from "@/wagmi/viem";
-import { veVaultStakeAbi } from "@/wagmi/generated";
+import { veVaultDepositAbi } from "@/wagmi/generated";
 import { InventoryHeader } from "./InventoryHeader";
 import { SelectableProvider } from "./context";
 import { InventoryGrid } from "./InventoryGrid";
@@ -39,7 +39,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
         nfts.map((tokenId) =>
           client.readContract({
             address: ourStaker,
-            abi: veVaultStakeAbi,
+            abi: veVaultDepositAbi,
             functionName: "locked",
             args: [tokenId],
           })

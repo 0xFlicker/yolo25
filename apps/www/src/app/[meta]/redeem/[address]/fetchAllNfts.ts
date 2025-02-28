@@ -3,14 +3,14 @@ import {
   META_DEX_CHAIN,
   META_DEX_ORIGIN,
 } from "@/wagmi/contracts";
-import { veVaultStakeAbi } from "@/wagmi/generated";
+import { veVaultDepositAbi } from "@/wagmi/generated";
 import { Address } from "viem";
 
 export async function fetchAllNfts(address: Address, meta: META_DEX_ORIGIN) {
   const client = getMetaClient(meta);
   const totalOwnedCount = await client.readContract({
     address: META_DEX_CHAIN[meta].ourStaker,
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     functionName: "balanceOf",
     args: [address],
   });
@@ -24,7 +24,7 @@ export async function fetchAllNfts(address: Address, meta: META_DEX_ORIGIN) {
   while (foundNfts < totalOwnedCount) {
     const ownerOfCalls = Array.from({ length: BATCH_SIZE }, (_, i) => ({
       address: META_DEX_CHAIN[meta].ourStaker,
-      abi: veVaultStakeAbi,
+      abi: veVaultDepositAbi,
       functionName: "ownerOf",
       args: [tokenIndex + BigInt(i)],
     }));

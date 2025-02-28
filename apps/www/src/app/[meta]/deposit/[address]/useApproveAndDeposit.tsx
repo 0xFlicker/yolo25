@@ -3,7 +3,7 @@ import { useCallback, useEffect } from "react";
 import { BaseError, erc721Abi } from "viem";
 import {
   useWriteIerc721SetApprovalForAll,
-  useWriteVeVaultStakeBatchDepositFor,
+  useWriteVeVaultDepositBatchDepositFor,
 } from "@/wagmi/generated";
 
 import {
@@ -65,8 +65,8 @@ export function useApproveAndDeposit({
   const { writeContractAsync: writeIerc721SetApprovalForAll } =
     useWriteIerc721SetApprovalForAll();
 
-  const { writeContractAsync: writeVeVaultStakeBatchDepositFor } =
-    useWriteVeVaultStakeBatchDepositFor();
+  const { writeContractAsync: writeVeVaultDepositBatchDepositFor } =
+    useWriteVeVaultDepositBatchDepositFor();
 
   // Transaction watchers
   const { data: transactionData } = useWaitForTransactionReceipt({
@@ -146,7 +146,7 @@ export function useApproveAndDeposit({
         });
 
         addToPendingTokenIds(...selectedTokenIds);
-        const depositResponse = await writeVeVaultStakeBatchDepositFor({
+        const depositResponse = await writeVeVaultDepositBatchDepositFor({
           address: ourStaker,
           args: [address, selectedTokenIds],
           chainId,
@@ -187,7 +187,7 @@ export function useApproveAndDeposit({
     addNotification,
     selectedTokenIds,
     addToPendingTokenIds,
-    writeVeVaultStakeBatchDepositFor,
+    writeVeVaultDepositBatchDepositFor,
     resetSelectedTokenIds,
     meta,
     router,
