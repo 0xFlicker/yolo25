@@ -167,7 +167,10 @@ contract VeVaultDeposit is OwnableRoles, ERC721, IVeVaultLock {
         }
     }
 
-    function depositLP(uint256 lockedAmount) external onlyRoles(MINTER_ROLE) {
+    function depositLPFor(
+        address to,
+        uint256 lockedAmount
+    ) external onlyRoles(MINTER_ROLE) {
         uint256 nextTokenId = ++_tokenIdCounter;
         _lockedTokenIdToLock[nextTokenId] = Lock({
             amount: uint128(lockedAmount),
@@ -176,7 +179,7 @@ contract VeVaultDeposit is OwnableRoles, ERC721, IVeVaultLock {
         });
         _addToMaxValueList(lockedAmount);
         _mintAndSetExtraDataUnchecked(
-            msg.sender,
+            to,
             nextTokenId,
             generateSeed(_tokenIdCounter)
         );
