@@ -8,7 +8,7 @@
  * -#%+@#-  :@#@@+%++@*@*:=%+..%%#=      *@  *@++##.    =%@%@%%#-  =#%+@#-   :*+**+=: %%++%*
  *
  * @title IVeVaultDeposit
- * @author @maxflowo2 and, @0xflick on github, MGGA!
+ * @author @maxflowo2 and, @0xflicker on github, MGGA!
  */
 
 // SPDX-License-Identifier: Apache-2.0

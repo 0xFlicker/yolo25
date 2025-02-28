@@ -8,7 +8,7 @@
  * -#%+@#-  :@#@@+%++@*@*:=%+..%%#=      *@  *@++##.    =%@%@%%#-  =#%+@#-   :*+**+=: %%++%*
  *
  * @title LP Creation/Lock 1.0.0 alpha (only aerodrome)
- * @author @maxflowo2 and, @0xflick on github, MGGA!
+ * @author @maxflowo2 and, @0xflicker on github, MGGA!
  */
 
 // SPDX-License-Identifier: Apache-2.0
