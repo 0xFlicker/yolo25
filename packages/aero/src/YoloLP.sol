@@ -144,8 +144,26 @@ contract YoloLP {
     /// calc the $weth to $aero swap value =>
     /// add them up, mint out NFT with that value
     function depositLP(uint256 _tokenId) external {
-        (address token0, address token1, int24 tickSpacing, uint128 liquidity) = _getPosition(_tokenId);
-        uint160 sqrtPriceX96 = _getSqrtPriceX96();
+        // First validate the LP token
+        _validateLPToken(_tokenId);
+
+        // Transfer and store the token
+        _transferAndStoreLPToken(_tokenId);
+
+        // Calculate and return aero amount
+        uint256 aeroAmount = _calculateAeroAmount(_tokenId);
+
+        // TODO: mint based off aero amount
+    }
+
+    function _validateLPToken(uint256 _tokenId) internal view {
+        (
+            address token0,
+            address token1,
+            int24 tickSpacing /* uint128 liquidity */,
+
+        ) = _getPosition(_tokenId);
+
         require(
             token0 == address(yolo) || token1 == address(yolo),
             "LP must contain YOLO"
@@ -154,32 +172,35 @@ contract YoloLP {
             token0 == address(weth) || token1 == address(weth),
             "LP must contain WETH"
         );
-        require(
-            tickSpacing == tickSpace,
-            "LP tickSpace must match"
-        );
+        require(tickSpacing == tickSpace, "LP tickSpace must match");
+    }
 
-        // move it
-        IERC721(v3PosMgr).safeTransferFrom(
-            msg.sender,
-            address(this),
-            _tokenId
-        );
-        // store it
+    function _transferAndStoreLPToken(uint256 _tokenId) internal {
+        IERC721(v3PosMgr).safeTransferFrom(msg.sender, address(this), _tokenId);
         lpTokenIds.push(_tokenId);
+    }
 
-        // calc t0/t1 => $aero
-        uint256 aeroAmount;
-        (uint256 token0Amount, uint256 token1Amount) = _calcTokens(liquidity, sqrtPriceX96);
+    function _calculateAeroAmount(uint256 _tokenId) internal returns (uint256) {
+        (
+            address token0,
+            ,
+            ,
+            /* address token1 */ /* int24 tickSpacing */ uint128 liquidity
+        ) = _getPosition(_tokenId);
+
+        uint160 sqrtPriceX96 = _getSqrtPriceX96();
+        (uint256 token0Amount, uint256 token1Amount) = _calcTokens(
+            liquidity,
+            sqrtPriceX96
+        );
+
         if (token0 == address(yolo)) {
-            token1Amount += _yoloToWeth(token0Amount); // swap yolo to ether
-            aeroAmount = _wethToAero(token1Amount);
+            token1Amount += _yoloToWeth(token0Amount);
+            return _wethToAero(token1Amount);
         } else {
-            token0Amount += _yoloToWeth(token1Amount); // swap yolo to ether
-            aeroAmount = _wethToAero(token0Amount);
+            token0Amount += _yoloToWeth(token1Amount);
+            return _wethToAero(token0Amount);
         }
-
-        // mint based off aero amount
     }
 
     /// @dev this is bland, it's 1990's calling wanting the Taco Bell pastel colors back...
@@ -524,44 +545,52 @@ contract YoloLP {
         uint160 _sqrtPriceX96
     ) internal returns (uint256 token0Amount, uint256 token1Amount) {
         // Convert sqrtPriceX96 to sqrtPrice
-        uint256 sqrtPrice = uint256(_sqrtPriceX96) * 1 ether / 2**96;
+        uint256 sqrtPrice = (uint256(_sqrtPriceX96) * 1 ether) / 2 ** 96;
 
         // Calculate the amounts of token0 and token1
-        token0Amount = _liquidity * 1 ether / sqrtPrice;
-        token1Amount = _liquidity * sqrtPrice / 1 ether;
+        token0Amount = (_liquidity * 1 ether) / sqrtPrice;
+        token1Amount = (_liquidity * sqrtPrice) / 1 ether;
 
         // Adjust for the precision
-        token0Amount = token0Amount * 1 ether / (sqrtPrice + 1 ether);
-        token1Amount = token1Amount * 1 ether / (sqrtPrice + 1 ether);
+        token0Amount = (token0Amount * 1 ether) / (sqrtPrice + 1 ether);
+        token1Amount = (token1Amount * 1 ether) / (sqrtPrice + 1 ether);
     }
 
     /// @dev this estimates the swap value from $yolo => $weth
     /// @param _amount of $yolo
     /// @return _value of $weth for _amount of $yolo
-    function _yoloToWeth(
-        uint256 _amount
-    ) internal returns (uint256 _value) {
-        _value = IQuoter(v3Quoter).quoteExactInputSingle(address(yolo), address(weth), tickSpace, _amount, type(uint160).max);
+    function _yoloToWeth(uint256 _amount) internal returns (uint256 _value) {
+        _value = IQuoter(v3Quoter).quoteExactInputSingle(
+            address(yolo),
+            address(weth),
+            tickSpace,
+            _amount,
+            type(uint160).max
+        );
     }
 
     /// @dev this estimates the swap value from $weth => $aero
     /// @param _amount of $weth
     /// @return _value of $aero for _amount of $weth
-    function _wethToAero(
-        uint256 _amount
-    ) internal returns (uint256 _value) {
-        _value = IQuoter(v3Quoter).quoteExactInputSingle(address(weth), address(aero), 200, _amount, type(uint160).max);
+    function _wethToAero(uint256 _amount) internal returns (uint256 _value) {
+        _value = IQuoter(v3Quoter).quoteExactInputSingle(
+            address(weth),
+            address(aero),
+            200,
+            _amount,
+            type(uint160).max
+        );
     }
 
     /// @dev this returns the current tick
     /// @return tick from ICLPool.slot0
-    function _getTick() internal returns (int24 tick) {
+    function _getTick() internal view returns (int24 tick) {
         (, tick, , , , ) = ICLPool(v3PoolAddress).slot0();
     }
 
     /// @dev this returns the current tick
     /// @return sqrtPriceX96 from ICLPool.slot0
-    function _getSqrtPriceX96() internal returns (uint160 sqrtPriceX96) {
+    function _getSqrtPriceX96() internal view returns (uint160 sqrtPriceX96) {
         (sqrtPriceX96, , , , , ) = ICLPool(v3PoolAddress).slot0();
     }
 
@@ -569,8 +598,30 @@ contract YoloLP {
     /// @param _tokenId the tokenId
     function _getPosition(
         uint256 _tokenId
-    ) internal returns (address token0, address token1, int24 tickSpacing, uint128 liquidity) {
-        (,,token0,token1,tickSpacing,,,liquidity,,,,) = INonfungiblePositionManager(v3PosMgr).positions(_tokenId);
+    )
+        internal
+        view
+        returns (
+            address token0,
+            address token1,
+            int24 tickSpacing,
+            uint128 liquidity
+        )
+    {
+        (
+            ,
+            ,
+            token0,
+            token1,
+            tickSpacing,
+            ,
+            ,
+            liquidity,
+            ,
+            ,
+            ,
+
+        ) = INonfungiblePositionManager(v3PosMgr).positions(_tokenId);
     }
 
     /// @dev this is that bland, got to have it or it breaks function

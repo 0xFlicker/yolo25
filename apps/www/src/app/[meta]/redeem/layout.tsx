@@ -15,7 +15,7 @@ export default async function Layout({
     <>
       {children}
       <RedirectWhenConnected
-        pathPrefix={`${meta}/inventory`}
+        pathPrefix={`${meta}/redeem`}
         toChain={metaDexChain.chainId}
       />
     </>

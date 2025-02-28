@@ -77,10 +77,7 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
                 _veNFT.lockPermanent(tokenId);
             } else {
                 uint256 newUnlockTime = ((block.timestamp + MAXTIME) / WEEK) *
-                    WEEK;
-                if (newUnlockTime > lockedBalance.end) {
-                    _veNFT.increaseUnlockTime(tokenId, MAXTIME);
-                }
+                    WEEK;iVotingEscrowAbi
             }
             lockedBalance = _veNFT.locked(tokenId);
         }
@@ -211,5 +208,9 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
 
     function lockForTokenId(uint256 tokenId) public view returns (Lock memory) {
         return _lockedTokenIdToLock[tokenId];
+    }
+
+    function protocolTokenId() public view returns (uint256) {
+        return _veNftProtocolTokenId;
     }
 }

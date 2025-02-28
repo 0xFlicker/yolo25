@@ -7,6 +7,9 @@ remappings = [
   "slipstream/contracts/=lib/slipstream/contracts/",
   "aerodrome-finance/contracts/=lib/aerodrome-finance/contracts/"
 ]
-solc_version = "0.8.19"
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
+
+
+[optimizer_details.yul_details]
+stack_allocation = false

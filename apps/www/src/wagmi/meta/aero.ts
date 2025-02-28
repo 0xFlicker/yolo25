@@ -32,8 +32,6 @@ export async function fetchAeroNfts(
       args: [ownerAddress, BigInt(index)],
     });
 
-    console.log("r", result);
-
     if (result === 0n) {
       break;
     }
@@ -42,6 +40,5 @@ export async function fetchAeroNfts(
     index++;
   }
 
-  console.log(tokens);
   return tokens;
 }

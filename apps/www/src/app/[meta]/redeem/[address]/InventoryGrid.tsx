@@ -45,7 +45,7 @@ export const InventoryGrid: FC<{
   return (
     <>
       <div className="flex justify-between items-center mb-4">
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           <button
             className={cn("bg-blue-500 text-white px-4 py-2 rounded-md")}
             disabled={selectedTokenIds.length === 0}
@@ -54,26 +54,23 @@ export const InventoryGrid: FC<{
             Redeem
           </button>
 
-          {selectedTokenIds.length < tokenIdsToDisplay.length &&
-            tokenIdsToDisplay.length > 0 && (
-              <button
-                className="bg-blue-400 text-white px-4 py-2 rounded-md"
-                onClick={() => {
-                  resetSelectedTokenIds();
-                  addToSelectedTokenIds(...tokenIdsToDisplay);
+          {tokenIdsToDisplay.length > 0 && (
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={selectedTokenIds.length === tokenIdsToDisplay.length}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    resetSelectedTokenIds();
+                    addToSelectedTokenIds(...tokenIdsToDisplay);
+                  } else {
+                    resetSelectedTokenIds();
+                  }
                 }}
-              >
-                Select All
-              </button>
-            )}
-
-          {selectedTokenIds.length > 0 && (
-            <button
-              className="bg-blue-400 text-white px-4 py-2 rounded-md"
-              onClick={resetSelectedTokenIds}
-            >
-              Reset
-            </button>
+                className="form-checkbox h-5 w-5 text-blue-500"
+              />
+              <span className="text-gray-700">Select All</span>
+            </label>
           )}
         </div>
         {selectedTokenIds.length > 0 && (

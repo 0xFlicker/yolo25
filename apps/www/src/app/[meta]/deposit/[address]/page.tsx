@@ -79,10 +79,9 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       <SelectableProvider>
         <div className="container mx-auto px-4 py-8 min-h-[calc(100vh-6rem)]">
           <DepositHeader
+            metaVeNft={metaNftContractAddress}
             availableCount={tokens.length}
-            selectedCount={0}
             totalValue={totalPossibleValue}
-            selectedValue={0n}
             veNftSymbol={theirVeNftSymbol}
             ourTokenSymbol={ourTokenSymbol}
             ourTokenName={ourTokenName}
@@ -94,6 +93,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
             ourToken={ourToken}
             metaVeNft={metaNftContractAddress}
             initialTokenIds={tokens.map((t) => t.tokenId)}
+            meta={pathMeta}
           />
         </div>
       </SelectableProvider>
