@@ -6,8 +6,8 @@ import { useParams } from "next/navigation";
 
 export const SiteMenu: FC<{
   isDeposit?: boolean;
-  isInventory?: boolean;
-}> = ({ isDeposit = false, isInventory = false }) => {
+  isRedeem?: boolean;
+}> = ({ isDeposit = false, isRedeem = false }) => {
   const params = useParams();
   const meta = Array.isArray(params.meta) ? params.meta[0] : params.meta;
   if (!meta) return null;
@@ -20,10 +20,10 @@ export const SiteMenu: FC<{
         text="Deposit"
       />
       <MenuItem
-        href={`/${meta}/inventory`}
-        disabled={isInventory}
+        href={`/${meta}/redeem`}
+        disabled={isRedeem}
         icon={<ArchiveBoxIcon />}
-        text="Inventory"
+        text="Redeem"
       />
     </>
   );

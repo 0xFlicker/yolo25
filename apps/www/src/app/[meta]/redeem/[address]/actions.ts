@@ -6,5 +6,5 @@ export async function revalidate(
   meta: "stuxnet" | "aerodrome" | "velodrome",
   address: string
 ) {
-  revalidatePath(`/${meta}/inventory/${address}`);
+  revalidatePath(`/${meta}/redeem/${address}`);
 }

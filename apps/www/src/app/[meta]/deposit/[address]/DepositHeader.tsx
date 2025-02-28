@@ -4,7 +4,7 @@ import { FC } from "react";
 import { Address, formatUnits } from "viem";
 import { useReadContracts } from "wagmi";
 import { useSelectable } from "./context";
-import { iVotingEscrowAbi, veVaultStakeAbi } from "@/wagmi/generated";
+import { iVotingEscrowAbi } from "@/wagmi/generated";
 
 type DepositHeaderProps = {
   availableCount: number;
