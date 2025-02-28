@@ -191,7 +191,9 @@ contract VeVaultDeposit is OwnableRoles, ERC721, IVeVaultLock {
     //
     ///////////////////////////////////////////////////////////////////////////
 
+    error OnlyOwnerOfTokenCanRedeem();
     function redeemTo(address to, uint256 tokenId) public {
+        if (_ownerOf(tokenId) != msg.sender) revert OnlyOwnerOfTokenCanRedeem();
         Lock memory lock = _lockedTokenIdToLock[tokenId];
         uint256 amount = _timeAdjustedValue(lock);
         _burn(tokenId);
