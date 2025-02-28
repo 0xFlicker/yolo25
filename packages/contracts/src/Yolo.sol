@@ -9,44 +9,61 @@ import {LibString} from "solady/utils/LibString.sol";
 contract Yolo is OwnableRoles, ERC20 {
     using LibString for string;
 
-    uint256 public constant _VAULT_ROLE = _ROLE_0;
+    uint256 public constant _MINTER_ROLE = _ROLE_0;
     uint256 public constant _BURNER_ROLE = _ROLE_1;
 
     address private _token;
 
-    bytes private constant _NAME_CALL = abi.encodeWithSignature("name()");
-    bytes private constant _SYMBOL_CALL = abi.encodeWithSignature("symbol()");
+    string private _cachedName;
+    string private _cachedSymbol;
+    uint8 private _cachedDecimals;
+
+    error NameCallFailed();
+    error SymbolCallFailed();
+    error DecimalsCallFailed();
 
     constructor(address token) {
         _initializeOwner(msg.sender);
         _token = token;
+
+        // Cache token details
+        (bool success, bytes memory data) = token.staticcall(
+            abi.encodeWithSignature("name()")
+        );
+        if (!success) revert NameCallFailed();
+        _cachedName = string.concat("Yolo", abi.decode(data, (string)));
+
+        (success, data) = token.staticcall(abi.encodeWithSignature("symbol()"));
+        if (!success) revert SymbolCallFailed();
+        _cachedSymbol = string.concat("YOLO", abi.decode(data, (string)));
+
+        (success, data) = token.staticcall(
+            abi.encodeWithSignature("decimals()")
+        );
+        if (!success) revert DecimalsCallFailed();
+        _cachedDecimals = abi.decode(data, (uint8));
     }
 
-    error NameCallFailed();
-    error SymbolCallFailed();
-
     function name() public view override returns (string memory) {
-        string memory baseName = "Yolo";
-        (bool success, bytes memory data) = _token.staticcall(_NAME_CALL);
-        if (!success) revert NameCallFailed();
-        return baseName.concat(abi.decode(data, (string)));
+        return _cachedName;
     }
 
     function symbol() public view override returns (string memory) {
-        string memory baseSymbol = "YOLO";
-        (bool success, bytes memory data) = _token.staticcall(_SYMBOL_CALL);
-        if (!success) revert SymbolCallFailed();
-        return baseSymbol.concat(abi.decode(data, (string)));
+        return _cachedSymbol;
     }
 
-    function mint(address to, uint256 amount) external onlyRoles(_VAULT_ROLE) {
+    function decimals() public view override returns (uint8) {
+        return _cachedDecimals;
+    }
+
+    function mint(address to, uint256 amount) external onlyRoles(_MINTER_ROLE) {
         _mint(to, amount);
     }
 
     function burn(
         address from,
         uint256 amount
-    ) external onlyRoles(_VAULT_ROLE | _BURNER_ROLE) {
+    ) external onlyRoles(_BURNER_ROLE) {
         _burn(from, amount);
     }
 }
