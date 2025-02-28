@@ -139,7 +139,7 @@ contract YoloLP {
         uint256 aeroAmount = _wethToAero(deltaEth1);
 
         // mint our NFT
-        vault.depositLPFor(msg.sender, aeroAmount);
+        vault.depositFor(msg.sender, aeroAmount);
     }
 
         /// @dev either i'm a Jenius (Genius with a J) or completely insane...
@@ -186,7 +186,7 @@ contract YoloLP {
         }
 
         // mint our NFT
-        vault.depositLPFor(msg.sender, aeroAmount);
+        vault.depositFor(msg.sender, aeroAmount);
     }
 
     /// @dev this is bland, it's 1990's calling wanting the Taco Bell pastel colors back...

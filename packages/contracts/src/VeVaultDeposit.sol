@@ -120,6 +120,9 @@ contract VeVaultDeposit is OwnableRoles, ERC721, IVeVaultLock {
     //
     ///////////////////////////////////////////////////////////////////////////
 
+    /// @dev this is for deposit of veNFT's
+    /// @param to address (non payable) for recipient
+    /// @param tokenId is the tokenId of veNFT
     function depositFor(address to, uint256 tokenId) public {
         _veNFT.safeTransferFrom(msg.sender, address(this), tokenId);
 
@@ -161,12 +164,18 @@ contract VeVaultDeposit is OwnableRoles, ERC721, IVeVaultLock {
         );
     }
 
+    /// @dev this is for deposit batch of veNFT's
+    /// @param to address (non payable) for recipient
+    /// @param tokenIds is the tokenId of veNFT
     function batchDepositFor(address to, uint256[] memory tokenIds) external {
         for (uint256 i = 0; i < tokenIds.length; i++) {
             depositFor(to, tokenIds[i]);
         }
     }
 
+    /// @dev this is for deposit to anyone
+    /// @param to address (non payable) for recipient
+    /// @param lockedAmount is the value equivalent in $aero
     function depositLPFor(
         address to,
         uint256 lockedAmount
@@ -191,6 +200,9 @@ contract VeVaultDeposit is OwnableRoles, ERC721, IVeVaultLock {
     //
     ///////////////////////////////////////////////////////////////////////////
 
+    /// @dev this burns the veVault => $yolo
+    /// @param to user address
+    /// @param tokenId the tokenId of veVault
     function redeemTo(address to, uint256 tokenId) public {
         Lock memory lock = _lockedTokenIdToLock[tokenId];
         uint256 amount = _timeAdjustedValue(lock);
