@@ -91,7 +91,7 @@ contract YoloLP {
         yolo = IYolo(_yolo);
         emit token0Set(address(0), address(yolo));
         aero = IERC20(_aero);
-        emit aeroSet(address(0), address(aero);
+        emit aeroSet(address(0), address(aero));
         v3Router = _v3Router;
         emit RouterSet(address(0), v3Router);
         v3Factory = _v3Factory;
@@ -226,9 +226,9 @@ contract YoloLP {
     /// the $yolo is burned at 100%
     /// the $weth is added to sell wall at 100%
     function rebalanceStandard() external {
-          uint256[] storage rebalancedLP;
+          uint256[] memory rebalancedLP = new uint256[](1);
           // never touch lpTokenIds[0]
-          rebalancedLP.push(lpTokenIds[0]);
+          rebalancedLP[0] = lpTokenIds[0];
           // collect lpTokenIds[0]
           _collectFees(lpTokenIds[0]);
           uint256 len = lpTokenIds.length;
@@ -247,6 +247,24 @@ contract YoloLP {
           yolo.burn(address(this), yolo.balanceOf(address(this)));
     }
 
+    /// @dev this will claim all fees on contract
+    function claimFees() external {
+        uint256 len = lpTokenIds.length;
+        for (uint256 c = 0; c < len;) {
+            (,,,,,,,,,, uint128 tokensOwed0, uint128 tokensOwed1) = INonfungiblePositionManager(v3PosMgr).positions(lpTokenIds[c]);
+            if (tokensOwed0 > 0 || tokensOwed1 > 0) {
+                _collectFees(lpTokenIds[c]);
+            }
+            unchecked { ++c; }
+        }
+    }
+
+    /// @dev this will claim emissions on contract
+    function claimEmissions() external {
+        address gauge = ICLPool(v3PoolAddress).gauge();
+        ICLGauge(gauge).getReward(address(this));
+    }
+
     /// @dev this function will rebalance all the LP's stored on contract
     /// lpTokenIds[0] will alwys be an infinity pool, never modify that
     /// lpTokenIds[1 - type(uint256).max] will be fee collection + burned
@@ -262,9 +280,9 @@ contract YoloLP {
         uint256 _amount0Desired,
         uint256 _amount1Desired
     ) external {
-          uint256[] storage rebalancedLP;
+          uint256[] memory rebalancedLP = new uint256[](1);
           // never touch lpTokenIds[0]
-          rebalancedLP.push(lpTokenIds[0]);
+          rebalancedLP[0] = lpTokenIds[0];
           // collect lpTokenIds[0]
           _collectFees(lpTokenIds[0]);
           uint256 len = lpTokenIds.length;
@@ -321,7 +339,7 @@ contract YoloLP {
           uint256 amount1
       ) {
           (amount0, amount1) = INonfungiblePositionManager(v3PosMgr).decreaseLiquidity(
-              INonfungiblePositionManager(v3PosMgr).DecreaseLiquidityParams({
+              INonfungiblePositionManager.DecreaseLiquidityParams({
                   tokenId: _tokenId,
                   liquidity: _liquidity,
                   amount0Min: 0,
