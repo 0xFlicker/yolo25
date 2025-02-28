@@ -9,8 +9,8 @@ import {LibString} from "solady/utils/LibString.sol";
 contract Yolo is OwnableRoles, ERC20 {
     using LibString for string;
 
-    uint256 public constant _MINTER_ROLE = _ROLE_0;
-    uint256 public constant _BURNER_ROLE = _ROLE_1;
+    uint256 public constant MINTER_ROLE = _ROLE_0;
+    uint256 public constant BURNER_ROLE = _ROLE_1;
 
     address private _token;
 
@@ -56,14 +56,14 @@ contract Yolo is OwnableRoles, ERC20 {
         return _cachedDecimals;
     }
 
-    function mint(address to, uint256 amount) external onlyRoles(_MINTER_ROLE) {
+    function mint(address to, uint256 amount) external onlyRoles(MINTER_ROLE) {
         _mint(to, amount);
     }
 
     function burn(
         address from,
         uint256 amount
-    ) external onlyRoles(_BURNER_ROLE) {
+    ) external onlyRoles(BURNER_ROLE) {
         _burn(from, amount);
     }
 }
