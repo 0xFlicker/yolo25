@@ -2,7 +2,7 @@ import { AppMain } from "@/components/AppMain";
 import Image from "next/image";
 import { GoToAppButton } from "./GoToAppButton";
 
-export default function Home() {
+export default async function Home() {
   return (
     <AppMain disableConnect headerRight={<GoToAppButton />}>
       <div className="relative min-h-screen">
