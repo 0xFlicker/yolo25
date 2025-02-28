@@ -1524,10 +1524,10 @@ export const iYoloAbi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// VeVaultStake
+// VeVaultDeposit
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const veVaultStakeAbi = [
+export const veVaultDepositAbi = [
   {
     type: 'constructor',
     inputs: [
@@ -1694,13 +1694,6 @@ export const veVaultStakeAbi = [
   {
     type: 'function',
     inputs: [],
-    name: 'metadataUpdateRole',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
     name: 'name',
     outputs: [{ name: '', internalType: 'string', type: 'string' }],
     stateMutability: 'pure',
@@ -1738,6 +1731,13 @@ export const veVaultStakeAbi = [
     ],
     name: 'ownershipHandoverExpiresAt',
     outputs: [{ name: 'result', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'protocolTokenId',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
   {
@@ -1780,6 +1780,13 @@ export const veVaultStakeAbi = [
     name: 'revokeRoles',
     outputs: [],
     stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'roleMetadataUpdate',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
   },
   {
     type: 'function',
@@ -2573,6 +2580,13 @@ export const yoloAbi = [
   {
     type: 'function',
     inputs: [],
+    name: 'BURNER_ROLE',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
     name: 'DOMAIN_SEPARATOR',
     outputs: [{ name: 'result', internalType: 'bytes32', type: 'bytes32' }],
     stateMutability: 'view',
@@ -2580,14 +2594,7 @@ export const yoloAbi = [
   {
     type: 'function',
     inputs: [],
-    name: '_BURNER_ROLE',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: '_VAULT_ROLE',
+    name: 'MINTER_ROLE',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
@@ -2918,6 +2925,7 @@ export const yoloAbi = [
   { type: 'error', inputs: [], name: 'AllowanceOverflow' },
   { type: 'error', inputs: [], name: 'AllowanceUnderflow' },
   { type: 'error', inputs: [], name: 'AlreadyInitialized' },
+  { type: 'error', inputs: [], name: 'DecimalsCallFailed' },
   { type: 'error', inputs: [], name: 'InsufficientAllowance' },
   { type: 'error', inputs: [], name: 'InsufficientBalance' },
   { type: 'error', inputs: [], name: 'InvalidPermit' },
@@ -4381,558 +4389,569 @@ export const useWatchIYoloTransferEvent =
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__
  */
-export const useReadVeVaultStake = /*#__PURE__*/ createUseReadContract({
-  abi: veVaultStakeAbi,
+export const useReadVeVaultDeposit = /*#__PURE__*/ createUseReadContract({
+  abi: veVaultDepositAbi,
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"balanceOf"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"balanceOf"`
  */
-export const useReadVeVaultStakeBalanceOf = /*#__PURE__*/ createUseReadContract(
-  { abi: veVaultStakeAbi, functionName: 'balanceOf' },
-)
+export const useReadVeVaultDepositBalanceOf =
+  /*#__PURE__*/ createUseReadContract({
+    abi: veVaultDepositAbi,
+    functionName: 'balanceOf',
+  })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"generateSeed"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"generateSeed"`
  */
-export const useReadVeVaultStakeGenerateSeed =
+export const useReadVeVaultDepositGenerateSeed =
   /*#__PURE__*/ createUseReadContract({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     functionName: 'generateSeed',
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"getApproved"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"getApproved"`
  */
-export const useReadVeVaultStakeGetApproved =
+export const useReadVeVaultDepositGetApproved =
   /*#__PURE__*/ createUseReadContract({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     functionName: 'getApproved',
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"hasAllRoles"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"hasAllRoles"`
  */
-export const useReadVeVaultStakeHasAllRoles =
+export const useReadVeVaultDepositHasAllRoles =
   /*#__PURE__*/ createUseReadContract({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     functionName: 'hasAllRoles',
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"hasAnyRole"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"hasAnyRole"`
  */
-export const useReadVeVaultStakeHasAnyRole =
+export const useReadVeVaultDepositHasAnyRole =
   /*#__PURE__*/ createUseReadContract({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     functionName: 'hasAnyRole',
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"isApprovedForAll"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"isApprovedForAll"`
  */
-export const useReadVeVaultStakeIsApprovedForAll =
+export const useReadVeVaultDepositIsApprovedForAll =
   /*#__PURE__*/ createUseReadContract({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     functionName: 'isApprovedForAll',
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"lockForTokenId"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"lockForTokenId"`
  */
-export const useReadVeVaultStakeLockForTokenId =
+export const useReadVeVaultDepositLockForTokenId =
   /*#__PURE__*/ createUseReadContract({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     functionName: 'lockForTokenId',
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"locked"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"locked"`
  */
-export const useReadVeVaultStakeLocked = /*#__PURE__*/ createUseReadContract({
-  abi: veVaultStakeAbi,
+export const useReadVeVaultDepositLocked = /*#__PURE__*/ createUseReadContract({
+  abi: veVaultDepositAbi,
   functionName: 'locked',
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"metadataUpdateRole"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"name"`
  */
-export const useReadVeVaultStakeMetadataUpdateRole =
-  /*#__PURE__*/ createUseReadContract({
-    abi: veVaultStakeAbi,
-    functionName: 'metadataUpdateRole',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"name"`
- */
-export const useReadVeVaultStakeName = /*#__PURE__*/ createUseReadContract({
-  abi: veVaultStakeAbi,
+export const useReadVeVaultDepositName = /*#__PURE__*/ createUseReadContract({
+  abi: veVaultDepositAbi,
   functionName: 'name',
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"onERC721Received"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"onERC721Received"`
  */
-export const useReadVeVaultStakeOnErc721Received =
+export const useReadVeVaultDepositOnErc721Received =
   /*#__PURE__*/ createUseReadContract({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     functionName: 'onERC721Received',
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"owner"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"owner"`
  */
-export const useReadVeVaultStakeOwner = /*#__PURE__*/ createUseReadContract({
-  abi: veVaultStakeAbi,
+export const useReadVeVaultDepositOwner = /*#__PURE__*/ createUseReadContract({
+  abi: veVaultDepositAbi,
   functionName: 'owner',
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"ownerOf"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"ownerOf"`
  */
-export const useReadVeVaultStakeOwnerOf = /*#__PURE__*/ createUseReadContract({
-  abi: veVaultStakeAbi,
-  functionName: 'ownerOf',
-})
+export const useReadVeVaultDepositOwnerOf = /*#__PURE__*/ createUseReadContract(
+  { abi: veVaultDepositAbi, functionName: 'ownerOf' },
+)
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"ownershipHandoverExpiresAt"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"ownershipHandoverExpiresAt"`
  */
-export const useReadVeVaultStakeOwnershipHandoverExpiresAt =
+export const useReadVeVaultDepositOwnershipHandoverExpiresAt =
   /*#__PURE__*/ createUseReadContract({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     functionName: 'ownershipHandoverExpiresAt',
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"rolesOf"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"protocolTokenId"`
  */
-export const useReadVeVaultStakeRolesOf = /*#__PURE__*/ createUseReadContract({
-  abi: veVaultStakeAbi,
-  functionName: 'rolesOf',
-})
+export const useReadVeVaultDepositProtocolTokenId =
+  /*#__PURE__*/ createUseReadContract({
+    abi: veVaultDepositAbi,
+    functionName: 'protocolTokenId',
+  })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"supportsInterface"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"roleMetadataUpdate"`
  */
-export const useReadVeVaultStakeSupportsInterface =
+export const useReadVeVaultDepositRoleMetadataUpdate =
   /*#__PURE__*/ createUseReadContract({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
+    functionName: 'roleMetadataUpdate',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"rolesOf"`
+ */
+export const useReadVeVaultDepositRolesOf = /*#__PURE__*/ createUseReadContract(
+  { abi: veVaultDepositAbi, functionName: 'rolesOf' },
+)
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"supportsInterface"`
+ */
+export const useReadVeVaultDepositSupportsInterface =
+  /*#__PURE__*/ createUseReadContract({
+    abi: veVaultDepositAbi,
     functionName: 'supportsInterface',
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"symbol"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"symbol"`
  */
-export const useReadVeVaultStakeSymbol = /*#__PURE__*/ createUseReadContract({
-  abi: veVaultStakeAbi,
+export const useReadVeVaultDepositSymbol = /*#__PURE__*/ createUseReadContract({
+  abi: veVaultDepositAbi,
   functionName: 'symbol',
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"tokenURI"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"tokenURI"`
  */
-export const useReadVeVaultStakeTokenUri = /*#__PURE__*/ createUseReadContract({
-  abi: veVaultStakeAbi,
-  functionName: 'tokenURI',
+export const useReadVeVaultDepositTokenUri =
+  /*#__PURE__*/ createUseReadContract({
+    abi: veVaultDepositAbi,
+    functionName: 'tokenURI',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__
+ */
+export const useWriteVeVaultDeposit = /*#__PURE__*/ createUseWriteContract({
+  abi: veVaultDepositAbi,
 })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"approve"`
  */
-export const useWriteVeVaultStake = /*#__PURE__*/ createUseWriteContract({
-  abi: veVaultStakeAbi,
-})
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"approve"`
- */
-export const useWriteVeVaultStakeApprove = /*#__PURE__*/ createUseWriteContract(
-  { abi: veVaultStakeAbi, functionName: 'approve' },
-)
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"batchDepositFor"`
- */
-export const useWriteVeVaultStakeBatchDepositFor =
+export const useWriteVeVaultDepositApprove =
   /*#__PURE__*/ createUseWriteContract({
-    abi: veVaultStakeAbi,
-    functionName: 'batchDepositFor',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"batchRedeemTo"`
- */
-export const useWriteVeVaultStakeBatchRedeemTo =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: veVaultStakeAbi,
-    functionName: 'batchRedeemTo',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"cancelOwnershipHandover"`
- */
-export const useWriteVeVaultStakeCancelOwnershipHandover =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: veVaultStakeAbi,
-    functionName: 'cancelOwnershipHandover',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"completeOwnershipHandover"`
- */
-export const useWriteVeVaultStakeCompleteOwnershipHandover =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: veVaultStakeAbi,
-    functionName: 'completeOwnershipHandover',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"depositFor"`
- */
-export const useWriteVeVaultStakeDepositFor =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: veVaultStakeAbi,
-    functionName: 'depositFor',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"grantRoles"`
- */
-export const useWriteVeVaultStakeGrantRoles =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: veVaultStakeAbi,
-    functionName: 'grantRoles',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"redeemTo"`
- */
-export const useWriteVeVaultStakeRedeemTo =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: veVaultStakeAbi,
-    functionName: 'redeemTo',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"renounceOwnership"`
- */
-export const useWriteVeVaultStakeRenounceOwnership =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: veVaultStakeAbi,
-    functionName: 'renounceOwnership',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"renounceRoles"`
- */
-export const useWriteVeVaultStakeRenounceRoles =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: veVaultStakeAbi,
-    functionName: 'renounceRoles',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"requestOwnershipHandover"`
- */
-export const useWriteVeVaultStakeRequestOwnershipHandover =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: veVaultStakeAbi,
-    functionName: 'requestOwnershipHandover',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"revokeRoles"`
- */
-export const useWriteVeVaultStakeRevokeRoles =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: veVaultStakeAbi,
-    functionName: 'revokeRoles',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"safeTransferFrom"`
- */
-export const useWriteVeVaultStakeSafeTransferFrom =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: veVaultStakeAbi,
-    functionName: 'safeTransferFrom',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"setApprovalForAll"`
- */
-export const useWriteVeVaultStakeSetApprovalForAll =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: veVaultStakeAbi,
-    functionName: 'setApprovalForAll',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"transferFrom"`
- */
-export const useWriteVeVaultStakeTransferFrom =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: veVaultStakeAbi,
-    functionName: 'transferFrom',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"transferOwnership"`
- */
-export const useWriteVeVaultStakeTransferOwnership =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: veVaultStakeAbi,
-    functionName: 'transferOwnership',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"updateAllMetadata"`
- */
-export const useWriteVeVaultStakeUpdateAllMetadata =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: veVaultStakeAbi,
-    functionName: 'updateAllMetadata',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__
- */
-export const useSimulateVeVaultStake = /*#__PURE__*/ createUseSimulateContract({
-  abi: veVaultStakeAbi,
-})
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"approve"`
- */
-export const useSimulateVeVaultStakeApprove =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     functionName: 'approve',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"batchDepositFor"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"batchDepositFor"`
  */
-export const useSimulateVeVaultStakeBatchDepositFor =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: veVaultStakeAbi,
+export const useWriteVeVaultDepositBatchDepositFor =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultDepositAbi,
     functionName: 'batchDepositFor',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"batchRedeemTo"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"batchRedeemTo"`
  */
-export const useSimulateVeVaultStakeBatchRedeemTo =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: veVaultStakeAbi,
+export const useWriteVeVaultDepositBatchRedeemTo =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultDepositAbi,
     functionName: 'batchRedeemTo',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"cancelOwnershipHandover"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"cancelOwnershipHandover"`
  */
-export const useSimulateVeVaultStakeCancelOwnershipHandover =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: veVaultStakeAbi,
+export const useWriteVeVaultDepositCancelOwnershipHandover =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultDepositAbi,
     functionName: 'cancelOwnershipHandover',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"completeOwnershipHandover"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"completeOwnershipHandover"`
  */
-export const useSimulateVeVaultStakeCompleteOwnershipHandover =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: veVaultStakeAbi,
+export const useWriteVeVaultDepositCompleteOwnershipHandover =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultDepositAbi,
     functionName: 'completeOwnershipHandover',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"depositFor"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"depositFor"`
  */
-export const useSimulateVeVaultStakeDepositFor =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: veVaultStakeAbi,
+export const useWriteVeVaultDepositDepositFor =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultDepositAbi,
     functionName: 'depositFor',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"grantRoles"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"grantRoles"`
  */
-export const useSimulateVeVaultStakeGrantRoles =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: veVaultStakeAbi,
+export const useWriteVeVaultDepositGrantRoles =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultDepositAbi,
     functionName: 'grantRoles',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"redeemTo"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"redeemTo"`
  */
-export const useSimulateVeVaultStakeRedeemTo =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: veVaultStakeAbi,
+export const useWriteVeVaultDepositRedeemTo =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultDepositAbi,
     functionName: 'redeemTo',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"renounceOwnership"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"renounceOwnership"`
  */
-export const useSimulateVeVaultStakeRenounceOwnership =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: veVaultStakeAbi,
+export const useWriteVeVaultDepositRenounceOwnership =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultDepositAbi,
     functionName: 'renounceOwnership',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"renounceRoles"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"renounceRoles"`
  */
-export const useSimulateVeVaultStakeRenounceRoles =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: veVaultStakeAbi,
+export const useWriteVeVaultDepositRenounceRoles =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultDepositAbi,
     functionName: 'renounceRoles',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"requestOwnershipHandover"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"requestOwnershipHandover"`
  */
-export const useSimulateVeVaultStakeRequestOwnershipHandover =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: veVaultStakeAbi,
+export const useWriteVeVaultDepositRequestOwnershipHandover =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultDepositAbi,
     functionName: 'requestOwnershipHandover',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"revokeRoles"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"revokeRoles"`
  */
-export const useSimulateVeVaultStakeRevokeRoles =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: veVaultStakeAbi,
+export const useWriteVeVaultDepositRevokeRoles =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultDepositAbi,
     functionName: 'revokeRoles',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"safeTransferFrom"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"safeTransferFrom"`
  */
-export const useSimulateVeVaultStakeSafeTransferFrom =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: veVaultStakeAbi,
+export const useWriteVeVaultDepositSafeTransferFrom =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultDepositAbi,
     functionName: 'safeTransferFrom',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"setApprovalForAll"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"setApprovalForAll"`
  */
-export const useSimulateVeVaultStakeSetApprovalForAll =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: veVaultStakeAbi,
+export const useWriteVeVaultDepositSetApprovalForAll =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultDepositAbi,
     functionName: 'setApprovalForAll',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"transferFrom"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"transferFrom"`
  */
-export const useSimulateVeVaultStakeTransferFrom =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: veVaultStakeAbi,
+export const useWriteVeVaultDepositTransferFrom =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultDepositAbi,
     functionName: 'transferFrom',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"transferOwnership"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"transferOwnership"`
  */
-export const useSimulateVeVaultStakeTransferOwnership =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: veVaultStakeAbi,
+export const useWriteVeVaultDepositTransferOwnership =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultDepositAbi,
     functionName: 'transferOwnership',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"updateAllMetadata"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"updateAllMetadata"`
  */
-export const useSimulateVeVaultStakeUpdateAllMetadata =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: veVaultStakeAbi,
+export const useWriteVeVaultDepositUpdateAllMetadata =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: veVaultDepositAbi,
     functionName: 'updateAllMetadata',
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__
  */
-export const useWatchVeVaultStakeEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({ abi: veVaultStakeAbi })
+export const useSimulateVeVaultDeposit =
+  /*#__PURE__*/ createUseSimulateContract({ abi: veVaultDepositAbi })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__ and `eventName` set to `"Approval"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"approve"`
  */
-export const useWatchVeVaultStakeApprovalEvent =
+export const useSimulateVeVaultDepositApprove =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultDepositAbi,
+    functionName: 'approve',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"batchDepositFor"`
+ */
+export const useSimulateVeVaultDepositBatchDepositFor =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultDepositAbi,
+    functionName: 'batchDepositFor',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"batchRedeemTo"`
+ */
+export const useSimulateVeVaultDepositBatchRedeemTo =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultDepositAbi,
+    functionName: 'batchRedeemTo',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"cancelOwnershipHandover"`
+ */
+export const useSimulateVeVaultDepositCancelOwnershipHandover =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultDepositAbi,
+    functionName: 'cancelOwnershipHandover',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"completeOwnershipHandover"`
+ */
+export const useSimulateVeVaultDepositCompleteOwnershipHandover =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultDepositAbi,
+    functionName: 'completeOwnershipHandover',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"depositFor"`
+ */
+export const useSimulateVeVaultDepositDepositFor =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultDepositAbi,
+    functionName: 'depositFor',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"grantRoles"`
+ */
+export const useSimulateVeVaultDepositGrantRoles =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultDepositAbi,
+    functionName: 'grantRoles',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"redeemTo"`
+ */
+export const useSimulateVeVaultDepositRedeemTo =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultDepositAbi,
+    functionName: 'redeemTo',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"renounceOwnership"`
+ */
+export const useSimulateVeVaultDepositRenounceOwnership =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultDepositAbi,
+    functionName: 'renounceOwnership',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"renounceRoles"`
+ */
+export const useSimulateVeVaultDepositRenounceRoles =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultDepositAbi,
+    functionName: 'renounceRoles',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"requestOwnershipHandover"`
+ */
+export const useSimulateVeVaultDepositRequestOwnershipHandover =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultDepositAbi,
+    functionName: 'requestOwnershipHandover',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"revokeRoles"`
+ */
+export const useSimulateVeVaultDepositRevokeRoles =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultDepositAbi,
+    functionName: 'revokeRoles',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"safeTransferFrom"`
+ */
+export const useSimulateVeVaultDepositSafeTransferFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultDepositAbi,
+    functionName: 'safeTransferFrom',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"setApprovalForAll"`
+ */
+export const useSimulateVeVaultDepositSetApprovalForAll =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultDepositAbi,
+    functionName: 'setApprovalForAll',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useSimulateVeVaultDepositTransferFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultDepositAbi,
+    functionName: 'transferFrom',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"transferOwnership"`
+ */
+export const useSimulateVeVaultDepositTransferOwnership =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultDepositAbi,
+    functionName: 'transferOwnership',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link veVaultDepositAbi}__ and `functionName` set to `"updateAllMetadata"`
+ */
+export const useSimulateVeVaultDepositUpdateAllMetadata =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: veVaultDepositAbi,
+    functionName: 'updateAllMetadata',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultDepositAbi}__
+ */
+export const useWatchVeVaultDepositEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({ abi: veVaultDepositAbi })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultDepositAbi}__ and `eventName` set to `"Approval"`
+ */
+export const useWatchVeVaultDepositApprovalEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     eventName: 'Approval',
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__ and `eventName` set to `"ApprovalForAll"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultDepositAbi}__ and `eventName` set to `"ApprovalForAll"`
  */
-export const useWatchVeVaultStakeApprovalForAllEvent =
+export const useWatchVeVaultDepositApprovalForAllEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     eventName: 'ApprovalForAll',
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__ and `eventName` set to `"BatchMetadataUpdate"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultDepositAbi}__ and `eventName` set to `"BatchMetadataUpdate"`
  */
-export const useWatchVeVaultStakeBatchMetadataUpdateEvent =
+export const useWatchVeVaultDepositBatchMetadataUpdateEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     eventName: 'BatchMetadataUpdate',
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__ and `eventName` set to `"OwnershipHandoverCanceled"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultDepositAbi}__ and `eventName` set to `"OwnershipHandoverCanceled"`
  */
-export const useWatchVeVaultStakeOwnershipHandoverCanceledEvent =
+export const useWatchVeVaultDepositOwnershipHandoverCanceledEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     eventName: 'OwnershipHandoverCanceled',
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__ and `eventName` set to `"OwnershipHandoverRequested"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultDepositAbi}__ and `eventName` set to `"OwnershipHandoverRequested"`
  */
-export const useWatchVeVaultStakeOwnershipHandoverRequestedEvent =
+export const useWatchVeVaultDepositOwnershipHandoverRequestedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     eventName: 'OwnershipHandoverRequested',
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__ and `eventName` set to `"OwnershipTransferred"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultDepositAbi}__ and `eventName` set to `"OwnershipTransferred"`
  */
-export const useWatchVeVaultStakeOwnershipTransferredEvent =
+export const useWatchVeVaultDepositOwnershipTransferredEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     eventName: 'OwnershipTransferred',
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__ and `eventName` set to `"RolesUpdated"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultDepositAbi}__ and `eventName` set to `"RolesUpdated"`
  */
-export const useWatchVeVaultStakeRolesUpdatedEvent =
+export const useWatchVeVaultDepositRolesUpdatedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     eventName: 'RolesUpdated',
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultStakeAbi}__ and `eventName` set to `"Transfer"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link veVaultDepositAbi}__ and `eventName` set to `"Transfer"`
  */
-export const useWatchVeVaultStakeTransferEvent =
+export const useWatchVeVaultDepositTransferEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
-    abi: veVaultStakeAbi,
+    abi: veVaultDepositAbi,
     eventName: 'Transfer',
   })
 
@@ -5603,6 +5622,14 @@ export const useWatchVotingEscrowTransferEvent =
 export const useReadYolo = /*#__PURE__*/ createUseReadContract({ abi: yoloAbi })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link yoloAbi}__ and `functionName` set to `"BURNER_ROLE"`
+ */
+export const useReadYoloBurnerRole = /*#__PURE__*/ createUseReadContract({
+  abi: yoloAbi,
+  functionName: 'BURNER_ROLE',
+})
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link yoloAbi}__ and `functionName` set to `"DOMAIN_SEPARATOR"`
  */
 export const useReadYoloDomainSeparator = /*#__PURE__*/ createUseReadContract({
@@ -5611,19 +5638,11 @@ export const useReadYoloDomainSeparator = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link yoloAbi}__ and `functionName` set to `"_BURNER_ROLE"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link yoloAbi}__ and `functionName` set to `"MINTER_ROLE"`
  */
-export const useReadYoloBurnerRole = /*#__PURE__*/ createUseReadContract({
+export const useReadYoloMinterRole = /*#__PURE__*/ createUseReadContract({
   abi: yoloAbi,
-  functionName: '_BURNER_ROLE',
-})
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link yoloAbi}__ and `functionName` set to `"_VAULT_ROLE"`
- */
-export const useReadYoloVaultRole = /*#__PURE__*/ createUseReadContract({
-  abi: yoloAbi,
-  functionName: '_VAULT_ROLE',
+  functionName: 'MINTER_ROLE',
 })
 
 /**

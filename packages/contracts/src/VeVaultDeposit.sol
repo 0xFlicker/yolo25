@@ -10,38 +10,86 @@ import "./IYolo.sol";
 import "./metadata/IMetaDataURI.sol";
 import "./IVeVaultLock.sol";
 
-contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
+contract VeVaultDeposit is OwnableRoles, ERC721, IVeVaultLock {
     using LibBitmap for LibBitmap.Bitmap;
 
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //                         State Variables
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
+    /// @dev Reference to the voting escrow NFT contract
+    IVotingEscrow private _veNFT;
+    /// @dev Reference to the YOLO token contract
+    IYolo private _yolo;
+    /// @dev Address of the NFT metadata renderer
+    address private _renderer;
+
+    /// @dev Counter for generating unique token IDs
+    uint256 private _tokenIdCounter;
+    /// @dev The protocol's main veNFT token ID used for merging
+    uint256 private _veNftProtocolTokenId;
+
+    /// @dev Head pointer for the max value linked list
+    uint256 private _maxValueHead;
+    /// @dev Counter for generating unique node IDs in max value tracking
+    uint256 private _maxValueNodeCounter;
+
+    /// @dev Maps token IDs to their lock information
+    mapping(uint256 => Lock) private _lockedTokenIdToLock;
+    /// @dev Maps node IDs to max value tracking nodes
+    mapping(uint256 => MaxValueNode) private _maxValueNodes;
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //                            Constants
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
+    /// @dev Time constants used for lock calculations
+    uint256 internal constant WEEK = 1 weeks;
+    uint256 internal constant MAXTIME = 4 * 365 * 86400;
+
+    /// @dev Role identifier for metadata update permissions
+    uint256 internal constant METADATA_UPDATE_ROLE = _ROLE_0;
+    /// @dev Role identifier for minting from a LP position
+    uint256 internal constant MINTER_ROLE = _ROLE_1;
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //                            Structs
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
+    /// @dev Node structure for tracking maximum value in a linked list
     struct MaxValueNode {
         uint256 value;
         uint256 next;
     }
 
-    mapping(uint256 => Lock) private _lockedTokenIdToLock;
-    mapping(uint256 => MaxValueNode) private _maxValueNodes;
-    uint256 private _maxValueHead;
-    uint256 private _maxValueNodeCounter;
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //                            Constructor
+    //
+    ///////////////////////////////////////////////////////////////////////////
 
-    IVotingEscrow private _veNFT;
-    IYolo private _yolo;
-
-    address private _renderer;
-    uint256 private _tokenIdCounter;
-
-    uint256 public metadataUpdateRole = _ROLE_0;
-
-    uint256 private _veNftProtocolTokenId;
-
-    uint256 internal constant WEEK = 1 weeks;
-    uint256 internal constant MAXTIME = 4 * 365 * 86400;
-
+    /// @dev Initializes the contract with the necessary addresses
+    /// @param veNFTAddress Address of the voting escrow NFT contract
+    /// @param yoloAddress Address of the YOLO token contract
+    /// @param renderer Address of the NFT metadata renderer
     constructor(address veNFTAddress, address yoloAddress, address renderer) {
         _veNFT = IVotingEscrow(veNFTAddress);
         _yolo = IYolo(yoloAddress);
         _renderer = renderer;
         _initializeOwner(msg.sender);
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //                            Identity
+    //
+    ///////////////////////////////////////////////////////////////////////////
 
     function name() public pure override returns (string memory) {
         return "veVault";
@@ -66,6 +114,12 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
             );
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //                            Deposit
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
     function depositFor(address to, uint256 tokenId) public {
         _veNFT.safeTransferFrom(msg.sender, address(this), tokenId);
 
@@ -77,7 +131,10 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
                 _veNFT.lockPermanent(tokenId);
             } else {
                 uint256 newUnlockTime = ((block.timestamp + MAXTIME) / WEEK) *
-                    WEEK;iVotingEscrowAbi
+                    WEEK;
+                if (newUnlockTime > lockedBalance.end) {
+                    _veNFT.increaseUnlockTime(tokenId, MAXTIME);
+                }
             }
             lockedBalance = _veNFT.locked(tokenId);
         }
@@ -89,19 +146,7 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
             end: uint64(block.timestamp + 126144000) // (4 * 365 * 24 * 60 * 60)
         });
 
-        // Add to max value linked list if it's greater than or equal to the highest value
-        if (
-            _maxValueHead == 0 ||
-            uint256(uint128(lockedBalance.amount)) >=
-            _maxValueNodes[_maxValueHead].value
-        ) {
-            uint256 newNodeId = ++_maxValueNodeCounter;
-            _maxValueNodes[newNodeId] = MaxValueNode({
-                value: uint256(uint128(lockedBalance.amount)),
-                next: _maxValueHead
-            });
-            _maxValueHead = newNodeId;
-        }
+        _addToMaxValueList(uint256(uint128(lockedBalance.amount)));
 
         if (_veNftProtocolTokenId == 0) {
             _veNftProtocolTokenId = tokenId;
@@ -122,6 +167,30 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
         }
     }
 
+    function depositLPFor(
+        address to,
+        uint256 lockedAmount
+    ) external onlyRoles(MINTER_ROLE) {
+        uint256 nextTokenId = ++_tokenIdCounter;
+        _lockedTokenIdToLock[nextTokenId] = Lock({
+            amount: uint128(lockedAmount),
+            start: uint64(block.timestamp),
+            end: uint64(block.timestamp + 126144000) // (4 * 365 * 24 * 60 * 60)
+        });
+        _addToMaxValueList(lockedAmount);
+        _mintAndSetExtraDataUnchecked(
+            to,
+            nextTokenId,
+            generateSeed(_tokenIdCounter)
+        );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //                            Redeem
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
     function redeemTo(address to, uint256 tokenId) public {
         Lock memory lock = _lockedTokenIdToLock[tokenId];
         uint256 amount = _timeAdjustedValue(lock);
@@ -139,6 +208,12 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
             redeemTo(to, tokenIds[i]);
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //                            Helpers
+    //
+    ///////////////////////////////////////////////////////////////////////////
 
     function locked(
         uint256 tokenId
@@ -188,7 +263,7 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
     /// timely update the images and related attributes of the NFTs.
     event BatchMetadataUpdate(uint256 _fromTokenId, uint256 _toTokenId);
 
-    function updateAllMetadata() public onlyRoles(metadataUpdateRole) {
+    function updateAllMetadata() public onlyRoles(METADATA_UPDATE_ROLE) {
         if (_tokenIdCounter > 0) {
             emit BatchMetadataUpdate(1, _tokenIdCounter);
         }
@@ -212,5 +287,34 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
 
     function protocolTokenId() public view returns (uint256) {
         return _veNftProtocolTokenId;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //                            Role Access
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
+    function roleMetadataUpdate() public pure returns (uint256) {
+        return METADATA_UPDATE_ROLE;
+    }
+
+    function roleMinter() public pure returns (uint256) {
+        return MINTER_ROLE;
+    }
+
+    function _addToMaxValueList(uint256 value) internal returns (uint256) {
+        if (
+            _maxValueHead == 0 || value >= _maxValueNodes[_maxValueHead].value
+        ) {
+            uint256 newNodeId = ++_maxValueNodeCounter;
+            _maxValueNodes[newNodeId] = MaxValueNode({
+                value: value,
+                next: _maxValueHead
+            });
+            _maxValueHead = newNodeId;
+            return newNodeId;
+        }
+        return 0;
     }
 }

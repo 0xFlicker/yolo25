@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 import {Script, console} from "forge-std/Script.sol";
 import {VmSafe} from "forge-std/Vm.sol";
-import {VeVaultStake} from "../src/VeVaultStake.sol";
+import {VeVaultDeposit} from "../src/VeVaultDeposit.sol";
 import {DataChunkCompiler} from "../src/metadata/DataChunkCompiler.sol";
 import {VeVaultRendererMetadata} from "../src/metadata/VeVaultRenderer_metadata.sol";
 import {VeVaultRendererImage} from "../src/metadata/VeVaultRenderer_image.sol";
@@ -11,7 +11,7 @@ import {Yolo} from "../src/Yolo.sol";
 
 contract DeployStuxScript is Script {
     Yolo public yolo;
-    VeVaultStake public veVaultStake;
+    VeVaultDeposit public veVaultDeposit;
 
     function setUp() public {}
 
@@ -27,13 +27,13 @@ contract DeployStuxScript is Script {
             address(image)
         );
 
-        veVaultStake = new VeVaultStake(
+        veVaultDeposit = new VeVaultDeposit(
             address(veNFT),
             address(yolo),
             address(metadata)
         );
 
-        yolo.grantRoles(address(veVaultStake), yolo._VAULT_ROLE());
+        yolo.grantRoles(address(veVaultDeposit), yolo.MINTER_ROLE());
         yolo.renounceOwnership();
 
         vm.stopBroadcast();

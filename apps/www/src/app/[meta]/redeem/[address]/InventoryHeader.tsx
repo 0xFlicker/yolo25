@@ -4,7 +4,7 @@ import { FC } from "react";
 import { Address, formatUnits } from "viem";
 import { useSelectable } from "./context";
 import { useReadContracts } from "wagmi";
-import { veVaultStakeAbi } from "@/wagmi/generated";
+import { veVaultDepositAbi } from "@/wagmi/generated";
 
 type InventoryHeaderProps = {
   availableCount: number;
@@ -32,12 +32,12 @@ export const InventoryHeader: FC<InventoryHeaderProps> = ({
     allowFailure: false,
     contracts: selectedTokenIds.map((tokenId) => ({
       address: ourStaker,
-      abi: veVaultStakeAbi,
+      abi: veVaultDepositAbi,
       functionName: "locked",
       args: [tokenId],
     })) as {
       address: Address;
-      abi: typeof veVaultStakeAbi;
+      abi: typeof veVaultDepositAbi;
       functionName: "locked";
       args: [bigint];
     }[],
