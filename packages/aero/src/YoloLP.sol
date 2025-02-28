@@ -34,10 +34,12 @@ pragma solidity >=0.7.0 <0.9.0;
 /* Imports if needed */
 // add roles (OZ)
 import {IERC20} from "./interface/IERC20.sol";
+import {IERC721} from "./interface/IERC721.sol";
 import {IWETH} from "./interface/IWETH.sol";
 import {ICLPool} from "slipstream/contracts/core/interfaces/ICLPool.sol";
 import {ICLFactory} from "slipstream/contracts/core/interfaces/ICLFactory.sol";
-import {INonfungiblePositionManager, IERC721} from "slipstream/contracts/periphery/interfaces/INonfungiblePositionManager.sol";
+import {INonfungiblePositionManager} from "slipstream/contracts/periphery/interfaces/INonfungiblePositionManager.sol";
+import {IQuoter} from "slipstream/contracts/periphery/interfaces/IQuoter.sol";
 
 contract YoloLP {
     IERC20 public yolo;
@@ -47,6 +49,7 @@ contract YoloLP {
     address public v3Router;
     address public v3PoolAddress;
     address public v3PosMgr;
+    address public v3Quoter;
     int24 public tickSpace;
     uint256[] public lpTokenIds;
 
@@ -63,28 +66,36 @@ contract YoloLP {
     /// @dev standard constructor
     /// @param _yolo is the CA of $yolo
     /// @param _weth is the CA of $weth
+    /// @param _aero is the CA of $aero
     /// @param _v3Router is the CA of the slipstream router
     /// @param _v3Factory is the CA of the slipstream factory
     /// @param _v3PosMgr is the CA of the slipstream position manager
+    /// @param _v3Quoter is the CA of the slipstream Quoter v1 (v2 not needed)
     /// @param _tickSpace is the tick spacing 1, 50, 100, 200, 2000, 10 (from slipstream factory)
     constructor(
         address _yolo,
         address _weth,
+        address _aero,
         address _v3Router,
         address _v3Factory,
         address _v3PosMgr,
+        address _v3Quoter,
         int24 _tickSpace
     ) {
         weth = IERC20(_weth);
         emit token1Set(address(0), _weth);
         yolo = IERC20(_yolo);
         emit token0Set(address(0), _yolo);
+        aero = IERC20(_aero);
+        // no emit
         v3Router = _v3Router;
         emit RouterSet(address(0), _v3Router);
         v3Factory = _v3Factory;
         emit FactorySet(address(0), _v3Factory);
         v3PosMgr = _v3PosMgr;
         emit PositionManagerSet(address(0), _v3PosMgr);
+        v3Quoter = _v3Quoter;
+        // no emit
         tickSpace = _tickSpace;
         emit TickSpacingSet(0, tickSpace);
 
@@ -116,6 +127,9 @@ contract YoloLP {
         // mint sellwall
         _mintSellWallPosition(deltaEth, sqrtPriceX96);
 
+        // calc $weth => $aero
+        uint256 amount = _wethToAero(deltaEth);
+
         // mint our NFT
     }
 
@@ -140,7 +154,7 @@ contract YoloLP {
         require(
             tickSpacing == tickSpace,
             "LP tickSpace must match"
-        )
+        );
 
         // move it
         IERC721(v3PosMgr).safeTransferFrom(
@@ -152,9 +166,17 @@ contract YoloLP {
         lpTokenIds.push(_tokenId);
 
         // calc t0/t1 => $aero
+        uint256 aeroAmount;
         (uint256 token0Amount, uint256 token1Amount) = _calcTokens(liquidity, sqrtPriceX96);
-        uint256 value = _calcToAero(token0Amount);
-        value += _calcToAero(token1Amount);
+        if (token0 == address(yolo)) {
+            token1Amount += _yoloToWeth(token0Amount); // swap yolo to ether
+            aeroAmount = _wethToAero(token1Amount);
+        } else {
+            token0Amount += _yoloToWeth(token1Amount); // swap yolo to ether
+            aeroAmount = _wethToAero(token0Amount);
+        }
+
+        // mint based off aero amount
     }
 
     /// @dev this is bland, it's 1990's calling wanting the Taco Bell pastel colors back...
@@ -309,6 +331,24 @@ contract YoloLP {
         // Adjust for the precision
         token0Amount = token0Amount * 1 ether / (sqrtPrice + 1 ether);
         token1Amount = token1Amount * 1 ether / (sqrtPrice + 1 ether);
+    }
+
+    /// @dev this estimates the swap value from $yolo => $weth
+    /// @param _amount of $yolo
+    /// @return _value of $weth for _amount of $yolo
+    function _yoloToWeth(
+        uint256 _amount
+    ) internal returns (uint256 _value) {
+        _value = IQuoter(v3Quoter).quoteExactInputSingle(address(yolo), address(weth), tickSpace, _amount, type(uint160).max);
+    }
+
+    /// @dev this estimates the swap value from $weth => $aero
+    /// @param _amount of $weth
+    /// @return _value of $aero for _amount of $weth
+    function _wethToAero(
+        uint256 _amount
+    ) internal returns (uint256 _value) {
+        _value = IQuoter(v3Quoter).quoteExactInputSingle(address(weth), address(aero), 200, _amount, type(uint160).max);
     }
 
     /// @dev this returns the current tick
