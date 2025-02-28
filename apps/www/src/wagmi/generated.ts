@@ -170,6 +170,1238 @@ export const ierc721Abi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// IVotingEscrow
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const iVotingEscrowAbi = [
+  {
+    type: 'function',
+    inputs: [],
+    name: 'CLOCK_MODE',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'allowedManager',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approve',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'artProxy',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: 'balance', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'balanceOfNFT',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: '_t', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'balanceOfNFTAt',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_account', internalType: 'address', type: 'address' }],
+    name: 'canSplit',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'checkpoint',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: 'index', internalType: 'uint48', type: 'uint48' },
+    ],
+    name: 'checkpoints',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct IVotingEscrow.Checkpoint',
+        type: 'tuple',
+        components: [
+          { name: 'fromTimestamp', internalType: 'uint256', type: 'uint256' },
+          { name: 'owner', internalType: 'address', type: 'address' },
+          {
+            name: 'delegatedBalance',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'delegatee', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'clock',
+    outputs: [{ name: '', internalType: 'uint48', type: 'uint48' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_value', internalType: 'uint256', type: 'uint256' },
+      { name: '_lockDuration', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'createLock',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_value', internalType: 'uint256', type: 'uint256' },
+      { name: '_lockDuration', internalType: 'uint256', type: 'uint256' },
+      { name: '_to', internalType: 'address', type: 'address' },
+    ],
+    name: 'createLockFor',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_to', internalType: 'address', type: 'address' }],
+    name: 'createManagedLockFor',
+    outputs: [{ name: '_mTokenId', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'deactivated',
+    outputs: [{ name: 'inactive', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'decimals',
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'delegator', internalType: 'uint256', type: 'uint256' },
+      { name: 'delegatee', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'delegate',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'delegator', internalType: 'uint256', type: 'uint256' },
+      { name: 'delegatee', internalType: 'uint256', type: 'uint256' },
+      { name: 'nonce', internalType: 'uint256', type: 'uint256' },
+      { name: 'expiry', internalType: 'uint256', type: 'uint256' },
+      { name: 'v', internalType: 'uint8', type: 'uint8' },
+      { name: 'r', internalType: 'bytes32', type: 'bytes32' },
+      { name: 's', internalType: 'bytes32', type: 'bytes32' },
+    ],
+    name: 'delegateBySig',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'delegator', internalType: 'uint256', type: 'uint256' }],
+    name: 'delegates',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: '_value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'depositFor',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: '_mTokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'depositManaged',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'distributor',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'epoch',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'escrowType',
+    outputs: [
+      {
+        name: '',
+        internalType: 'enum IVotingEscrow.EscrowType',
+        type: 'uint8',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'factoryRegistry',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'forwarder',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'getApproved',
+    outputs: [{ name: 'operator', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'timestamp', internalType: 'uint256', type: 'uint256' }],
+    name: 'getPastTotalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: 'timestamp', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'getPastVotes',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'idToManaged',
+    outputs: [
+      { name: 'managedTokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: '_value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'increaseAmount',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: '_lockDuration', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'increaseUnlockTime',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'operator', internalType: 'address', type: 'address' },
+    ],
+    name: 'isApprovedForAll',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_spender', internalType: 'address', type: 'address' },
+      { name: '_tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'isApprovedOrOwner',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'lockPermanent',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'locked',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct IVotingEscrow.LockedBalance',
+        type: 'tuple',
+        components: [
+          { name: 'amount', internalType: 'int128', type: 'int128' },
+          { name: 'end', internalType: 'uint256', type: 'uint256' },
+          { name: 'isPermanent', internalType: 'bool', type: 'bool' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'managedToFree',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'managedToLocked',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_from', internalType: 'uint256', type: 'uint256' },
+      { name: '_to', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'merge',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'nonces',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'numCheckpoints',
+    outputs: [{ name: '', internalType: 'uint48', type: 'uint48' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'ownerOf',
+    outputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_owner', internalType: 'address', type: 'address' },
+      { name: '_index', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'ownerToNFTokenIdList',
+    outputs: [{ name: '_tokenId', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'permanentLockBalance',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_loc', internalType: 'uint256', type: 'uint256' }],
+    name: 'pointHistory',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct IVotingEscrow.GlobalPoint',
+        type: 'tuple',
+        components: [
+          { name: 'bias', internalType: 'int128', type: 'int128' },
+          { name: 'slope', internalType: 'int128', type: 'int128' },
+          { name: 'ts', internalType: 'uint256', type: 'uint256' },
+          { name: 'blk', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'permanentLockBalance',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'safeTransferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'safeTransferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_allowedManager', internalType: 'address', type: 'address' },
+    ],
+    name: 'setAllowedManager',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'operator', internalType: 'address', type: 'address' },
+      { name: 'approved', internalType: 'bool', type: 'bool' },
+    ],
+    name: 'setApprovalForAll',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_proxy', internalType: 'address', type: 'address' }],
+    name: 'setArtProxy',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_mTokenId', internalType: 'uint256', type: 'uint256' },
+      { name: '_state', internalType: 'bool', type: 'bool' },
+    ],
+    name: 'setManagedState',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_team', internalType: 'address', type: 'address' }],
+    name: 'setTeam',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_voter', internalType: 'address', type: 'address' },
+      { name: '_distributor', internalType: 'address', type: 'address' },
+    ],
+    name: 'setVoterAndDistributor',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_timestamp', internalType: 'uint256', type: 'uint256' }],
+    name: 'slopeChanges',
+    outputs: [{ name: '', internalType: 'int128', type: 'int128' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_from', internalType: 'uint256', type: 'uint256' },
+      { name: '_amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'split',
+    outputs: [
+      { name: '_tokenId1', internalType: 'uint256', type: 'uint256' },
+      { name: '_tokenId2', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'supply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_interfaceID', internalType: 'bytes4', type: 'bytes4' }],
+    name: 'supportsInterface',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'team',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_account', internalType: 'address', type: 'address' },
+      { name: '_bool', internalType: 'bool', type: 'bool' },
+    ],
+    name: 'toggleSplit',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'token',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'tokenId',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'tokenURI',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_t', internalType: 'uint256', type: 'uint256' }],
+    name: 'totalSupplyAt',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'unlockPermanent',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'userPointEpoch',
+    outputs: [{ name: '_epoch', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: '_loc', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'userPointHistory',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct IVotingEscrow.UserPoint',
+        type: 'tuple',
+        components: [
+          { name: 'bias', internalType: 'int128', type: 'int128' },
+          { name: 'slope', internalType: 'int128', type: 'int128' },
+          { name: 'ts', internalType: 'uint256', type: 'uint256' },
+          { name: 'blk', internalType: 'uint256', type: 'uint256' },
+          { name: 'permanent', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'version',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'voted',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'voter',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: '_voted', internalType: 'bool', type: 'bool' },
+    ],
+    name: 'voting',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: 'managedTokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'weights',
+    outputs: [{ name: 'weight', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'withdraw',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'withdrawManaged',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'approved',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'Approval',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'operator',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      { name: 'approved', internalType: 'bool', type: 'bool', indexed: false },
+    ],
+    name: 'ApprovalForAll',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: '_fromTokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: '_toTokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'BatchMetadataUpdate',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: '_to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: '_mTokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: '_from',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: '_lockedManagedReward',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+      {
+        name: '_freeManagedReward',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+    ],
+    name: 'CreateManaged',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'delegator',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'fromDelegate',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'toDelegate',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'DelegateChanged',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'delegate',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'previousBalance',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'newBalance',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'DelegateVotesChanged',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'provider',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'depositType',
+        internalType: 'enum IVotingEscrow.DepositType',
+        type: 'uint8',
+        indexed: true,
+      },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'locktime',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      { name: 'ts', internalType: 'uint256', type: 'uint256', indexed: false },
+    ],
+    name: 'Deposit',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: '_owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: '_tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: '_mTokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: '_weight',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      { name: '_ts', internalType: 'uint256', type: 'uint256', indexed: false },
+    ],
+    name: 'DepositManaged',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: '_owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: '_tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      { name: '_ts', internalType: 'uint256', type: 'uint256', indexed: false },
+    ],
+    name: 'LockPermanent',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: '_sender',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: '_from',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      { name: '_to', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: '_amountFrom',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: '_amountTo',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: '_amountFinal',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: '_locktime',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      { name: '_ts', internalType: 'uint256', type: 'uint256', indexed: false },
+    ],
+    name: 'Merge',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: '_tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'MetadataUpdate',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: '_allowedManager',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'SetAllowedManager',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: '_from',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: '_tokenId1',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: '_tokenId2',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: '_sender',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+      {
+        name: '_splitAmount1',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: '_splitAmount2',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: '_locktime',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      { name: '_ts', internalType: 'uint256', type: 'uint256', indexed: false },
+    ],
+    name: 'Split',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'prevSupply',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'supply',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Supply',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'Transfer',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: '_owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: '_tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      { name: '_ts', internalType: 'uint256', type: 'uint256', indexed: false },
+    ],
+    name: 'UnlockPermanent',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'provider',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      { name: 'ts', internalType: 'uint256', type: 'uint256', indexed: false },
+    ],
+    name: 'Withdraw',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: '_owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: '_tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: '_mTokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: '_weight',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      { name: '_ts', internalType: 'uint256', type: 'uint256', indexed: false },
+    ],
+    name: 'WithdrawManaged',
+  },
+  { type: 'error', inputs: [], name: 'AlreadyVoted' },
+  { type: 'error', inputs: [], name: 'AmountTooBig' },
+  { type: 'error', inputs: [], name: 'ERC721ReceiverRejectedTokens' },
+  {
+    type: 'error',
+    inputs: [],
+    name: 'ERC721TransferToNonERC721ReceiverImplementer',
+  },
+  { type: 'error', inputs: [], name: 'InvalidManagedNFTId' },
+  { type: 'error', inputs: [], name: 'InvalidNonce' },
+  { type: 'error', inputs: [], name: 'InvalidSignature' },
+  { type: 'error', inputs: [], name: 'InvalidSignatureS' },
+  { type: 'error', inputs: [], name: 'LockDurationNotInFuture' },
+  { type: 'error', inputs: [], name: 'LockDurationTooLong' },
+  { type: 'error', inputs: [], name: 'LockExpired' },
+  { type: 'error', inputs: [], name: 'LockNotExpired' },
+  { type: 'error', inputs: [], name: 'NoLockFound' },
+  { type: 'error', inputs: [], name: 'NonExistentToken' },
+  { type: 'error', inputs: [], name: 'NotApprovedOrOwner' },
+  { type: 'error', inputs: [], name: 'NotDistributor' },
+  { type: 'error', inputs: [], name: 'NotEmergencyCouncilOrGovernor' },
+  { type: 'error', inputs: [], name: 'NotGovernor' },
+  { type: 'error', inputs: [], name: 'NotGovernorOrManager' },
+  { type: 'error', inputs: [], name: 'NotLockedNFT' },
+  { type: 'error', inputs: [], name: 'NotManagedNFT' },
+  { type: 'error', inputs: [], name: 'NotManagedOrNormalNFT' },
+  { type: 'error', inputs: [], name: 'NotNormalNFT' },
+  { type: 'error', inputs: [], name: 'NotOwner' },
+  { type: 'error', inputs: [], name: 'NotPermanentLock' },
+  { type: 'error', inputs: [], name: 'NotTeam' },
+  { type: 'error', inputs: [], name: 'NotVoter' },
+  { type: 'error', inputs: [], name: 'OwnershipChange' },
+  { type: 'error', inputs: [], name: 'PermanentLock' },
+  { type: 'error', inputs: [], name: 'SameAddress' },
+  { type: 'error', inputs: [], name: 'SameNFT' },
+  { type: 'error', inputs: [], name: 'SameState' },
+  { type: 'error', inputs: [], name: 'SignatureExpired' },
+  { type: 'error', inputs: [], name: 'SplitNoOwner' },
+  { type: 'error', inputs: [], name: 'SplitNotAllowed' },
+  { type: 'error', inputs: [], name: 'TooManyTokenIDs' },
+  { type: 'error', inputs: [], name: 'ZeroAddress' },
+  { type: 'error', inputs: [], name: 'ZeroAmount' },
+  { type: 'error', inputs: [], name: 'ZeroBalance' },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // IYolo
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -307,13 +1539,6 @@ export const veVaultStakeAbi = [
   },
   {
     type: 'function',
-    inputs: [],
-    name: '_METADATA_UPDATE_ROLE',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
     inputs: [
       { name: 'account', internalType: 'address', type: 'address' },
       { name: 'id', internalType: 'uint256', type: 'uint256' },
@@ -431,6 +1656,31 @@ export const veVaultStakeAbi = [
   },
   {
     type: 'function',
+    inputs: [],
+    name: 'largestLock',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'lockForTokenId',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct IVeVaultLock.Lock',
+        type: 'tuple',
+        components: [
+          { name: 'amount', internalType: 'uint128', type: 'uint128' },
+          { name: 'start', internalType: 'uint64', type: 'uint64' },
+          { name: 'end', internalType: 'uint64', type: 'uint64' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
     name: 'locked',
     outputs: [
@@ -451,9 +1701,28 @@ export const veVaultStakeAbi = [
   {
     type: 'function',
     inputs: [],
+    name: 'metadataUpdateRole',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
     name: 'name',
     outputs: [{ name: '', internalType: 'string', type: 'string' }],
     stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'onERC721Received',
+    outputs: [{ name: '', internalType: 'bytes4', type: 'bytes4' }],
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -744,6 +2013,7 @@ export const veVaultStakeAbi = [
   { type: 'error', inputs: [], name: 'NewOwnerIsZeroAddress' },
   { type: 'error', inputs: [], name: 'NoHandoverRequest' },
   { type: 'error', inputs: [], name: 'NotOwnerNorApproved' },
+  { type: 'error', inputs: [], name: 'NotSupported' },
   { type: 'error', inputs: [], name: 'TokenAlreadyExists' },
   { type: 'error', inputs: [], name: 'TokenDoesNotExist' },
   { type: 'error', inputs: [], name: 'TransferFromIncorrectOwner' },
@@ -787,8 +2057,8 @@ export const votingEscrowAbi = [
   {
     type: 'function',
     inputs: [
-      { name: '_approved', internalType: 'address', type: 'address' },
-      { name: '_tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
     ],
     name: 'approve',
     outputs: [],
@@ -796,7 +2066,7 @@ export const votingEscrowAbi = [
   },
   {
     type: 'function',
-    inputs: [{ name: '_owner', internalType: 'address', type: 'address' }],
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
     name: 'balanceOf',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
@@ -858,7 +2128,7 @@ export const votingEscrowAbi = [
   },
   {
     type: 'function',
-    inputs: [{ name: '_tokenId', internalType: 'uint256', type: 'uint256' }],
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
     name: 'getApproved',
     outputs: [{ name: '', internalType: 'address', type: 'address' }],
     stateMutability: 'view',
@@ -896,27 +2166,10 @@ export const votingEscrowAbi = [
   {
     type: 'function',
     inputs: [
-      { name: '_owner', internalType: 'address', type: 'address' },
-      { name: '_operator', internalType: 'address', type: 'address' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'operator', internalType: 'address', type: 'address' },
     ],
     name: 'isApprovedForAll',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: '_spender', internalType: 'address', type: 'address' },
-      { name: '_tokenId', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'isApprovedOrOwner',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'forwarder', internalType: 'address', type: 'address' }],
-    name: 'isTrustedForwarder',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
     stateMutability: 'view',
   },
@@ -961,19 +2214,9 @@ export const votingEscrowAbi = [
   },
   {
     type: 'function',
-    inputs: [{ name: '_tokenId', internalType: 'uint256', type: 'uint256' }],
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
     name: 'ownerOf',
     outputs: [{ name: '', internalType: 'address', type: 'address' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: '', internalType: 'address', type: 'address' },
-      { name: '', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'ownerToNFTokenIdList',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
   {
@@ -1033,9 +2276,9 @@ export const votingEscrowAbi = [
   {
     type: 'function',
     inputs: [
-      { name: '_from', internalType: 'address', type: 'address' },
-      { name: '_to', internalType: 'address', type: 'address' },
-      { name: '_tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
     ],
     name: 'safeTransferFrom',
     outputs: [],
@@ -1044,10 +2287,10 @@ export const votingEscrowAbi = [
   {
     type: 'function',
     inputs: [
-      { name: '_from', internalType: 'address', type: 'address' },
-      { name: '_to', internalType: 'address', type: 'address' },
-      { name: '_tokenId', internalType: 'uint256', type: 'uint256' },
-      { name: '_data', internalType: 'bytes', type: 'bytes' },
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' },
     ],
     name: 'safeTransferFrom',
     outputs: [],
@@ -1056,8 +2299,8 @@ export const votingEscrowAbi = [
   {
     type: 'function',
     inputs: [
-      { name: '_operator', internalType: 'address', type: 'address' },
-      { name: '_approved', internalType: 'bool', type: 'bool' },
+      { name: 'operator', internalType: 'address', type: 'address' },
+      { name: 'approved', internalType: 'bool', type: 'bool' },
     ],
     name: 'setApprovalForAll',
     outputs: [],
@@ -1104,7 +2347,7 @@ export const votingEscrowAbi = [
   },
   {
     type: 'function',
-    inputs: [{ name: '_interfaceID', internalType: 'bytes4', type: 'bytes4' }],
+    inputs: [{ name: 'interfaceId', internalType: 'bytes4', type: 'bytes4' }],
     name: 'supportsInterface',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
     stateMutability: 'view',
@@ -1150,9 +2393,9 @@ export const votingEscrowAbi = [
   {
     type: 'function',
     inputs: [
-      { name: '_from', internalType: 'address', type: 'address' },
-      { name: '_to', internalType: 'address', type: 'address' },
-      { name: '_tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
     ],
     name: 'transferFrom',
     outputs: [],
@@ -1191,19 +2434,19 @@ export const votingEscrowAbi = [
     anonymous: false,
     inputs: [
       {
-        name: '_owner',
+        name: 'owner',
         internalType: 'address',
         type: 'address',
         indexed: true,
       },
       {
-        name: '_approved',
+        name: 'approved',
         internalType: 'address',
         type: 'address',
         indexed: true,
       },
       {
-        name: '_tokenId',
+        name: 'tokenId',
         internalType: 'uint256',
         type: 'uint256',
         indexed: true,
@@ -1216,18 +2459,18 @@ export const votingEscrowAbi = [
     anonymous: false,
     inputs: [
       {
-        name: '_owner',
+        name: 'owner',
         internalType: 'address',
         type: 'address',
         indexed: true,
       },
       {
-        name: '_operator',
+        name: 'operator',
         internalType: 'address',
         type: 'address',
         indexed: true,
       },
-      { name: '_approved', internalType: 'bool', type: 'bool', indexed: false },
+      { name: 'approved', internalType: 'bool', type: 'bool', indexed: false },
     ],
     name: 'ApprovalForAll',
   },
@@ -1294,15 +2537,10 @@ export const votingEscrowAbi = [
     type: 'event',
     anonymous: false,
     inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
       {
-        name: '_from',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      { name: '_to', internalType: 'address', type: 'address', indexed: true },
-      {
-        name: '_tokenId',
+        name: 'tokenId',
         internalType: 'uint256',
         type: 'uint256',
         indexed: true,
@@ -1317,6 +2555,7 @@ export const votingEscrowAbi = [
     inputs: [],
     name: 'ERC721TransferToNonERC721ReceiverImplementer',
   },
+  { type: 'error', inputs: [], name: 'Locked' },
   { type: 'error', inputs: [], name: 'NewOwnerIsZeroAddress' },
   { type: 'error', inputs: [], name: 'NoHandoverRequest' },
   { type: 'error', inputs: [], name: 'NotApprovedOrOwner' },
@@ -1901,6 +3140,1104 @@ export const useWatchIerc721TransferEvent =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__
+ */
+export const useReadIVotingEscrow = /*#__PURE__*/ createUseReadContract({
+  abi: iVotingEscrowAbi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"CLOCK_MODE"`
+ */
+export const useReadIVotingEscrowClockMode =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'CLOCK_MODE',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"allowedManager"`
+ */
+export const useReadIVotingEscrowAllowedManager =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'allowedManager',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"artProxy"`
+ */
+export const useReadIVotingEscrowArtProxy = /*#__PURE__*/ createUseReadContract(
+  { abi: iVotingEscrowAbi, functionName: 'artProxy' },
+)
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"balanceOf"`
+ */
+export const useReadIVotingEscrowBalanceOf =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'balanceOf',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"balanceOfNFT"`
+ */
+export const useReadIVotingEscrowBalanceOfNft =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'balanceOfNFT',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"balanceOfNFTAt"`
+ */
+export const useReadIVotingEscrowBalanceOfNftAt =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'balanceOfNFTAt',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"canSplit"`
+ */
+export const useReadIVotingEscrowCanSplit = /*#__PURE__*/ createUseReadContract(
+  { abi: iVotingEscrowAbi, functionName: 'canSplit' },
+)
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"checkpoints"`
+ */
+export const useReadIVotingEscrowCheckpoints =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'checkpoints',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"clock"`
+ */
+export const useReadIVotingEscrowClock = /*#__PURE__*/ createUseReadContract({
+  abi: iVotingEscrowAbi,
+  functionName: 'clock',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"deactivated"`
+ */
+export const useReadIVotingEscrowDeactivated =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'deactivated',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"decimals"`
+ */
+export const useReadIVotingEscrowDecimals = /*#__PURE__*/ createUseReadContract(
+  { abi: iVotingEscrowAbi, functionName: 'decimals' },
+)
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"delegates"`
+ */
+export const useReadIVotingEscrowDelegates =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'delegates',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"distributor"`
+ */
+export const useReadIVotingEscrowDistributor =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'distributor',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"epoch"`
+ */
+export const useReadIVotingEscrowEpoch = /*#__PURE__*/ createUseReadContract({
+  abi: iVotingEscrowAbi,
+  functionName: 'epoch',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"escrowType"`
+ */
+export const useReadIVotingEscrowEscrowType =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'escrowType',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"factoryRegistry"`
+ */
+export const useReadIVotingEscrowFactoryRegistry =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'factoryRegistry',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"forwarder"`
+ */
+export const useReadIVotingEscrowForwarder =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'forwarder',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"getApproved"`
+ */
+export const useReadIVotingEscrowGetApproved =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'getApproved',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"getPastTotalSupply"`
+ */
+export const useReadIVotingEscrowGetPastTotalSupply =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'getPastTotalSupply',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"getPastVotes"`
+ */
+export const useReadIVotingEscrowGetPastVotes =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'getPastVotes',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"idToManaged"`
+ */
+export const useReadIVotingEscrowIdToManaged =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'idToManaged',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"isApprovedForAll"`
+ */
+export const useReadIVotingEscrowIsApprovedForAll =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'isApprovedForAll',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"locked"`
+ */
+export const useReadIVotingEscrowLocked = /*#__PURE__*/ createUseReadContract({
+  abi: iVotingEscrowAbi,
+  functionName: 'locked',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"managedToFree"`
+ */
+export const useReadIVotingEscrowManagedToFree =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'managedToFree',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"managedToLocked"`
+ */
+export const useReadIVotingEscrowManagedToLocked =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'managedToLocked',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"name"`
+ */
+export const useReadIVotingEscrowName = /*#__PURE__*/ createUseReadContract({
+  abi: iVotingEscrowAbi,
+  functionName: 'name',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"nonces"`
+ */
+export const useReadIVotingEscrowNonces = /*#__PURE__*/ createUseReadContract({
+  abi: iVotingEscrowAbi,
+  functionName: 'nonces',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"numCheckpoints"`
+ */
+export const useReadIVotingEscrowNumCheckpoints =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'numCheckpoints',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"ownerOf"`
+ */
+export const useReadIVotingEscrowOwnerOf = /*#__PURE__*/ createUseReadContract({
+  abi: iVotingEscrowAbi,
+  functionName: 'ownerOf',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"ownerToNFTokenIdList"`
+ */
+export const useReadIVotingEscrowOwnerToNfTokenIdList =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'ownerToNFTokenIdList',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"permanentLockBalance"`
+ */
+export const useReadIVotingEscrowPermanentLockBalance =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'permanentLockBalance',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"pointHistory"`
+ */
+export const useReadIVotingEscrowPointHistory =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'pointHistory',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"slopeChanges"`
+ */
+export const useReadIVotingEscrowSlopeChanges =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'slopeChanges',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"supply"`
+ */
+export const useReadIVotingEscrowSupply = /*#__PURE__*/ createUseReadContract({
+  abi: iVotingEscrowAbi,
+  functionName: 'supply',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"supportsInterface"`
+ */
+export const useReadIVotingEscrowSupportsInterface =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'supportsInterface',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"symbol"`
+ */
+export const useReadIVotingEscrowSymbol = /*#__PURE__*/ createUseReadContract({
+  abi: iVotingEscrowAbi,
+  functionName: 'symbol',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"team"`
+ */
+export const useReadIVotingEscrowTeam = /*#__PURE__*/ createUseReadContract({
+  abi: iVotingEscrowAbi,
+  functionName: 'team',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"token"`
+ */
+export const useReadIVotingEscrowToken = /*#__PURE__*/ createUseReadContract({
+  abi: iVotingEscrowAbi,
+  functionName: 'token',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"tokenId"`
+ */
+export const useReadIVotingEscrowTokenId = /*#__PURE__*/ createUseReadContract({
+  abi: iVotingEscrowAbi,
+  functionName: 'tokenId',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"tokenURI"`
+ */
+export const useReadIVotingEscrowTokenUri = /*#__PURE__*/ createUseReadContract(
+  { abi: iVotingEscrowAbi, functionName: 'tokenURI' },
+)
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"totalSupply"`
+ */
+export const useReadIVotingEscrowTotalSupply =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'totalSupply',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"totalSupplyAt"`
+ */
+export const useReadIVotingEscrowTotalSupplyAt =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'totalSupplyAt',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"userPointEpoch"`
+ */
+export const useReadIVotingEscrowUserPointEpoch =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'userPointEpoch',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"userPointHistory"`
+ */
+export const useReadIVotingEscrowUserPointHistory =
+  /*#__PURE__*/ createUseReadContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'userPointHistory',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"version"`
+ */
+export const useReadIVotingEscrowVersion = /*#__PURE__*/ createUseReadContract({
+  abi: iVotingEscrowAbi,
+  functionName: 'version',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"voted"`
+ */
+export const useReadIVotingEscrowVoted = /*#__PURE__*/ createUseReadContract({
+  abi: iVotingEscrowAbi,
+  functionName: 'voted',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"voter"`
+ */
+export const useReadIVotingEscrowVoter = /*#__PURE__*/ createUseReadContract({
+  abi: iVotingEscrowAbi,
+  functionName: 'voter',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"weights"`
+ */
+export const useReadIVotingEscrowWeights = /*#__PURE__*/ createUseReadContract({
+  abi: iVotingEscrowAbi,
+  functionName: 'weights',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__
+ */
+export const useWriteIVotingEscrow = /*#__PURE__*/ createUseWriteContract({
+  abi: iVotingEscrowAbi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"approve"`
+ */
+export const useWriteIVotingEscrowApprove =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'approve',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"checkpoint"`
+ */
+export const useWriteIVotingEscrowCheckpoint =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'checkpoint',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"createLock"`
+ */
+export const useWriteIVotingEscrowCreateLock =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'createLock',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"createLockFor"`
+ */
+export const useWriteIVotingEscrowCreateLockFor =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'createLockFor',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"createManagedLockFor"`
+ */
+export const useWriteIVotingEscrowCreateManagedLockFor =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'createManagedLockFor',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"delegate"`
+ */
+export const useWriteIVotingEscrowDelegate =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'delegate',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"delegateBySig"`
+ */
+export const useWriteIVotingEscrowDelegateBySig =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'delegateBySig',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"depositFor"`
+ */
+export const useWriteIVotingEscrowDepositFor =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'depositFor',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"depositManaged"`
+ */
+export const useWriteIVotingEscrowDepositManaged =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'depositManaged',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"increaseAmount"`
+ */
+export const useWriteIVotingEscrowIncreaseAmount =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'increaseAmount',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"increaseUnlockTime"`
+ */
+export const useWriteIVotingEscrowIncreaseUnlockTime =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'increaseUnlockTime',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"isApprovedOrOwner"`
+ */
+export const useWriteIVotingEscrowIsApprovedOrOwner =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'isApprovedOrOwner',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"lockPermanent"`
+ */
+export const useWriteIVotingEscrowLockPermanent =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'lockPermanent',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"merge"`
+ */
+export const useWriteIVotingEscrowMerge = /*#__PURE__*/ createUseWriteContract({
+  abi: iVotingEscrowAbi,
+  functionName: 'merge',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"safeTransferFrom"`
+ */
+export const useWriteIVotingEscrowSafeTransferFrom =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'safeTransferFrom',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"setAllowedManager"`
+ */
+export const useWriteIVotingEscrowSetAllowedManager =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'setAllowedManager',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"setApprovalForAll"`
+ */
+export const useWriteIVotingEscrowSetApprovalForAll =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'setApprovalForAll',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"setArtProxy"`
+ */
+export const useWriteIVotingEscrowSetArtProxy =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'setArtProxy',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"setManagedState"`
+ */
+export const useWriteIVotingEscrowSetManagedState =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'setManagedState',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"setTeam"`
+ */
+export const useWriteIVotingEscrowSetTeam =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'setTeam',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"setVoterAndDistributor"`
+ */
+export const useWriteIVotingEscrowSetVoterAndDistributor =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'setVoterAndDistributor',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"split"`
+ */
+export const useWriteIVotingEscrowSplit = /*#__PURE__*/ createUseWriteContract({
+  abi: iVotingEscrowAbi,
+  functionName: 'split',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"toggleSplit"`
+ */
+export const useWriteIVotingEscrowToggleSplit =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'toggleSplit',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useWriteIVotingEscrowTransferFrom =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'transferFrom',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"unlockPermanent"`
+ */
+export const useWriteIVotingEscrowUnlockPermanent =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'unlockPermanent',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"voting"`
+ */
+export const useWriteIVotingEscrowVoting = /*#__PURE__*/ createUseWriteContract(
+  { abi: iVotingEscrowAbi, functionName: 'voting' },
+)
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"withdraw"`
+ */
+export const useWriteIVotingEscrowWithdraw =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'withdraw',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"withdrawManaged"`
+ */
+export const useWriteIVotingEscrowWithdrawManaged =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'withdrawManaged',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__
+ */
+export const useSimulateIVotingEscrow = /*#__PURE__*/ createUseSimulateContract(
+  { abi: iVotingEscrowAbi },
+)
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"approve"`
+ */
+export const useSimulateIVotingEscrowApprove =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'approve',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"checkpoint"`
+ */
+export const useSimulateIVotingEscrowCheckpoint =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'checkpoint',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"createLock"`
+ */
+export const useSimulateIVotingEscrowCreateLock =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'createLock',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"createLockFor"`
+ */
+export const useSimulateIVotingEscrowCreateLockFor =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'createLockFor',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"createManagedLockFor"`
+ */
+export const useSimulateIVotingEscrowCreateManagedLockFor =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'createManagedLockFor',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"delegate"`
+ */
+export const useSimulateIVotingEscrowDelegate =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'delegate',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"delegateBySig"`
+ */
+export const useSimulateIVotingEscrowDelegateBySig =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'delegateBySig',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"depositFor"`
+ */
+export const useSimulateIVotingEscrowDepositFor =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'depositFor',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"depositManaged"`
+ */
+export const useSimulateIVotingEscrowDepositManaged =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'depositManaged',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"increaseAmount"`
+ */
+export const useSimulateIVotingEscrowIncreaseAmount =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'increaseAmount',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"increaseUnlockTime"`
+ */
+export const useSimulateIVotingEscrowIncreaseUnlockTime =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'increaseUnlockTime',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"isApprovedOrOwner"`
+ */
+export const useSimulateIVotingEscrowIsApprovedOrOwner =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'isApprovedOrOwner',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"lockPermanent"`
+ */
+export const useSimulateIVotingEscrowLockPermanent =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'lockPermanent',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"merge"`
+ */
+export const useSimulateIVotingEscrowMerge =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'merge',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"safeTransferFrom"`
+ */
+export const useSimulateIVotingEscrowSafeTransferFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'safeTransferFrom',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"setAllowedManager"`
+ */
+export const useSimulateIVotingEscrowSetAllowedManager =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'setAllowedManager',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"setApprovalForAll"`
+ */
+export const useSimulateIVotingEscrowSetApprovalForAll =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'setApprovalForAll',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"setArtProxy"`
+ */
+export const useSimulateIVotingEscrowSetArtProxy =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'setArtProxy',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"setManagedState"`
+ */
+export const useSimulateIVotingEscrowSetManagedState =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'setManagedState',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"setTeam"`
+ */
+export const useSimulateIVotingEscrowSetTeam =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'setTeam',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"setVoterAndDistributor"`
+ */
+export const useSimulateIVotingEscrowSetVoterAndDistributor =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'setVoterAndDistributor',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"split"`
+ */
+export const useSimulateIVotingEscrowSplit =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'split',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"toggleSplit"`
+ */
+export const useSimulateIVotingEscrowToggleSplit =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'toggleSplit',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useSimulateIVotingEscrowTransferFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'transferFrom',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"unlockPermanent"`
+ */
+export const useSimulateIVotingEscrowUnlockPermanent =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'unlockPermanent',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"voting"`
+ */
+export const useSimulateIVotingEscrowVoting =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'voting',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"withdraw"`
+ */
+export const useSimulateIVotingEscrowWithdraw =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'withdraw',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `functionName` set to `"withdrawManaged"`
+ */
+export const useSimulateIVotingEscrowWithdrawManaged =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: iVotingEscrowAbi,
+    functionName: 'withdrawManaged',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__
+ */
+export const useWatchIVotingEscrowEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({ abi: iVotingEscrowAbi })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"Approval"`
+ */
+export const useWatchIVotingEscrowApprovalEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'Approval',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"ApprovalForAll"`
+ */
+export const useWatchIVotingEscrowApprovalForAllEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'ApprovalForAll',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"BatchMetadataUpdate"`
+ */
+export const useWatchIVotingEscrowBatchMetadataUpdateEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'BatchMetadataUpdate',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"CreateManaged"`
+ */
+export const useWatchIVotingEscrowCreateManagedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'CreateManaged',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"DelegateChanged"`
+ */
+export const useWatchIVotingEscrowDelegateChangedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'DelegateChanged',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"DelegateVotesChanged"`
+ */
+export const useWatchIVotingEscrowDelegateVotesChangedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'DelegateVotesChanged',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"Deposit"`
+ */
+export const useWatchIVotingEscrowDepositEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'Deposit',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"DepositManaged"`
+ */
+export const useWatchIVotingEscrowDepositManagedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'DepositManaged',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"LockPermanent"`
+ */
+export const useWatchIVotingEscrowLockPermanentEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'LockPermanent',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"Merge"`
+ */
+export const useWatchIVotingEscrowMergeEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'Merge',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"MetadataUpdate"`
+ */
+export const useWatchIVotingEscrowMetadataUpdateEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'MetadataUpdate',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"SetAllowedManager"`
+ */
+export const useWatchIVotingEscrowSetAllowedManagerEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'SetAllowedManager',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"Split"`
+ */
+export const useWatchIVotingEscrowSplitEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'Split',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"Supply"`
+ */
+export const useWatchIVotingEscrowSupplyEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'Supply',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"Transfer"`
+ */
+export const useWatchIVotingEscrowTransferEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'Transfer',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"UnlockPermanent"`
+ */
+export const useWatchIVotingEscrowUnlockPermanentEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'UnlockPermanent',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"Withdraw"`
+ */
+export const useWatchIVotingEscrowWithdrawEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'Withdraw',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link iVotingEscrowAbi}__ and `eventName` set to `"WithdrawManaged"`
+ */
+export const useWatchIVotingEscrowWithdrawManagedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: iVotingEscrowAbi,
+    eventName: 'WithdrawManaged',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link iYoloAbi}__
  */
 export const useReadIYolo = /*#__PURE__*/ createUseReadContract({
@@ -2058,15 +4395,6 @@ export const useReadVeVaultStake = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"_METADATA_UPDATE_ROLE"`
- */
-export const useReadVeVaultStakeMetadataUpdateRole =
-  /*#__PURE__*/ createUseReadContract({
-    abi: veVaultStakeAbi,
-    functionName: '_METADATA_UPDATE_ROLE',
-  })
-
-/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"balanceOf"`
  */
 export const useReadVeVaultStakeBalanceOf = /*#__PURE__*/ createUseReadContract(
@@ -2119,6 +4447,24 @@ export const useReadVeVaultStakeIsApprovedForAll =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"largestLock"`
+ */
+export const useReadVeVaultStakeLargestLock =
+  /*#__PURE__*/ createUseReadContract({
+    abi: veVaultStakeAbi,
+    functionName: 'largestLock',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"lockForTokenId"`
+ */
+export const useReadVeVaultStakeLockForTokenId =
+  /*#__PURE__*/ createUseReadContract({
+    abi: veVaultStakeAbi,
+    functionName: 'lockForTokenId',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"locked"`
  */
 export const useReadVeVaultStakeLocked = /*#__PURE__*/ createUseReadContract({
@@ -2127,12 +4473,30 @@ export const useReadVeVaultStakeLocked = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"metadataUpdateRole"`
+ */
+export const useReadVeVaultStakeMetadataUpdateRole =
+  /*#__PURE__*/ createUseReadContract({
+    abi: veVaultStakeAbi,
+    functionName: 'metadataUpdateRole',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"name"`
  */
 export const useReadVeVaultStakeName = /*#__PURE__*/ createUseReadContract({
   abi: veVaultStakeAbi,
   functionName: 'name',
 })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"onERC721Received"`
+ */
+export const useReadVeVaultStakeOnErc721Received =
+  /*#__PURE__*/ createUseReadContract({
+    abi: veVaultStakeAbi,
+    functionName: 'onERC721Received',
+  })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link veVaultStakeAbi}__ and `functionName` set to `"owner"`
@@ -2685,24 +5049,6 @@ export const useReadVotingEscrowIsApprovedForAll =
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link votingEscrowAbi}__ and `functionName` set to `"isApprovedOrOwner"`
- */
-export const useReadVotingEscrowIsApprovedOrOwner =
-  /*#__PURE__*/ createUseReadContract({
-    abi: votingEscrowAbi,
-    functionName: 'isApprovedOrOwner',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link votingEscrowAbi}__ and `functionName` set to `"isTrustedForwarder"`
- */
-export const useReadVotingEscrowIsTrustedForwarder =
-  /*#__PURE__*/ createUseReadContract({
-    abi: votingEscrowAbi,
-    functionName: 'isTrustedForwarder',
-  })
-
-/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link votingEscrowAbi}__ and `functionName` set to `"locked"`
  */
 export const useReadVotingEscrowLocked = /*#__PURE__*/ createUseReadContract({
@@ -2733,15 +5079,6 @@ export const useReadVotingEscrowOwnerOf = /*#__PURE__*/ createUseReadContract({
   abi: votingEscrowAbi,
   functionName: 'ownerOf',
 })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link votingEscrowAbi}__ and `functionName` set to `"ownerToNFTokenIdList"`
- */
-export const useReadVotingEscrowOwnerToNfTokenIdList =
-  /*#__PURE__*/ createUseReadContract({
-    abi: votingEscrowAbi,
-    functionName: 'ownerToNFTokenIdList',
-  })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link votingEscrowAbi}__ and `functionName` set to `"ownershipHandoverExpiresAt"`

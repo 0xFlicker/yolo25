@@ -17,7 +17,7 @@ export default defineConfig({
         "Yolo.sol/**",
         "VeVaultStake.sol/**",
         "IYolo.sol/**",
-        "IVoteEscrow.sol/**",
+        "IVotingEscrow.sol/**",
         "veStuxNet.sol/**",
       ],
     }),

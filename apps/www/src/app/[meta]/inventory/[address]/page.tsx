@@ -3,7 +3,11 @@ import { InvalidAddress } from "./InvalidAddress";
 import { InvalidMetadex } from "./InvalidMetadex";
 import { META_DEX_CHAIN, stringToMeta } from "@/wagmi/contracts";
 import { getChainClient } from "@/wagmi/viem";
-import { veVaultStakeAbi, votingEscrowAbi } from "@/wagmi/generated";
+import {
+  iVotingEscrowAbi,
+  veVaultStakeAbi,
+  votingEscrowAbi,
+} from "@/wagmi/generated";
 import { DepositHeader, InventoryHeader } from "./InventoryHeader";
 import { SelectableProvider } from "./context";
 import { VeNFTGrid } from "./VeNFTGrid";
@@ -25,12 +29,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
 
   try {
     const meta = stringToMeta(pathMeta);
-    const {
-      chainId,
-      metaVeNft: metaNftContractAddress,
-      ourToken,
-      ourStaker,
-    } = META_DEX_CHAIN[meta];
+    const { chainId, ourToken, ourStaker } = META_DEX_CHAIN[meta];
     const client = getChainClient(chainId);
     const nfts = await fetchAllNfts(address, meta);
     const [
@@ -86,6 +85,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       <SelectableProvider>
         <div className="container mx-auto px-4 py-8 min-h-[calc(100vh-6rem)]">
           <InventoryHeader
+            allTokenIds={nfts}
             availableCount={tokens.length}
             totalValue={totalPossibleValue}
             redeemableValue={totalRedeemableValue}

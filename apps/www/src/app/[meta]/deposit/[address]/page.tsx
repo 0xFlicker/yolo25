@@ -1,9 +1,8 @@
 import { erc20Abi, isAddress } from "viem";
 import { InvalidAddress } from "./InvalidAddress";
-import { InvalidMetadex } from "./InvalidMetadex";
 import { META_DEX_CHAIN, stringToMeta } from "@/wagmi/contracts";
 import { getChainClient } from "@/wagmi/viem";
-import { votingEscrowAbi } from "@/wagmi/generated";
+import { iVotingEscrowAbi, votingEscrowAbi } from "@/wagmi/generated";
 import { DepositHeader } from "./DepositHeader";
 import { SelectableProvider } from "./context";
 import { VeNFTGrid } from "./VeNFTGrid";
@@ -56,14 +55,14 @@ export default async function Page({ params }: { params: Promise<Params> }) {
           functionName: "symbol",
         }),
       ]);
-    const tokens = await fetchMetaVeNfts(client, address).then(async (tokens) =>
+    const tokens = await fetchMetaVeNfts(address).then(async (tokens) =>
       Promise.all(
         tokens.map(async (tokenId) => {
           return {
             tokenId,
             locked: await client.readContract({
               address: metaNftContractAddress,
-              abi: votingEscrowAbi,
+              abi: iVotingEscrowAbi,
               functionName: "locked",
               args: [tokenId],
             }),

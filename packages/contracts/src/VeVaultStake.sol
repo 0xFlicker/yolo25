@@ -30,9 +30,12 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
     address private _renderer;
     uint256 private _tokenIdCounter;
 
-    uint256 public _METADATA_UPDATE_ROLE = _ROLE_0;
+    uint256 public metadataUpdateRole = _ROLE_0;
 
-    uint256 private _veNFT_Protocol_Token_ID;
+    uint256 private _veNftProtocolTokenId;
+
+    uint256 internal constant WEEK = 1 weeks;
+    uint256 internal constant MAXTIME = 4 * 365 * 86400;
 
     constructor(address veNFTAddress, address yoloAddress, address renderer) {
         _veNFT = IVotingEscrow(veNFTAddress);
@@ -65,20 +68,29 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
     }
 
     function depositFor(address to, uint256 tokenId) public {
+        _veNFT.safeTransferFrom(msg.sender, address(this), tokenId);
+
         IVotingEscrow.LockedBalance memory lockedBalance = _veNFT.locked(
             tokenId
         );
-
-        _veNFT.safeTransferFrom(msg.sender, address(this), tokenId);
         if (!lockedBalance.isPermanent) {
-            _veNFT.lockPermanent(tokenId);
+            if (_veNftProtocolTokenId == 0) {
+                _veNFT.lockPermanent(tokenId);
+            } else {
+                uint256 newUnlockTime = ((block.timestamp + MAXTIME) / WEEK) *
+                    WEEK;
+                if (newUnlockTime > lockedBalance.end) {
+                    _veNFT.increaseUnlockTime(tokenId, MAXTIME);
+                }
+            }
             lockedBalance = _veNFT.locked(tokenId);
         }
 
-        _lockedTokenIdToLock[tokenId] = Lock({
+        uint256 nextTokenId = ++_tokenIdCounter;
+        _lockedTokenIdToLock[nextTokenId] = Lock({
             amount: uint128(lockedBalance.amount),
             start: uint64(block.timestamp),
-            end: uint64(block.timestamp + 1461 days) // (4 years with 1 leap year)
+            end: uint64(block.timestamp + 126144000) // (4 * 365 * 24 * 60 * 60)
         });
 
         // Add to max value linked list if it's greater than or equal to the highest value
@@ -96,15 +108,15 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
             _maxValueHead = newNodeId;
         }
 
-        if (_veNFT_Protocol_Token_ID == 0) {
-            _veNFT_Protocol_Token_ID = tokenId;
+        if (_veNftProtocolTokenId == 0) {
+            _veNftProtocolTokenId = tokenId;
         } else {
-            _veNFT.merge(tokenId, _veNFT_Protocol_Token_ID);
+            _veNFT.merge(tokenId, _veNftProtocolTokenId);
         }
 
         _mintAndSetExtraDataUnchecked(
             to,
-            ++_tokenIdCounter,
+            nextTokenId,
             generateSeed(_tokenIdCounter)
         );
     }
@@ -117,7 +129,7 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
 
     function redeemTo(address to, uint256 tokenId) public {
         Lock memory lock = _lockedTokenIdToLock[tokenId];
-        uint256 amount = timeAdjustedValue(lock.amount, lock.start, lock.end);
+        uint256 amount = _timeAdjustedValue(lock.amount, lock.start, lock.end);
         _burn(tokenId);
         _yolo.mint(to, amount);
 
@@ -135,12 +147,12 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
 
     function locked(
         uint256 tokenId
-    ) public view returns (uint256 currentValue, Lock memory lock) {
-        lock = _lockedTokenIdToLock[tokenId];
-        currentValue = timeAdjustedValue(lock.amount, lock.start, lock.end);
+    ) public view returns (uint256, Lock memory) {
+        Lock memory lock = _lockedTokenIdToLock[tokenId];
+        return (_timeAdjustedValue(lock.amount, lock.start, lock.end), lock);
     }
 
-    function timeAdjustedValue(
+    function _timeAdjustedValue(
         uint128 value,
         uint64 unlockStartTime,
         uint64 unlockEndTime
@@ -176,7 +188,7 @@ contract VeVaultStake is OwnableRoles, ERC721, IVeVaultLock {
     /// timely update the images and related attributes of the NFTs.
     event BatchMetadataUpdate(uint256 _fromTokenId, uint256 _toTokenId);
 
-    function updateAllMetadata() public onlyRoles(_METADATA_UPDATE_ROLE) {
+    function updateAllMetadata() public onlyRoles(metadataUpdateRole) {
         if (_tokenIdCounter > 0) {
             emit BatchMetadataUpdate(1, _tokenIdCounter);
         }
