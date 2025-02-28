@@ -34,6 +34,7 @@ pragma solidity >=0.7.0 <0.9.0;
 /* Imports if needed */
 // add roles (OZ)
 import {IERC20} from "./interface/IERC20.sol";
+import {IYolo} from "./interface/IYolo.sol";
 import {IERC721} from "./interface/IERC721.sol";
 import {IWETH} from "./interface/IWETH.sol";
 import {ICLPool} from "./interface/ICLPool.sol";
@@ -42,7 +43,7 @@ import {INonfungiblePositionManager} from "./interface/INonfungiblePositionManag
 import {IQuoter} from "./interface/IQuoter.sol";
 
 contract YoloLP {
-    IERC20 public yolo;
+    IYolo public yolo;
     IWETH public weth;
     IERC20 public aero;
     address public v3Factory;
@@ -84,7 +85,7 @@ contract YoloLP {
     ) {
         weth = IWETH(_weth);
         emit token1Set(address(0), _weth);
-        yolo = IERC20(_yolo);
+        yolo = IYolo(_yolo);
         emit token0Set(address(0), _yolo);
         aero = IERC20(_aero);
         // no emit
@@ -215,6 +216,92 @@ contract YoloLP {
         _mintInfinityPosition(deltaYolo, deltaEth, _sqrtPriceX96);
     }
 
+    function rebalanceStandard() external {
+          uint256[] storage rebalancedLP;
+          // never touch lpTokenIds[0]
+          rebalancedLP.push(lpTokenIds[0]);
+          // collect lpTokenIds[0]
+          _collectFees(lpTokenIds[0]);
+          uint256 len = lpTokenIds.length;
+          for (uint256 c = 1; c < len;) {
+              (,,,,,,, uint128 liquidity,,, uint128 tokensOwed0, uint128 tokensOwed1) = INonfungiblePositionManager(v3PosMgr).positions(lpTokenIds[c]);
+              if (tokensOwed0 > 0 || tokensOwed1 > 0) {
+                  _collectFees(lpTokenIds[c]);
+              }
+              _reduceLPPosition(lpTokenIds[c], liquidity);
+              unchecked { ++c; }
+          }
+          lpTokenIds = rebalancedLP;
+          uint256 wethOnContract = weth.balanceOf(address(this));
+          _mintSellWallPosition(wethOnContract, _getSqrtPriceX96());
+          // burn IERC20
+          yolo.burn(address(this), yolo.balanceOf(address(this)));
+    }
+
+    function rebalanceCustom(
+        int24 _tickLow,
+        int24 _tickHigh,
+        uint256 _amount0Desired,
+        uint256 _amount1Desired
+    ) external {
+          uint256[] storage rebalancedLP;
+          // never touch lpTokenIds[0]
+          rebalancedLP.push(lpTokenIds[0]);
+          // collect lpTokenIds[0]
+          _collectFees(lpTokenIds[0]);
+          uint256 len = lpTokenIds.length;
+          for (uint256 c = 1; c < len;) {
+              (,,,,,,, uint128 liquidity,,, uint128 tokensOwed0, uint128 tokensOwed1) = INonfungiblePositionManager(v3PosMgr).positions(lpTokenIds[c]);
+              if (tokensOwed0 > 0 || tokensOwed1 > 0) {
+                  _collectFees(lpTokenIds[c]);
+              }
+              _reduceLPPosition(lpTokenIds[c], liquidity);
+              unchecked { ++c; }
+          }
+          lpTokenIds = rebalancedLP;
+          _mintCustomPosition(_tickLow, _tickHigh, _amount0Desired, _amount1Desired, _getSqrtPriceX96());
+          // burn IERC20
+          yolo.burn(address(this), yolo.balanceOf(address(this)));
+    }
+
+      /// @dev Decreases the amount of liquidity in a position and accounts it to the position
+      /// @param _tokenId The ID of the token for which liquidity is being decreased
+      /// @param _liquidity The amount by which liquidity will be decreased
+      /// @return amount0 The amount of token0 accounted to the position's tokens owed
+      /// @return amount1 The amount of token1 accounted to the position's tokens owed
+      function _reduceLPPosition(
+          uint256 _tokenId,
+          uint128 _liquidity
+      ) internal returns (
+          uint256 amount0,
+          uint256 amount1
+      ) {
+          (amount0, amount1) = INonfungiblePositionManager(v3PosMgr).decreaseLiquidity(
+              INonfungiblePositionManager(v3PosMgr).DecreaseLiquidityParams({
+                  tokenId: _tokenId,
+                  liquidity: _liquidity,
+                  amount0Min: 0,
+                  amount1Min: 0,
+                  deadline: block.timestamp
+            })
+        );
+    }
+
+    /// @dev this will be used a lot for LP fee collection
+    /// @param _tokenId The ID of the token to collect fees from
+    function _collectFees(
+        uint256 _tokenId
+    ) internal {
+        INonfungiblePositionManager(v3PosMgr).collect(
+            INonfungiblePositionManager.CollectParams({
+                tokenId: _tokenId,
+                recipient: address(this),
+                amount0Max: type(uint128).max,
+                amount1Max: type(uint128).max
+            })
+        );
+    }
+
     /// @dev this is the magical function you will use once...
     /// @param _token0Amount amount of yolo to add to position
     /// @param _token1Amount amount of weth to add to position
@@ -301,6 +388,61 @@ contract YoloLP {
                 tickUpper: tick - 1,
                 amount0Desired: 0,
                 amount1Desired: _amount,
+                amount0Min: 0,
+                amount1Min: 0,
+                recipient: address(this),
+                deadline: block.timestamp,
+                sqrtPriceX96: _sqrtPriceX96
+            })
+        );
+        // push to array
+        lpTokenIds.push(tokenId);
+    }
+
+    /// @dev this is the magical function you will use in a few functions
+    /// @param _tickLow lower tick range
+    /// @param _tickHigh upper tick range
+    /// @param _amount0Desired amount of $yolo
+    /// @param _amount1Desired amount of $weth
+    /// @param _sqrtPriceX96 is the magic number from pool.slot0
+    /// @return tokenId the uint256 tokenId from the 721 position
+    /// @return liquidity amount of liquidity added to v3 slipstream pool
+    /// @return token0Amount the uint256 of the left over token
+    /// @return token1Amount the uint256 of the left over wavax
+    /// @notice this generates a buy wall... 1-2 ticks below current tick
+    function _mintCustomPosition(
+        int24 _tickLow,
+        int24 _tickHigh,
+        uint256 _amount0Desired,
+        uint256 _amount1Desired,
+        uint160 _sqrtPriceX96
+    )
+        internal
+        returns (
+            uint256 tokenId,
+            uint128 liquidity,
+            uint256 token0Amount,
+            uint256 token1Amount
+        )
+    {
+        // Grabs tick
+        int24 tick = _getTick();
+
+        // Mint it
+        (
+            tokenId,
+            liquidity,
+            token0Amount,
+            token1Amount
+        ) = INonfungiblePositionManager(v3PosMgr).mint(
+            INonfungiblePositionManager.MintParams({
+                token0: address(yolo),
+                token1: address(weth),
+                tickSpacing: tickSpace,
+                tickLower: _tickLow,
+                tickUpper: _tickHigh,
+                amount0Desired: _amount0Desired,
+                amount1Desired: _amount1Desired,
                 amount0Min: 0,
                 amount1Min: 0,
                 recipient: address(this),
